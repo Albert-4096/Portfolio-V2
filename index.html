@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Albert G — ML · CyberSec · Homelab · CTF</title>
+  <meta name="description" content="18-year-old Romanian developer. HackTM 2026 winner. I build machine-learning models, compete in CTFs, and self-host everything on a rack server at home.">
+  <link rel="canonical" href="https://alberyt.xyz">
+  <meta property="og:title" content="Albert G — ML · CyberSec · Homelab · CTF">
+  <meta property="og:description" content="HackTM 2026 winner. ML, security, and a homelab with ~95 Docker services. Everything here is self-hosted.">
+  <meta property="og:url" content="https://alberyt.xyz">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0a0d0b">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="container" aria-label="Main">
+    <a class="brand" href="#top">alberyt.xyz</a>
+    <ul class="nav-links">
+      <li><a href="#building">building</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#infra">infra</a></li>
+      <li><a href="#about">about</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ── Hero ─────────────────────────────────────────── -->
+  <section class="hero container">
+    <p class="eyebrow">ml · cybersec · homelab · ctf — romania</p>
+    <h1>Albert G</h1>
+    <p class="lede">I build machine-learning models, create automation systems, compete in CTFs, and turn research into hands-on experiments — one side-project at a time.</p>
+
+    <aside class="win-banner" aria-label="HackTM 2026 win">
+      <span class="win-tag">winner</span>
+      <div>
+        <p class="win-title">HackTM 2026 — Product Innovation track</p>
+        <p class="win-detail">A pipeline that converts Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles. Sponsored by Aumovio. €2,000 prize. <a href="#projects">See the project ↓</a></p>
+      </div>
+    </aside>
+
+    <p class="print-contact print-only">contact@alberyt.xyz · github.com/Albert-4096 · blog.alberyt.xyz · alberyt.xyz</p>
+  </section>
+
+  <!-- ── Currently building ───────────────────────────── -->
+  <section id="building" class="container section">
+    <h2><span class="section-label">01</span> Currently building</h2>
+    <p class="section-note">What's on the bench right now. If this list goes stale for more than a month, email me and complain.</p>
+    <ul id="building-list" class="building-list">
+      <noscript><li class="building-item"><p>JavaScript is off — fair enough. The list lives in <span class="mono">js/main.js</span>.</p></li></noscript>
+    </ul>
+  </section>
+
+  <!-- ── Projects ─────────────────────────────────────── -->
+  <section id="projects" class="container section">
+    <h2><span class="section-label">02</span> Projects</h2>
+
+    <div class="featured-grid">
+      <article class="card featured">
+        <div class="card-head">
+          <h3>EHDS Medical Platform</h3>
+          <span class="badge">HackTM 2026 winner</span>
+        </div>
+        <p>Romanian hospital discharge papers are PDFs. The European Health Data Space wants HL7 FHIR R4. This pipeline reads the first and emits the second — valid bundles, real documents, end to end. It won the Product Innovation track at HackTM 2026.</p>
+        <ul class="tags"><li>React</li><li>TypeScript</li><li>Python</li><li>FHIR R4</li></ul>
+        <p class="card-links"><a href="https://github.com/Albert-4096/EHDS-Service" rel="noopener">GitHub ↗</a></p>
+      </article>
+
+      <article class="card featured">
+        <div class="card-head">
+          <h3>Cryptography Atlas</h3>
+          <span class="badge badge-live">live</span>
+        </div>
+        <p>An interactive map of cryptographic concepts. Most crypto explanations are either hand-wavy or impenetrable; this one lets you poke at the primitives until they make sense.</p>
+        <ul class="tags"><li>React</li><li>Vite</li></ul>
+        <p class="card-links"><a href="https://crypto.alberyt.xyz" rel="noopener">crypto.alberyt.xyz ↗</a> <a href="https://github.com/Albert-4096/cryptography-atlas" rel="noopener">GitHub ↗</a></p>
+      </article>
+
+      <article class="card featured">
+        <div class="card-head">
+          <h3>SOC Dashboard</h3>
+          <span class="badge badge-live">live demo</span>
+        </div>
+        <p>A Palantir-style personal intelligence dashboard. Telemetry from machines I own, on one screen, because tailing logs across 95 containers stopped being fun.</p>
+        <ul class="tags"><li>Node.js</li><li>Telemetry</li></ul>
+        <p class="card-links"><a href="https://dash-demo.alberyt.xyz" rel="noopener">dash-demo.alberyt.xyz ↗</a> <a href="https://github.com/Albert-4096/dashboard-demo" rel="noopener">GitHub ↗</a></p>
+      </article>
+    </div>
+
+    <div class="rest-grid">
+      <article class="card">
+        <h3>Auth System</h3>
+        <p>Production-grade auth microservice. JWT sessions, Argon2 hashing — the boring parts, done properly.</p>
+        <ul class="tags"><li>TypeScript</li><li>Postgres</li><li>JWT</li><li>Argon2</li></ul>
+        <p class="card-links"><a href="https://github.com/Albert-4096/auth-system" rel="noopener">GitHub ↗</a></p>
+      </article>
+
+      <article class="card">
+        <h3>Qobuz Web Platform</h3>
+        <p>Self-hosted hi-res music downloader with an MCP server, so an AI assistant can fetch albums for me.</p>
+        <ul class="tags"><li>FastAPI</li><li>Docker</li><li>MCP</li></ul>
+        <p class="card-links"><a href="https://github.com/Albert-4096/Qobuz-Web-Platform" rel="noopener">GitHub ↗</a></p>
+      </article>
+
+      <article class="card">
+        <h3>LCG Visualizer</h3>
+        <p>Interactive PRNG visualizer with Hull–Dobell theorem analysis. Watch a bad seed ruin everything.</p>
+        <ul class="tags"><li>JavaScript</li><li>PRNG</li></ul>
+        <p class="card-links"><a href="https://github.com/Albert-4096/LCG-Visualizer-Website" rel="noopener">GitHub ↗</a></p>
+      </article>
+
+      <article class="card">
+        <h3>Opere BAC</h3>
+        <p>Study platform for the Romanian Baccalaureate literature exam. Built for an exam I actually had to pass.</p>
+        <ul class="tags"><li>Web</li><li>Education</li></ul>
+        <p class="card-links"><a href="https://github.com/Albert-4096/opere-bac-website" rel="noopener">GitHub ↗</a></p>
+      </article>
+
+      <article class="card">
+        <h3>Nonlinear Thinking</h3>
+        <p>An interactive explainer on thinking in systems instead of straight lines.</p>
+        <ul class="tags"><li>JavaScript</li><li>Interactive</li></ul>
+        <p class="card-links"><a href="https://github.com/Albert-4096/Nonlinear-Thinking-Website" rel="noopener">GitHub ↗</a></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── Infrastructure ───────────────────────────────── -->
+  <section id="infra" class="container section">
+    <h2><span class="section-label">03</span> Infrastructure</h2>
+    <p>Everything I run lives on two machines: a Dell PowerEdge R610 running Proxmox and an Acer laptop, with around 95 Docker services on top. This site, the blog, the live demos — all served from them, behind Nginx Proxy Manager. The homelab is the project I never stop working on, and the fact that you're reading this page is the uptime report.</p>
+
+    <div class="diagram-wrap no-print">
+<pre class="diagram" aria-label="Network diagram of self-hosted services">
+internet
+   │
+   ▼
+nginx proxy manager ── dell poweredge r610 · proxmox · ~95 docker services
+   ├── <a href="https://alberyt.xyz">alberyt.xyz</a>             ◀ you are here
+   ├── <a href="https://blog.alberyt.xyz" rel="noopener">blog.alberyt.xyz</a>        writing
+   ├── <a href="https://crypto.alberyt.xyz" rel="noopener">crypto.alberyt.xyz</a>      cryptography atlas
+   ├── <a href="https://dash-demo.alberyt.xyz" rel="noopener">dash-demo.alberyt.xyz</a>  soc dashboard
+   └── <a href="http://albertghf2dx6d7bfjibjhtejlyr26gtznotx27fqfapaz2zlkugctad.onion" rel="noopener">albertghf…ctad.onion</a>    tor mirror
+</pre>
+    </div>
+  </section>
+
+  <!-- ── About ────────────────────────────────────────── -->
+  <section id="about" class="container section">
+    <h2><span class="section-label">04</span> About</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm Albert, 18, from Romania. I got into AI through neuroscience — I wanted to understand how brains work and ended up training the artificial kind. That led to machine learning, which led to security, which led to a rack server at home running 95 containers.</p>
+        <p>I compete in CTFs and in the Romanian AI &amp; Cybersecurity Olympiad at the national level. University for AI is next. I'm endlessly curious, always diving into anything I find interesting or useful — lately that includes 3D art and photography, which can keep me away from a terminal just long enough.</p>
+      </div>
+      <div class="skills">
+        <div class="skill-group">
+          <h3 class="mono">languages</h3>
+          <ul class="tags"><li>Python</li><li>JavaScript</li><li>C</li><li>Bash</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3 class="mono">ml / ai</h3>
+          <ul class="tags"><li>PyTorch</li><li>n8n</li><li>Ollama</li><li>LangChain</li><li>Hugging Face</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3 class="mono">security</h3>
+          <ul class="tags"><li>CTFs</li><li>Cryptography</li><li>OSINT</li><li>Network sec</li><li>Reverse engineering</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3 class="mono">infra</h3>
+          <ul class="tags"><li>Docker</li><li>Linux</li><li>Nginx</li><li>PostgreSQL</li><li>Self-hosting</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ──────────────────────────────────────── -->
+  <section id="contact" class="container section">
+    <h2><span class="section-label">05</span> Contact</h2>
+    <p>Want to collaborate, exchange CTF write-ups, or share feedback? My inbox is always open.</p>
+    <ul class="contact-list">
+      <li><span class="mono contact-label">email</span><a href="mailto:contact@alberyt.xyz">contact@alberyt.xyz</a></li>
+      <li><span class="mono contact-label">github</span><a href="https://github.com/Albert-4096" rel="noopener">github.com/Albert-4096</a></li>
+      <li><span class="mono contact-label">blog</span><a href="https://blog.alberyt.xyz" rel="noopener">blog.alberyt.xyz</a></li>
+      <li><span class="mono contact-label">dark web</span><a href="http://albertghf2dx6d7bfjibjhtejlyr26gtznotx27fqfapaz2zlkugctad.onion" rel="noopener">albertghf…ctad.onion</a></li>
+    </ul>
+                <!-- <p class="cv-hint no-print">Need a CV? <button class="linklike" onclick="window.print()">Print this page</button> — the stylesheet collapses it to one page. -->
+      <!-- CV download slot: uncomment and drop cv.pdf in /assets
+      Or <a href="/assets/cv.pdf">download the PDF</a>. -->
+    </p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Self-hosted on a Dell R610 in Romania. No trackers, no analytics, no cookies.</p>
+    <p class="mono">© 2026 Albert G</p>
+  </div>
+</footer>
+
+<script src="/js/main.js" defer></script>
+</body>
+</html>
