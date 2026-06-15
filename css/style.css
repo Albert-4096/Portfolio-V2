@@ -30,6 +30,8 @@
   --bg: #0a0d0b;
   --surface: #0f1310;
   --surface-2: #131815;
+  --surface-glass: rgba(15, 19, 16, 0.72);
+  --surface-glass-strong: rgba(20, 25, 21, 0.82);
   --border: #1f2722;
   --border-strong: #2e3a32;
   --text: #d9dfda;
@@ -52,6 +54,7 @@ body {
   font-size: 1.0625rem;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  text-shadow: 0 2px 8px rgba(10, 13, 11, 0.95), 0 1px 3px rgba(10, 13, 11, 0.95);
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -73,7 +76,7 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 #terrain-canvas {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   pointer-events: none;
   width: 100%;
   height: 100%;
@@ -82,10 +85,20 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .terrain-static-bg {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   pointer-events: none;
   background: url('/assets/retezat-hillshade.png') center/cover no-repeat;
   opacity: 0.07;
+}
+.terrain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, rgba(10, 13, 11, 0.1) 0%, rgba(10, 13, 11, 0.6) 100%);
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 /* ─── Header ──────────────────────────────────────────── */
@@ -137,9 +150,10 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .win-banner {
   display: flex; gap: 1rem; align-items: flex-start;
-  border: 1px solid var(--border-strong);
+  border: 1px solid rgba(76, 217, 123, 0.15);
   border-left: 3px solid var(--accent);
-  background: var(--surface);
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
   padding: 1.1rem 1.25rem;
   max-width: 44rem;
 }
@@ -160,7 +174,10 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 
 /* ─── Sections ────────────────────────────────────────── */
-.section { padding: 3.5rem 1.25rem; border-top: 1px solid var(--border); }
+.section {
+  padding: clamp(5.5rem, 16vh, 9.5rem) 1.25rem;
+  border-top: 1px solid var(--border);
+}
 .section h2 { font-size: 1.6rem; margin-bottom: 0.8em; }
 .section-label {
   font-family: var(--mono); font-size: 0.8rem; font-weight: 400;
@@ -173,11 +190,12 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .building-item {
   display: flex; gap: 1rem; align-items: baseline;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
   padding: 0.8rem 1.1rem;
   transition: border-color 0.15s ease;
 }
-.building-item:hover { border-color: var(--border-strong); }
+.building-item:hover { border-color: rgba(76, 217, 123, 0.4); }
 .building-status {
   font-family: var(--mono); font-size: 0.75rem; color: var(--accent);
   white-space: nowrap; flex-shrink: 0; min-width: 5.5rem;
@@ -199,14 +217,15 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 .card {
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
   padding: 1.4rem;
   display: flex; flex-direction: column;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
-.card:hover { border-color: var(--accent-dim); transform: translateY(-2px); }
-.card.featured { border-color: var(--border-strong); background: var(--surface-2); }
-.card.featured:hover { border-color: var(--accent-dim); }
+.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.card.featured { border-color: rgba(76, 217, 123, 0.25); background: var(--surface-glass-strong); }
+.card.featured:hover { border-color: var(--accent); }
 .card h3 { font-size: 1.15rem; margin-bottom: 0.5em; }
 .card p { color: var(--muted); font-size: 0.95rem; }
 .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; }

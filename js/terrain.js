@@ -147,17 +147,27 @@ function initTerrain() {
     div.className = 'terrain-static-bg';
     div.setAttribute('aria-hidden', 'true');
     body.prepend(div);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'terrain-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    body.prepend(overlay);
     return;
   }
 
   // ── Reduced motion → will render one static frame ──
   const animationEnabled = !prefersReducedMotion;
 
-  // ── Canvas ──
+  // ── Canvas & Overlay ──
   const canvas = document.createElement('canvas');
   canvas.id = 'terrain-canvas';
   canvas.setAttribute('aria-hidden', 'true');
   body.prepend(canvas);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'terrain-overlay';
+  overlay.setAttribute('aria-hidden', 'true');
+  body.prepend(overlay);
 
   // Helper for static fallback
   function triggerFallback(err) {
@@ -204,9 +214,12 @@ function initTerrain() {
   let isTabVisible = true;
   let disposed = false;
 
-  // Camera offset for parallax
+  // Decoupled camera controls for scroll, parallax, drift, and intro dolly
   const cameraBase = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
   const cameraOffset = { x: 0, y: 0 };
+  const cameraIntroOffset = { y: 0.3, z: 0.8 };
+  const cameraDrift = { x: 0, y: 0 };
+  const lookAtTarget = new THREE.Vector3(0, 0.15, 0);
 
   // ── Load assets ──
   Promise.all([
@@ -282,9 +295,13 @@ function initTerrain() {
       uniforms.uTime.value = clock.getElapsedTime();
       uniforms.uCameraPos.value.copy(camera.position);
 
-      // Apply parallax offset
-      camera.position.x = cameraBase.x + cameraOffset.x;
-      camera.position.y = cameraBase.y + cameraOffset.y;
+      // Apply parallax offset + scroll base + intro offset + idle drift
+      camera.position.x = cameraBase.x + cameraOffset.x + cameraDrift.x;
+      camera.position.y = cameraBase.y + cameraOffset.y + cameraIntroOffset.y + cameraDrift.y;
+      camera.position.z = cameraBase.z + cameraIntroOffset.z;
+
+      // Always orient camera toward lookAtTarget
+      camera.lookAt(lookAtTarget);
 
       renderer.render(scene, camera);
     }
@@ -377,9 +394,9 @@ function initTerrain() {
       }, 0);
 
       // Camera dollies in
-      tl.from(cameraBase, {
-        z: 2.2,
-        y: 0.9,
+      tl.to(cameraIntroOffset, {
+        y: 0,
+        z: 0,
         duration: 2.5,
         ease: 'power2.out',
       }, 0);
@@ -387,15 +404,15 @@ function initTerrain() {
       // ── GSAP: Idle drift (after intro) ──
       tl.add(() => {
         // Very slow continuous camera orbit
-        gsap.to(cameraBase, {
+        gsap.to(cameraDrift, {
           x: 0.15,
           duration: 30,
           ease: 'sine.inOut',
           yoyo: true,
           repeat: -1,
         });
-        gsap.to(cameraBase, {
-          y: cameraBase.y + 0.04,
+        gsap.to(cameraDrift, {
+          y: 0.04,
           duration: 25,
           ease: 'sine.inOut',
           yoyo: true,
@@ -406,21 +423,36 @@ function initTerrain() {
       // ── GSAP: ScrollTrigger — camera traverses the massif ──
       const mainEl = document.querySelector('main');
       if (mainEl) {
-        ScrollTrigger.create({
-          trigger: mainEl,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1.5,
-          onUpdate: (self) => {
-            const p = self.progress;
-            // Camera slowly pans across the terrain
-            cameraBase.x = gsap.utils.interpolate(-0.3, 0.3, p);
-            // Gradually increase fog as we scroll down
-            uniforms.uFogFar.value = gsap.utils.interpolate(3.8, 2.2, p);
-            // Slightly reduce contour density at bottom
-            uniforms.uContourWidth.value = gsap.utils.interpolate(1.8, 1.2, p);
-          },
+        const scrollTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: mainEl,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1.5,
+          }
         });
+
+        scrollTl
+          // 1. To Building
+          .to(cameraBase, { x: -0.5, y: 0.35, z: 1.1, ease: 'power1.inOut' }, 0)
+          .to(lookAtTarget, { x: -0.15, y: 0.08, z: -0.2, ease: 'power1.inOut' }, 0)
+          .to(uniforms.uFogFar, { value: 3.4, ease: 'power1.inOut' }, 0)
+
+          // 2. To Projects
+          .to(cameraBase, { x: 0.5, y: 0.3, z: 0.9, ease: 'power1.inOut' }, 1)
+          .to(lookAtTarget, { x: 0.1, y: 0.12, z: 0.15, ease: 'power1.inOut' }, 1)
+          .to(uniforms.uFogFar, { value: 3.0, ease: 'power1.inOut' }, 1)
+
+          // 3. To Infra
+          .to(cameraBase, { x: -0.2, y: 0.25, z: 0.75, ease: 'power1.inOut' }, 2)
+          .to(lookAtTarget, { x: 0.15, y: 0.06, z: -0.25, ease: 'power1.inOut' }, 2)
+          .to(uniforms.uFogFar, { value: 2.6, ease: 'power1.inOut' }, 2)
+
+          // 4. To About / Contact
+          .to(cameraBase, { x: 0.0, y: 0.75, z: 1.5, ease: 'power1.inOut' }, 3)
+          .to(lookAtTarget, { x: 0.0, y: 0.1, z: 0.0, ease: 'power1.inOut' }, 3)
+          .to(uniforms.uFogFar, { value: 2.2, ease: 'power1.inOut' }, 3)
+          .to(uniforms.uContourWidth, { value: 1.2, ease: 'power1.inOut' }, 3);
       }
     } else {
       // ── Reduced motion: single static frame ──
