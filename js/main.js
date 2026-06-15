@@ -5,15 +5,15 @@
    ("active", "shipping", "paused", a date, whatever). */
 const BUILDING = [
   {
-    status: "active",
-    name: "SOC Dashboard",
-    note: "Personal intelligence dashboard pulling telemetry from the homelab.",
-    link: "https://dash-demo.albertg.site",
+    status: "building",
+    name: "Procedural Terrain Generation from DEM Geospatial Data",
+    note: "A project to test my new R610 for heavy 3D use cases like this.",
   },
   {
-    status: "active",
-    name: "Qobuz Web Platform",
+    status: "shipped",
+    name: "Qobuz Web Platform & MCP",
     note: "Hi-res music downloader with an MCP server so AI assistants can run it.",
+    link: "https://github.com/Albert-4096/Qobuz-Web-Platform"
   },
   {
     status: "shipped",
