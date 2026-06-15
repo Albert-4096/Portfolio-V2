@@ -1,2 +1,8 @@
 .env
 README.md
+
+# Raw LiDAR source + processing scratch (regenerate assets via scripts/bake_terrain.sh)
+F06.zip
+*.asc
+*.asc.xml
+.scratch/

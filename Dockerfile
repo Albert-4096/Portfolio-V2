@@ -5,3 +5,4 @@ COPY css /usr/share/nginx/html/css
 COPY js /usr/share/nginx/html/js
 COPY fonts /usr/share/nginx/html/fonts
 COPY assets /usr/share/nginx/html/assets
+COPY vendor /usr/share/nginx/html/vendor
