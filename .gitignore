@@ -6,3 +6,6 @@ F06.zip
 *.asc
 *.asc.xml
 .scratch/
+
+# nginx access/error logs (see nginx.conf)
+logs/

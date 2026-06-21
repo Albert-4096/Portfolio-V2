@@ -5,3 +5,5 @@ services:
     restart: unless-stopped
     ports:
       - "18602:80"
+    volumes:
+      - ./logs:/var/log/nginx
