@@ -1,0 +1,24 @@
+# alberyt.xyz
+
+> Personal website, portfolio, and documentation hub of Albert, a software developer and system administrator based in Romania.
+
+This site outlines Albert's projects spanning software engineering, self-hosted infrastructure, AI automation, and bioinformatics. It serves as a central reference for his technical work, hackathon contributions, and home lab configurations.
+
+## About the Author
+Albert is a Romanian hobbyist software developer and system administrator who balances academic preparation for AI with high-compute infrastructure engineering. Operating a heavy-duty home lab centered around a Dell PowerEdge R610, he specializes in Linux virtualization, self-hosted architectures, and AI automation. His technical expertise spans multiple disciplines, including parsing unstructured medical data for EHDS compliance, running containerized bioinformatics pipelines for genome assembly, and processing geospatial DEM data. He is a frequent hackathon participant and an advocate for data independence and open-source systems.
+
+## Key Projects
+- **EHDS-Service**: A FastAPI backend developed during HackTM 2026, which won first place. It parses unstructured medical discharge reports into standardized HL7 FHIR R4 Bundles to comply with the European Health Data Space (EHDS) initiative.
+- **Cryptography Atlas**: An interactive educational resource detailing various cryptographic algorithms, their specific use cases, and technical quirks.
+- **YouTube Ingestion Pipeline**: An automation architecture utilizing vector embeddings and LLM summaries to automatically process and extract insights from video content.
+- **LCG-Visualizer-Website**: A TypeScript-based tool that validates and computes grayscale images given a Linear Congruential Generator formula.
+
+## Technical Stack & Infrastructure
+- **Languages & Frameworks**: C++, Python (FastAPI), Bash.
+- **Infrastructure & DevOps**: Proxmox VE, Docker, Ubuntu Server, EndeavourOS.
+- **Self-Hosted Services**: Navidrome, Immich, Authentik, Pi-hole, Jellyfin, and 90 others.
+- **Hardware**: Dedicated high-compute home lab featuring a Dell PowerEdge R610 and an older Acer laptop.
+- **AI Integration**: Integration of Model Context Protocol (MCP) and agentic IDE workflows for service control and development.
+
+## Links & Repositories
+- [GitHub Profile](https://github.com/Albert-4096): Source code for public repositories, including authentication backend systems and personal dashboards.

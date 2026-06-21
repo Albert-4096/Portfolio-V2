@@ -4,9 +4,14 @@
    status shows as the green dot label — keep it short
    ("active", "shipping", "paused", a date, whatever). */
 const BUILDING = [
-  {
+ {
     status: "building",
-    name: "Procedural Terrain Generation from DEM Geospatial Data",
+    name: "De Novo Genome Assembly",
+    note: "A biomedical RAM-hungry application to test the R610.",
+  },
+{
+    status: "building",
+    name: "Solar Power Efficiency Analysis Platform from DEM Geospatial Data",
     note: "A project to test my new R610 for heavy 3D use cases like this.",
   },
   {
@@ -14,11 +19,6 @@ const BUILDING = [
     name: "Qobuz Web Platform & MCP",
     note: "Hi-res music downloader with an MCP server so AI assistants can run it.",
     link: "https://github.com/Albert-4096/Qobuz-Web-Platform"
-  },
-  {
-    status: "shipped",
-    name: "This site",
-    note: "The rebuild you're reading. Self-hosted, like everything else.",
   },
 ];
 
