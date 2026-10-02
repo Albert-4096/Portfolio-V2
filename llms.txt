@@ -1,24 +1,43 @@
 # alberyt.xyz
 
-> Personal website, portfolio, and documentation hub of Albert, a software developer and system administrator based in Romania.
+> Personal site of Albert Gabor, a first-year AI student at West University of Timișoara (Romania) who works on machine learning, security and self-hosting. He led his team's build at HackTM 2026, which won the Product Innovation track.
 
-This site outlines Albert's projects spanning software engineering, self-hosted infrastructure, AI automation, and bioinformatics. It serves as a central reference for his technical work, hackathon contributions, and home lab configurations.
+The site lists his projects, his homelab, events he has taken part in, and how to contact him. It is self-hosted on his own hardware and available in English and Romanian.
 
-## About the Author
-Albert is a Romanian hobbyist software developer and system administrator who balances academic preparation for AI with high-compute infrastructure engineering. Operating a heavy-duty home lab centered around a Dell PowerEdge R610, he specializes in Linux virtualization, self-hosted architectures, and AI automation. His technical expertise spans multiple disciplines, including parsing unstructured medical data for EHDS compliance, running containerized bioinformatics pipelines for genome assembly, and processing geospatial DEM data. He is a frequent hackathon participant and an advocate for data independence and open-source systems.
+## About
+- Got into AI through neuroscience, then moved into machine learning and security.
+- First-year BSc in Artificial Intelligence at West University of Timișoara (UVT), started 2026.
+- Artificial Intelligence Olympiad, national stage (2025, 2026). Cybersecurity Olympiad, national stage (2025). Both are national-stage qualifications, not prizes.
+- Plays CTFs. Cambridge C1 Advanced (2025).
+- Open to internships, research with professors, freelance websites and automations for small businesses, and CTF teams and hackathons.
 
-## Key Projects
-- **EHDS-Service**: A FastAPI backend developed during HackTM 2026, which won first place. It parses unstructured medical discharge reports into standardized HL7 FHIR R4 Bundles to comply with the European Health Data Space (EHDS) initiative.
-- **Cryptography Atlas**: An interactive educational resource detailing various cryptographic algorithms, their specific use cases, and technical quirks.
-- **YouTube Ingestion Pipeline**: An automation architecture utilizing vector embeddings and LLM summaries to automatically process and extract insights from video content.
-- **LCG-Visualizer-Website**: A TypeScript-based tool that validates and computes grayscale images given a Linear Congruential Generator formula.
+## Projects
+- [EHDS-Service](https://github.com/Albert-4096/EHDS-Service): converts Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles for the European Health Data Space, using a 9-stage extraction pipeline (Python, FastAPI, React, TypeScript). Built at HackTM 2026, his first hackathon. Albert led the build with his team, and it won the Product Innovation track (€2,000, sponsored by Aumovio). Live demo with a synthetic patient: https://ehds.alberyt.xyz
+- K-Project (private repository): 5,500+ saved YouTube videos turned into a searchable corpus (captions or Whisper transcripts, bge-m3 embeddings, hybrid search in PostgreSQL with pgvector), queried by Claude Code over MCP.
+- [Cryptography Atlas](https://crypto.alberyt.xyz): a small visual guide to several cryptographic algorithms, their uses and quirks (React, Vite). Source: https://github.com/Albert-4096/cryptography-atlas
+- [mail-platform](https://github.com/Albert-4096/mail-platform): personal webmail for own-domain email on top of Resend (Next.js, PostgreSQL, required TOTP).
+- [LCG Visualizer](https://lcg.alberyt.xyz): renders a linear congruential generator's output as a grayscale image and checks its parameters against the Hull–Dobell theorem. Source: https://github.com/Albert-4096/LCG-Visualizer-Website
+- [Nonlinear Thinking](https://nonlinear-thinking.alberyt.xyz): a guide to habits, environment and exercises for nonlinear thinking.
+- [Auth System](https://github.com/Albert-4096/auth-system): a small dockerized authentication backend (Node.js, Express, TypeScript, PostgreSQL, Argon2, JWT).
+- Guest check-in desk for TEDxAristide Demetriade (private repository, 2026).
+- Open-source contributions, both merged in September 2026: [NandhaKishorM/laya#264](https://github.com/NandhaKishorM/laya/pull/264) (treat an empty HF_TOKEN as no token) and [Freika/dawarich#3595](https://github.com/Freika/dawarich/pull/3595) (warn at startup when a self-hosted instance runs in development mode).
 
-## Technical Stack & Infrastructure
-- **Languages & Frameworks**: C++, Python (FastAPI), Bash.
-- **Infrastructure & DevOps**: Proxmox VE, Docker, Ubuntu Server, EndeavourOS.
-- **Self-Hosted Services**: Navidrome, Immich, Authentik, Pi-hole, Jellyfin, and 90 others.
-- **Hardware**: Dedicated high-compute home lab featuring a Dell PowerEdge R610 and an older Acer laptop.
-- **AI Integration**: Integration of Model Context Protocol (MCP) and agentic IDE workflows for service control and development.
+## Homelab
+- Self-hosting since January 2024 (his first Linux install and first Ubuntu server).
+- An always-on Lenovo ThinkCentre mini PC running Ubuntu 24.04, with about 130 Docker containers behind Nginx Proxy Manager.
+- A Dell PowerEdge R610 (Proxmox) that is mostly powered off and wakes up once a week to run Proxmox Backup Server.
+- Services include n8n, Immich, Jellyfin, Home Assistant, Paperless, SearXNG, Pi-hole, CrowdSec, fail2ban, self-hosted Umami analytics (opt-in only), and a Tor mirror of this site.
 
-## Links & Repositories
-- [GitHub Profile](https://github.com/Albert-4096): Source code for public repositories, including authentication backend systems and personal dashboards.
+## Writing
+- [Won Product Innovation at HackTM. Here's What I Actually Took Away.](https://blog.alberyt.xyz/posts/hacktm-2026/) (May 2026)
+- [Locking Down a Private Site with Romanian eID + mTLS](https://blog.alberyt.xyz/posts/locking-down-a-private-site-with-romanian-eid/) (October 2025)
+- [How I Prompt-Injected ChatGPT to Leak Its Own Security Policy](https://blog.alberyt.xyz/posts/prompt-injected-chatgpt-security-policy/) (June 2025)
+- [All posts](https://blog.alberyt.xyz)
+
+## Contact
+- Email: contact@alberyt.xyz
+- LinkedIn: https://www.linkedin.com/in/albert-gabor-5a763b36a/
+- CV: https://gallery.alberyt.xyz/cv
+- Websites he has built: https://gallery.alberyt.xyz
+- GitHub: https://github.com/Albert-4096
+- Tor mirror: http://albertghf2dx6d7bfjibjhtejlyr26gtznotx27fqfapaz2zlkugctad.onion

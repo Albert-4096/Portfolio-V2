@@ -1,15 +1,34 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Albert G — ML · CyberSec · Homelab · CTF</title>
-  <meta name="description" content="18-year-old Romanian developer. HackTM 2026 winner. I build machine-learning models, compete in CTFs, and self-host everything on a rack server at home.">
-  <link rel="canonical" href="https://alberyt.xyz">
-  <meta property="og:title" content="Albert G — ML · CyberSec · Homelab · CTF">
-  <meta property="og:description" content="HackTM 2026 winner. ML, security, and a homelab with ~95 Docker services. Everything here is self-hosted.">
-  <meta property="og:url" content="https://alberyt.xyz">
+  <title>Albert Gabor · ML, security &amp; self-hosting</title>
+  <meta name="description" content="I&#x27;m Albert Gabor, a first-year AI student in Timișoara. HackTM 2026 winner with my team, CTF player, and self-hosting my own servers since January 2024.">
+  <script>
+  window.SITE_META={"en": {"title": "Albert Gabor · ML, security & self-hosting", "desc": "I'm Albert Gabor, a first-year AI student in Timișoara. HackTM 2026 winner with my team, CTF player, and self-hosting my own servers since January 2024."}, "ro": {"title": "Albert Gabor · ML, securitate și self-hosting", "desc": "Sunt Albert Gabor, student în anul I la AI, în Timișoara. Am câștigat HackTM 2026 cu echipa mea, joc CTF-uri și îmi țin propriile servere din ianuarie 2024."}};
+  (function(){var d=document.documentElement,p=location.pathname,s=null,l;
+  try{s=localStorage.getItem('lang')}catch(e){}
+  if(/^\/ro\/?$/.test(p))l='ro';else if(s==='en'||s==='ro')l=s;else l=/^ro\b/i.test(navigator.language||'')?'ro':'en';
+  d.lang=l;d.setAttribute('data-lang',l);
+  var u=l==='ro'?'/ro/':'/';if(p!==u&&/^\/(index\.html)?$/.test(p))history.replaceState(null,'',u+location.search+location.hash);
+  var c=document.createElement('link');c.rel='canonical';c.href='https://alberyt.xyz'+u;document.head.appendChild(c);
+  if(l==='ro'){document.title=SITE_META.ro.title;document.querySelector('meta[name=description]').content=SITE_META.ro.desc}})();
+  </script>
+  <link rel="alternate" hreflang="en" href="https://alberyt.xyz/">
+  <link rel="alternate" hreflang="ro" href="https://alberyt.xyz/ro/">
+  <link rel="alternate" hreflang="x-default" href="https://alberyt.xyz/">
+  <meta property="og:title" content="Albert Gabor · ML, security &amp; self-hosting">
+  <meta property="og:description" content="First-year AI student at UVT and HackTM 2026 winner (with my team). Self-hosting since January 2024: this site is one of about 130 containers on a mini PC at home.">
+  <meta property="og:url" content="https://alberyt.xyz/">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="https://alberyt.xyz/assets/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="alberyt.xyz: Albert Gabor's name over a green contour map of the Retezat mountains.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ro_RO">
   <meta name="theme-color" content="#0a0d0b">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -22,203 +41,282 @@
     }
   }
   </script>
-  <script defer src="https://analytics.alberyt.xyz/script.js" data-website-id="d1cc2d72-388b-4550-8c39-772046a13e23"></script>
-  <script defer src="https://analytics.alberyt.xyz/recorder.js" data-website-id="d1cc2d72-388b-4550-8c39-772046a13e23" data-sample-rate="0.15" data-mask-level="moderate" data-max-duration="300000"></script>
 </head>
 <body>
 
-<header class="site-header">
-  <nav class="container" aria-label="Main">
-    <a class="brand" href="#top">alberyt.xyz</a>
+<a class="skip" href="#top"><span data-i18n="en">Skip to content</span><span data-i18n="ro">Sari la conținut</span></a>
+
+<header class="site-header"><div class="container header-row">
+  <a class="brand" href="#top">alberyt.xyz</a>
+  <nav id="site-nav" class="site-nav" popover data-aria-en="Main" data-aria-ro="Principal" aria-label="Main">
     <ul class="nav-links">
-      <li><a href="#building">building</a></li>
-      <li><a href="#projects">projects</a></li>
-      <li><a href="#infra">infra</a></li>
-      <li><a href="#about">about</a></li>
-      <li><a href="#contact">contact</a></li>
+      <li><a href="#work"><span class="nav-i" aria-hidden="true">01</span><span data-i18n="en">work</span><span data-i18n="ro">proiecte</span></a></li>
+      <li><a href="#now"><span class="nav-i" aria-hidden="true">02</span><span data-i18n="en">now</span><span data-i18n="ro">acum</span></a></li>
+      <li><a href="#homelab"><span class="nav-i" aria-hidden="true">03</span><span data-i18n="en">homelab</span><span data-i18n="ro">homelab</span></a></li>
+      <li><a href="#out-there"><span class="nav-i" aria-hidden="true">04</span><span data-i18n="en">out there</span><span data-i18n="ro">pe teren</span></a></li>
+      <li><a href="#about"><span class="nav-i" aria-hidden="true">05</span><span data-i18n="en">about</span><span data-i18n="ro">despre</span></a></li>
+      <li><a href="#contact"><span class="nav-i" aria-hidden="true">06</span><span data-i18n="en">contact</span><span data-i18n="ro">contact</span></a></li>
     </ul>
   </nav>
-</header>
+  <div class="header-tools">
+    <div class="lang-toggle" role="group" data-aria-en="Language" data-aria-ro="Limbă" aria-label="Language">
+        <a class="lang-opt" href="/" hreflang="en" lang="en">EN</a>
+        <a class="lang-opt" href="/ro/" hreflang="ro" lang="ro">RO</a>
+        <span class="lang-thumb" aria-hidden="true"><span>EN</span><span>RO</span></span>
+      </div>
+    <a class="btn btn--primary btn--sm header-cta" href="#contact"><span data-i18n="en">Get in touch</span><span data-i18n="ro">Scrie-mi</span></a>
+    <button class="menu-btn" type="button" popovertarget="site-nav"><span data-i18n="en">Menu</span><span data-i18n="ro">Meniu</span></button>
+  </div>
+</div></header>
 
-<main id="top">
+<main id="top" tabindex="-1">
 
   <!-- ── Hero ─────────────────────────────────────────── -->
-  <section class="hero container">
-    <p class="eyebrow">ml · cybersec · homelab · ctf — romania</p>
-    <h1>Albert G</h1>
-    <p class="lede">I build machine-learning models, create automation systems, compete in CTFs, and turn research into hands-on experiments — one side-project at a time.</p>
+  <section class="hero"><div class="container">
+    <p class="eyebrow" data-enter style="--i:0" data-i18n="en">ml&nbsp;· security&nbsp;· homelab&nbsp;· ctf&nbsp;· timișoara</p><p class="eyebrow" data-enter style="--i:0" data-i18n="ro">ml&nbsp;· securitate&nbsp;· homelab&nbsp;· ctf&nbsp;· timișoara</p>
+    <h1 data-enter style="--i:1">Albert Gabor</h1>
+    <p class="lede" data-enter style="--i:2" data-i18n="en">Hey there, I'm Albert, a first-year AI student at UVT. I'm really curious, and I learn by building: ML models, security tools, and the servers this site runs on.</p><p class="lede" data-enter style="--i:2" data-i18n="ro">Salut, sunt Albert, student în anul I la AI, la UVT. Sunt foarte curios și învăț construind: modele ML, unelte de securitate și serverele pe care rulează site-ul ăsta.</p>
+    <div class="cta-row" data-enter style="--i:3">
+      <a class="btn btn--primary" href="#contact"><span data-i18n="en">Get in touch</span><span data-i18n="ro">Scrie-mi</span></a>
+      <a class="btn btn--ghost" href="#work"><span data-i18n="en">See my work</span><span data-i18n="ro">Vezi ce fac</span></a>
+    </div>
+    <p class="hero-proof" data-enter style="--i:4" data-i18n="en">Self-hosting since Jan 2024 · ~130 containers · served from my home</p><p class="hero-proof" data-enter style="--i:4" data-i18n="ro">Self-hosting din ian. 2024 · ~130 de containere · găzduit acasă</p>
 
-    <aside class="win-banner" aria-label="HackTM 2026 win">
-      <span class="win-tag">winner</span>
+    <div class="win-banner" role="group" data-aria-en="HackTM 2026 win" data-aria-ro="Victoria de la HackTM 2026" aria-label="HackTM 2026 win" data-enter style="--i:5">
+      <span class="win-tag"><span data-i18n="en">winner</span><span data-i18n="ro">câștigător</span></span>
       <div>
-        <p class="win-title">HackTM 2026 — Product Innovation track</p>
-        <p class="win-detail">A pipeline that converts Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles. Sponsored by Aumovio. €2,000 prize. <a href="#projects">See the project ↓</a></p>
+        <p class="win-title"><span data-i18n="en">HackTM 2026 · Product Innovation track</span><span data-i18n="ro">HackTM 2026 · categoria Product Innovation</span></p>
+        <p class="win-detail"><span data-i18n="en">My first hackathon. I led the build, with my team, and we won the Product Innovation track (sponsored by Aumovio, €2,000). The project turns Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles.</span><span data-i18n="ro">Primul meu hackathon. Am condus dezvoltarea, cu echipa mea, și am câștigat categoria Product Innovation (sponsorizată de Aumovio, 2.000 €). Proiectul transformă PDF-urile cu bilete de externare din spitalele românești în bundle-uri HL7 FHIR R4 valide.</span></p>
+        <p class="win-links"><a href="https://ehds.alberyt.xyz/" rel="noopener"><span data-i18n="en">Try the demo</span><span data-i18n="ro">Încearcă demo-ul</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://blog.alberyt.xyz/posts/hacktm-2026/" rel="noopener"><span data-i18n="en">How it went</span><span data-i18n="ro">Cum a fost (EN)</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p>
       </div>
-    </aside>
+    </div>
 
-    <p class="print-contact print-only">contact@alberyt.xyz · github.com/Albert-4096 · blog.alberyt.xyz · alberyt.xyz</p>
-  </section>
+    <p class="hero-cap" aria-hidden="true"><span data-i18n="en">Retezat Mountains · 1 m LiDAR</span><span data-i18n="ro">Munții Retezat · LiDAR de 1 m</span></p>
 
-  <!-- ── Currently building ───────────────────────────── -->
-  <section id="building" class="container section">
-    <h2><span class="section-label">01</span> Currently building</h2>
-    <p class="section-note">What's on the bench right now. If this list goes stale for more than a month, email me and complain.</p>
-    <ul id="building-list" class="building-list">
-      <noscript><li class="building-item"><p>JavaScript is off — fair enough. The list lives in <span class="mono">js/main.js</span>.</p></li></noscript>
+    <p class="print-contact print-only">contact@alberyt.xyz · linkedin.com/in/albert-gabor-5a763b36a · github.com/Albert-4096 · alberyt.xyz</p>
+  </div></section>
+
+  <!-- ── Proof strip ──────────────────────────────────── -->
+  <section id="proof" aria-labelledby="proof-h"><div class="container">
+    <h2 id="proof-h" class="vh"><span data-i18n="en">Highlights</span><span data-i18n="ro">Pe scurt</span></h2>
+    <ul class="chips" data-aria-en="Highlights" data-aria-ro="Pe scurt" aria-label="Highlights" data-reveal>
+      <li class="chip"><span class="chip__k"><span data-i18n="en">UVT</span><span data-i18n="ro">UVT</span></span><span class="chip__v"><span data-i18n="en">AI, year 1</span><span data-i18n="ro">AI, anul I</span></span></li>
+      <li class="chip"><span class="chip__k"><span data-i18n="en">olympiads</span><span data-i18n="ro">olimpiade</span></span><span class="chip__v"><span data-i18n="en">national stage 2025–26</span><span data-i18n="ro">faza națională 2025–26</span></span></li>
+      <li class="chip"><span class="chip__k"><span data-i18n="en">open source</span><span data-i18n="ro">open source</span></span><span class="chip__v"><span data-i18n="en">2 fixes merged</span><span data-i18n="ro">2 fix-uri acceptate</span></span></li>
     </ul>
-  </section>
+  </div></section>
 
-  <!-- ── Projects ─────────────────────────────────────── -->
-  <section id="projects" class="container section">
-    <h2><span class="section-label">02</span> Projects</h2>
+  <!-- ── Work ─────────────────────────────────────────── -->
+  <section id="work" class="section" aria-labelledby="work-h"><div class="container">
+  <header class="sec-head" data-reveal>
+    <span class="sec-index" aria-hidden="true">01</span>
+    <h2 id="work-h"><span data-i18n="en">Work</span><span data-i18n="ro">Proiecte</span></h2>
+    <span class="sec-rule" aria-hidden="true"></span>
+  </header>
 
-    <div class="featured-grid">
-      <article class="card featured">
-        <div class="card-head">
-          <h3>EHDS Medical Platform</h3>
-          <span class="badge">HackTM 2026 winner</span>
-        </div>
-        <p>Romanian hospital discharge papers are PDFs. The European Health Data Space wants HL7 FHIR R4. This pipeline reads the first and emits the second — valid bundles, real documents, end to end. It won the Product Innovation track at HackTM 2026.</p>
-        <ul class="tags"><li>React</li><li>TypeScript</li><li>Python</li><li>FHIR R4</li></ul>
-        <p class="card-links"><a href="https://ehds.alberyt.xyz/" rel="noopener">Demo ↗</a><a href="https://github.com/Albert-4096/EHDS-Service" rel="noopener">GitHub ↗</a></p>
+    <div class="work-featured">
+      <article class="card card--featured" aria-labelledby="p-ehds" data-reveal>
+        <div class="card__meta"><time datetime="2026-05">2026</time><span class="badge"><span data-i18n="en">HackTM 2026 winner</span><span data-i18n="ro">câștigător HackTM 2026</span></span></div>
+        <h3 id="p-ehds" class="card__title">EHDS-Service</h3>
+        <p class="card__body"><span data-i18n="en">Romanian hospitals hand out discharge papers as PDFs. The European Health Data Space wants HL7 FHIR R4. We built the part in between: a 9-stage pipeline that turns the PDF into a valid FHIR bundle. I led the build, with my team.</span><span data-i18n="ro">Spitalele din România dau biletele de externare ca PDF-uri. Spațiul european al datelor privind sănătatea cere HL7 FHIR R4. Noi am construit partea dintre ele: un pipeline în 9 etape care face din PDF un bundle FHIR valid. Am condus dezvoltarea, cu echipa mea.</span></p>
+        <p class="card__hard"><span class="card__label"><span data-i18n="en">hard part</span><span data-i18n="ro">partea grea</span></span> <span data-i18n="en">Not the code. We spent the first three days figuring out what the regulation actually asks for.</span><span data-i18n="ro">Nu codul. Primele trei zile am încercat doar să înțelegem ce cere de fapt regulamentul.</span></p>
+        <ul class="tags"><li>Python</li><li>FastAPI</li><li>React</li><li>TypeScript</li><li>HL7 FHIR R4</li></ul>
+        <p class="card__links"><a href="https://ehds.alberyt.xyz" rel="noopener"><span data-i18n="en">Try it (1 click)</span><span data-i18n="ro">Încearcă (1 click)</span><span class="vh"> – EHDS-Service</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://github.com/Albert-4096/EHDS-Service" rel="noopener"><span data-i18n="en">GitHub</span><span data-i18n="ro">GitHub</span><span class="vh"> – EHDS-Service</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://blog.alberyt.xyz/posts/hacktm-2026/" rel="noopener"><span data-i18n="en">Write-up</span><span data-i18n="ro">Articol (EN)</span><span class="vh"> – EHDS-Service</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p>
+        <p class="card__demo"><span data-i18n="en">The demo runs a synthetic patient's discharge PDF through the whole pipeline in one click: 78 FHIR resources, 0 validation errors.</span><span data-i18n="ro">Demo-ul trece într-un click biletul de externare al unui pacient fictiv prin tot pipeline-ul: 78 de resurse FHIR, 0 erori de validare.</span></p>
       </article>
 
-      <article class="card featured">
-        <div class="card-head">
-          <h3>Cryptography Atlas</h3>
-          <span class="badge badge-live">live</span>
-        </div>
-        <p>An interactive map of cryptographic concepts. Most crypto explanations are either hand-wavy or impenetrable; this one lets you poke at the primitives until they make sense.</p>
+      <article class="card card--featured" aria-labelledby="p-kproject" data-reveal>
+        <div class="card__meta"><span class="badge badge--muted"><span data-i18n="en">private · Sep 2026</span><span data-i18n="ro">privat · sept. 2026</span></span></div>
+        <h3 id="p-kproject" class="card__title">K-Project</h3>
+        <p class="card__body"><span data-i18n="en">5,500+ YouTube videos I'd saved, turned into a library I can actually search. Captions (or Whisper when there are none), bge-m3 embeddings, and hybrid search in Postgres with pgvector. Claude Code queries it over MCP.</span><span data-i18n="ro">Peste 5.500 de videoclipuri YouTube salvate, transformate într-o bibliotecă în care chiar pot căuta. Subtitrări (sau Whisper, când nu există), embedding-uri bge-m3 și căutare hibridă în Postgres cu pgvector. Claude Code o interoghează prin MCP.</span></p>
+        <ul class="tags"><li>Python</li><li>PostgreSQL</li><li>pgvector</li><li>Whisper</li><li>MCP</li></ul>
+        <p class="card__links"><span data-i18n="en">Private repo, for now.</span><span data-i18n="ro">Repo privat, deocamdată.</span></p>
+      </article>
+
+      <article class="card card--featured" aria-labelledby="p-crypto" data-reveal>
+        <div class="card__meta"><span class="badge badge-live"><span data-i18n="en">live</span><span data-i18n="ro">live</span></span></div>
+        <h3 id="p-crypto" class="card__title">Cryptography Atlas</h3>
+        <p class="card__body"><span data-i18n="en">A small visual guide to a few cryptographic algorithms: what they do, where they're used, and their quirks.</span><span data-i18n="ro">Un mic ghid vizual pentru câțiva algoritmi criptografici: ce fac, unde sunt folosiți și ce ciudățenii au.</span></p>
         <ul class="tags"><li>React</li><li>Vite</li></ul>
-        <p class="card-links"><a href="https://crypto.alberyt.xyz" rel="noopener">crypto.alberyt.xyz ↗</a> <a href="https://github.com/Albert-4096/cryptography-atlas" rel="noopener">GitHub ↗</a></p>
-      </article>
-
-      <article class="card featured">
-        <div class="card-head">
-          <h3>SOC Dashboard</h3>
-          <span class="badge badge-live">live demo</span>
-        </div>
-        <p>A Palantir-style personal intelligence dashboard. Telemetry from machines I own, on one screen, because tailing logs across 95 containers stopped being fun.</p>
-        <ul class="tags"><li>Node.js</li><li>Telemetry</li></ul>
-        <p class="card-links"><a href="https://dash-demo.alberyt.xyz" rel="noopener">dash-demo.alberyt.xyz ↗</a> <a href="https://github.com/Albert-4096/dashboard-demo" rel="noopener">GitHub ↗</a></p>
+        <p class="card__links"><a href="https://crypto.alberyt.xyz" rel="noopener"><span data-i18n="en">crypto.alberyt.xyz</span><span data-i18n="ro">crypto.alberyt.xyz</span><span class="vh"> – Cryptography Atlas</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://github.com/Albert-4096/cryptography-atlas" rel="noopener"><span data-i18n="en">GitHub</span><span data-i18n="ro">GitHub</span><span class="vh"> – Cryptography Atlas</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p>
       </article>
     </div>
 
-    <div class="rest-grid">
-      <article class="card">
-        <h3>Auth System</h3>
-        <p>Production-grade auth microservice. JWT sessions, Argon2 hashing — the boring parts, done properly.</p>
-        <ul class="tags"><li>TypeScript</li><li>Postgres</li><li>JWT</li><li>Argon2</li></ul>
-        <p class="card-links"><a href="https://github.com/Albert-4096/auth-system" rel="noopener">GitHub ↗</a></p>
-      </article>
+    <h3 class="work-sub"><span data-i18n="en">More things I made</span><span data-i18n="ro">Alte lucruri făcute de mine</span></h3>
+    <ol class="log log--compact log--list" data-reveal>
+      <li class="log__item"><div class="log__main"><p class="log__title"><a href="https://github.com/Albert-4096/mail-platform" rel="noopener">mail-platform</a></p><p class="log__note"><span data-i18n="en">My own webmail for my own domains, on top of Resend. Next.js, Postgres, TOTP required.</span><span data-i18n="ro">Webmail-ul meu pentru domeniile mele, construit pe Resend. Next.js, Postgres, TOTP obligatoriu.</span></p></div></li>
+      <li class="log__item"><div class="log__main"><p class="log__title"><span data-i18n="en">Open-source fixes</span><span data-i18n="ro">Fix-uri open-source</span></p><p class="log__note"><span data-i18n="en">Two fixes merged upstream: empty Hugging Face tokens in <a href="https://github.com/NandhaKishorM/laya/pull/264" rel="noopener">laya</a>, and a dev-mode warning for self-hosted <a href="https://github.com/Freika/dawarich/pull/3595" rel="noopener">Dawarich</a>.</span><span data-i18n="ro">Două fix-uri acceptate: token-uri Hugging Face goale în <a href="https://github.com/NandhaKishorM/laya/pull/264" rel="noopener">laya</a> și un avertisment pentru <a href="https://github.com/Freika/dawarich/pull/3595" rel="noopener">Dawarich</a> self-hosted pornit în modul de dezvoltare.</span></p></div></li>
+      <li class="log__item"><div class="log__main"><p class="log__title"><a href="https://lcg.alberyt.xyz" rel="noopener">LCG Visualizer</a></p><p class="log__note"><span data-i18n="en">See an LCG's output as a grayscale image and check its parameters against the Hull–Dobell theorem. Bad ones show up as patterns.</span><span data-i18n="ro">Vezi ieșirea unui LCG ca imagine gri și verifică parametrii cu teorema Hull–Dobell. Cei prost aleși se văd ca tipare.</span></p></div></li>
+      <li class="log__item"><div class="log__main"><p class="log__title"><a href="https://nonlinear-thinking.alberyt.xyz" rel="noopener">Nonlinear Thinking</a></p><p class="log__note"><span data-i18n="en">A guide to the habits, environment and even music that help you think less linearly.</span><span data-i18n="ro">Un ghid despre obiceiurile, mediul și chiar muzica care te ajută să gândești mai puțin liniar.</span></p></div></li>
+      <li class="log__item"><div class="log__main"><p class="log__title"><a href="https://github.com/Albert-4096/auth-system" rel="noopener">Auth System</a></p><p class="log__note"><span data-i18n="en">A small, dockerized auth backend: Argon2, JWT, Postgres. The boring parts, done properly.</span><span data-i18n="ro">Un backend mic de autentificare, în Docker: Argon2, JWT, Postgres. Părțile plictisitoare, făcute cum trebuie.</span></p></div></li>
+      <li class="log__item"><div class="log__main"><p class="log__title"><a href="https://github.com/Albert-4096/opere-bac-website" rel="noopener">Opere BAC</a></p><p class="log__note"><span data-i18n="en">A study site for the Romanian Baccalaureate literature exam. Built for an exam I actually had to pass.</span><span data-i18n="ro">Un site de învățat pentru proba de română de la BAC. Făcut pentru un examen pe care chiar trebuia să-l iau.</span></p></div></li>
+    </ol>
 
-      <article class="card">
-        <h3>Qobuz Web Platform</h3>
-        <p>Self-hosted hi-res music downloader with an MCP server, so an AI assistant can fetch albums for me.</p>
-        <ul class="tags"><li>FastAPI</li><li>Docker</li><li>MCP</li></ul>
-        <p class="card-links"><a href="https://github.com/Albert-4096/Qobuz-Web-Platform" rel="noopener">GitHub ↗</a></p>
-      </article>
+    <h3 class="work-sub"><span data-i18n="en">Writing</span><span data-i18n="ro">Ce am scris</span></h3>
+    <p class="log__note" data-i18n="ro">Articolele sunt în engleză.</p>
+    <ol class="log log--links" data-reveal>
+      <li class="log__item"><div class="log__when"><time datetime="2026-05"><span data-i18n="en">May 2026</span><span data-i18n="ro">mai 2026</span></time></div><div class="log__main"><p class="log__title"><a href="https://blog.alberyt.xyz/posts/hacktm-2026/" rel="noopener"><span data-i18n="en">What I took away from winning HackTM</span><span data-i18n="ro">Ce am învățat după ce am câștigat HackTM</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p></div></li>
+      <li class="log__item"><div class="log__when"><time datetime="2025-10"><span data-i18n="en">Oct 2025</span><span data-i18n="ro">oct. 2025</span></time></div><div class="log__main"><p class="log__title"><a href="https://blog.alberyt.xyz/posts/locking-down-a-private-site-with-romanian-eid/" rel="noopener"><span data-i18n="en">Locking down a private site with my Romanian eID card and mTLS</span><span data-i18n="ro">Un site privat care se deschide doar cu buletinul electronic și mTLS</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p></div></li>
+      <li class="log__item"><div class="log__when"><time datetime="2025-06"><span data-i18n="en">Jun 2025</span><span data-i18n="ro">iun. 2025</span></time></div><div class="log__main"><p class="log__title"><a href="https://blog.alberyt.xyz/posts/prompt-injected-chatgpt-security-policy/" rel="noopener"><span data-i18n="en">How I prompt-injected ChatGPT into leaking its own security policy</span><span data-i18n="ro">Cum am făcut ChatGPT, prin prompt injection, să-și divulge politica de securitate</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p></div></li>
+    </ol>
+    <p class="log-all"><a href="https://blog.alberyt.xyz" rel="noopener"><span data-i18n="en">All posts</span><span data-i18n="ro">Toate articolele</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p>
+  </div></section>
 
-      <article class="card">
-        <h3>LCG Visualizer</h3>
-        <p>Interactive PRNG visualizer with Hull–Dobell theorem analysis. Watch a bad seed ruin everything.</p>
-        <ul class="tags"><li>JavaScript</li><li>PRNG</li></ul>
-        <p class="card-links"><a href="https://lcg.alberyt.xyz/" rel="noopener">Website ↗</a><a href="https://github.com/Albert-4096/LCG-Visualizer-Website" rel="noopener">GitHub ↗</a></p>
-      </article>
+  <!-- ── Now ──────────────────────────────────────────── -->
+  <section id="now" class="section" aria-labelledby="now-h"><div class="container">
+  <header class="sec-head" data-reveal>
+    <span class="sec-index" aria-hidden="true">02</span>
+    <h2 id="now-h"><span data-i18n="en">Now</span><span data-i18n="ro">Acum</span></h2>
+    <span class="sec-rule" aria-hidden="true"></span>
+    <span class="sec-meta"><span data-i18n="en">Last updated: 2 October 2026</span><span data-i18n="ro">Actualizat: 2 octombrie 2026</span></span>
+  </header>
+    <p class="sec-intro"><span data-i18n="en">What I'm working on right now. If this list goes stale for more than a month, email me and complain :)</span><span data-i18n="ro">La ce lucrez acum. Dacă lista asta stă neschimbată mai mult de o lună, scrie-mi și ceartă-mă :)</span></p>
+    <!-- NOW: edit entries here. Newest first. Both languages. -->
+    <ol class="log" data-reveal>
+      <li class="log__item" data-status="active">
+        <div class="log__when"><time datetime="2026-10"><span data-i18n="en">Oct 2026</span><span data-i18n="ro">oct. 2026</span></time><span class="log__status" role="group" data-aria-en="Status" data-aria-ro="Stare" aria-label="Status"><span class="log__dot"></span><span data-i18n="en">started</span><span data-i18n="ro">început</span></span></div>
+        <div class="log__main"><p class="log__title"><span data-i18n="en">First weeks at UVT</span><span data-i18n="ro">Primele săptămâni la UVT</span></p><p class="log__note"><span data-i18n="en">Year one of my BSc in Artificial Intelligence at West University of Timișoara.</span><span data-i18n="ro">Anul I de licență în Inteligență Artificială, la Universitatea de Vest din Timișoara.</span></p></div>
+      </li>
+      <li class="log__item" data-status="active">
+        <div class="log__when"><time datetime="2026-09"><span data-i18n="en">Sep 2026</span><span data-i18n="ro">sept. 2026</span></time><span class="log__status" role="group" data-aria-en="Status" data-aria-ro="Stare" aria-label="Status"><span class="log__dot"></span><span data-i18n="en">building</span><span data-i18n="ro">în lucru</span></span></div>
+        <div class="log__main"><p class="log__title"><span data-i18n="en">K-Project</span><span data-i18n="ro">K-Project</span></p><p class="log__note"><span data-i18n="en">Making 5,500+ saved YouTube videos searchable from Claude Code.</span><span data-i18n="ro">Peste 5.500 de videoclipuri YouTube salvate, în care pot căuta direct din Claude Code.</span></p></div>
+      </li>
+      <li class="log__item" data-status="rabbit-hole">
+        <div class="log__when"><span class="log__status" role="group" data-aria-en="Status" data-aria-ro="Stare" aria-label="Status"><span class="log__dot"></span><span data-i18n="en">rabbit hole</span><span data-i18n="ro">curiozitate</span></span></div>
+        <div class="log__main"><p class="log__title log__title--plain"><span data-i18n="en">How phones work out where they are from nearby Wi-Fi networks, by asking Apple's location service what it knows about each BSSID.</span><span data-i18n="ro">Cum își dau seama telefoanele unde sunt după rețelele Wi-Fi din jur, întrebând serviciul de localizare Apple ce știe despre fiecare BSSID.</span></p></div>
+      </li>
+    </ol>
+  </div></section>
 
-      <article class="card">
-        <h3>Opere BAC</h3>
-        <p>Study platform for the Romanian Baccalaureate literature exam. Built for an exam I actually had to pass.</p>
-        <ul class="tags"><li>Web</li><li>Education</li></ul>
-        <p class="card-links"><a href="https://github.com/Albert-4096/opere-bac-website" rel="noopener">GitHub ↗</a></p>
-      </article>
-
-      <article class="card">
-        <h3>Nonlinear Thinking Website</h3>
-        <p>An interactive explainer on thinking in systems instead of straight lines.</p>
-        <ul class="tags"><li>JavaScript</li><li>Interactive</li></ul>
-        <p class="card-links"><a href="https://nonlinear-thinking.alberyt.xyz/" rel="noopener">Website ↗</a><a href="https://github.com/Albert-4096/Nonlinear-Thinking-Website" rel="noopener">GitHub ↗</a></p>
-      </article>
+  <!-- ── Homelab ──────────────────────────────────────── -->
+  <section id="homelab" class="section" aria-labelledby="homelab-h"><div class="container">
+  <header class="sec-head" data-reveal>
+    <span class="sec-index" aria-hidden="true">03</span>
+    <h2 id="homelab-h"><span data-i18n="en">Homelab</span><span data-i18n="ro">Homelab</span></h2>
+    <span class="sec-rule" aria-hidden="true"></span>
+  </header>
+    <div class="prose">
+      <p><span data-i18n="en">I've been self-hosting since January 2024, when I installed Linux for the first time and set up my first Ubuntu server. Today almost everything runs on a Lenovo ThinkCentre mini PC that never turns off: about 130 containers behind Nginx Proxy Manager, including this site, the blog and the demos above. I also have a Dell PowerEdge R610, but it draws way too much power to leave on, so it wakes up once a week for backups.</span><span data-i18n="ro">Fac self-hosting din ianuarie 2024, când am instalat prima dată Linux și mi-am pus primul server Ubuntu. Azi aproape totul rulează pe un mini PC Lenovo ThinkCentre care nu se oprește niciodată: cam 130 de containere în spatele lui Nginx Proxy Manager, inclusiv site-ul ăsta, blogul și demo-urile de mai sus. Am și un Dell PowerEdge R610, dar consumă mult prea mult curent ca să-l țin pornit, așa că se trezește o dată pe săptămână pentru backup-uri.</span></p>
+      <p><span data-i18n="en">A few things running on it: n8n automations, Immich, Jellyfin, Home Assistant, Paperless, SearXNG, Pi-hole, CrowdSec and fail2ban, and a Tor mirror of this site.</span><span data-i18n="ro">Câteva dintre lucrurile care rulează pe el: automatizări n8n, Immich, Jellyfin, Home Assistant, Paperless, SearXNG, Pi-hole, CrowdSec și fail2ban, plus o oglindă Tor a site-ului.</span></p>
     </div>
-  </section>
-
-  <!-- ── Infrastructure ───────────────────────────────── -->
-  <section id="infra" class="container section">
-    <h2><span class="section-label">03</span> Infrastructure</h2>
-    <p>Everything I run lives on two machines: a Dell PowerEdge server running Proxmox and a Lenovo ThinkCentre Mini-PC, with around 130 Docker services on top. This site, the blog, the live demos — all served from them, behind Nginx Proxy Manager. The homelab is the project I never stop working on, and the fact that you're reading this page is the uptime report.</p>
-
-    <div class="diagram-wrap no-print">
-<pre class="diagram" aria-label="Network diagram of self-hosted services">
-internet
-   │
-   ▼
-nginx proxy manager ── dell poweredge r610 · proxmox · ~130 docker services
-   ├── <a href="https://alberyt.xyz">alberyt.xyz</a>             ◀ you are here
-   ├── <a href="https://blog.alberyt.xyz" rel="noopener">blog.alberyt.xyz</a>        writing
-   ├── <a href="https://crypto.alberyt.xyz" rel="noopener">crypto.alberyt.xyz</a>      cryptography atlas
-   ├── <a href="https://dash-demo.alberyt.xyz" rel="noopener">dash-demo.alberyt.xyz</a>  soc dashboard
-   └── <a href="http://albertghf2dx6d7bfjibjhtejlyr26gtznotx27fqfapaz2zlkugctad.onion" rel="noopener">albertghf…ctad.onion</a>    tor mirror
-</pre>
+    <div class="homelab-grid homelab-cols">
+      <ol class="log log--timeline" data-aria-en="Homelab timeline" data-aria-ro="Istoria homelab-ului" aria-label="Homelab timeline" data-reveal>
+        <li class="log__item"><div class="log__when"><time datetime="2024-01"><span data-i18n="en">Jan 2024</span><span data-i18n="ro">ian. 2024</span></time></div><div class="log__main"><p class="log__title log__title--plain"><span data-i18n="en">First Linux install, first Ubuntu server.</span><span data-i18n="ro">Primul Linux instalat, primul server Ubuntu.</span></p></div></li>
+        <li class="log__item"><div class="log__when"><time datetime="2026-05"><span data-i18n="en">May 2026</span><span data-i18n="ro">mai 2026</span></time></div><div class="log__main"><p class="log__title"><span data-i18n="en">HackTM 2026</span><span data-i18n="ro">HackTM 2026</span></p><p class="log__note"><span data-i18n="en">The slides weren't ready, so I put an HTML deck on my own server in under five minutes. We won with it.</span><span data-i18n="ro">Slide-urile nu erau gata, așa că am pus o prezentare HTML pe serverul meu în nici cinci minute. Am câștigat cu ea.</span></p></div></li>
+        <li class="log__item"><div class="log__when"><span><span data-i18n="en">Today</span><span data-i18n="ro">Azi</span></span></div><div class="log__main"><p class="log__title log__title--plain"><span data-i18n="en">A ThinkCentre mini PC keeps ~130 containers running around the clock. The R610 wakes up once a week for backups.</span><span data-i18n="ro">Un mini PC ThinkCentre ține ~130 de containere pornite non-stop. R610-ul se trezește o dată pe săptămână pentru backup-uri.</span></p></div></li>
+      </ol>
+      <figure class="tree" data-reveal><figcaption class="vh"><span data-i18n="en">Diagram: traffic from the internet goes through Nginx Proxy Manager to a ThinkCentre mini PC, which serves this site, the blog, Cryptography Atlas, the EHDS demo, the websites gallery and a Tor mirror. A Dell PowerEdge R610 wakes up once a week to back it up.</span><span data-i18n="ro">Diagramă: traficul de pe internet trece prin Nginx Proxy Manager spre un mini PC ThinkCentre, care servește site-ul ăsta, blogul, Cryptography Atlas, demo-ul EHDS, galeria de site-uri și o oglindă Tor. Un Dell PowerEdge R610 pornește o dată pe săptămână ca să-i facă backup.</span></figcaption>
+        <ul><li><span class="tree__node"><span data-i18n="en">internet</span><span data-i18n="ro">internet</span></span>
+          <ul>
+            <li><span class="tree__node">nginx proxy manager</span><span class="tree__note"><span data-i18n="en">thinkcentre mini pc · ubuntu 24.04 · ~130 containers</span><span data-i18n="ro">mini pc thinkcentre · ubuntu 24.04 · ~130 de containere</span></span>
+              <ul>
+                <li><a href="https://alberyt.xyz">alberyt.xyz</a><span class="tree__note"><span data-i18n="en">you are here</span><span data-i18n="ro">ești aici</span></span></li>
+                <li><a href="https://blog.alberyt.xyz" rel="noopener">blog.alberyt.xyz</a><span class="tree__note"><span data-i18n="en">writing</span><span data-i18n="ro">blog</span></span></li>
+                <li><a href="https://crypto.alberyt.xyz" rel="noopener">crypto.alberyt.xyz</a><span class="tree__note"><span data-i18n="en">cryptography atlas</span><span data-i18n="ro">atlas de criptografie</span></span></li>
+                <li><a href="https://ehds.alberyt.xyz" rel="noopener">ehds.alberyt.xyz</a><span class="tree__note"><span data-i18n="en">hackathon demo</span><span data-i18n="ro">demo hackathon</span></span></li>
+                <li><a href="https://gallery.alberyt.xyz" rel="noopener">gallery.alberyt.xyz</a><span class="tree__note"><span data-i18n="en">websites</span><span data-i18n="ro">site-uri</span></span></li>
+                <li><a href="http://albertghf2dx6d7bfjibjhtejlyr26gtznotx27fqfapaz2zlkugctad.onion" rel="noopener"><span data-i18n="en">tor mirror</span><span data-i18n="ro">oglindă tor</span></a></li>
+              </ul></li>
+            <li><span class="tree__node tree__node--off">dell poweredge r610</span><span class="tree__note"><span data-i18n="en">proxmox backup server · wakes up weekly</span><span data-i18n="ro">proxmox backup server · pornește o dată pe săptămână</span></span></li>
+          </ul></li>
+        </ul>
+      </figure>
     </div>
-  </section>
+  </div></section>
+
+  <!-- ── Out there ────────────────────────────────────── -->
+  <section id="out-there" class="section" aria-labelledby="out-there-h"><div class="container">
+  <header class="sec-head" data-reveal>
+    <span class="sec-index" aria-hidden="true">04</span>
+    <h2 id="out-there-h"><span data-i18n="en">Out there</span><span data-i18n="ro">Pe teren</span></h2>
+    <span class="sec-rule" aria-hidden="true"></span>
+  </header>
+    <p class="sec-intro"><span data-i18n="en">For the past 6 months or so I've been going out of my way to meet new people. A few places you could have run into me:</span><span data-i18n="ro">De vreo 6 luni încerc să ies cât mai mult printre oameni și să cunosc lume nouă. Câteva locuri unde ai fi putut da de mine:</span></p>
+    <ol class="log" data-reveal>
+      <li class="log__item"><div class="log__when"><time datetime="2026-05"><span data-i18n="en">May 2026</span><span data-i18n="ro">mai 2026</span></time></div><div class="log__main"><p class="log__title"><span data-i18n="en">HackTM 2026</span><span data-i18n="ro">HackTM 2026</span></p><p class="log__note"><span data-i18n="en">My first hackathon, and we won it. I came in focused on building. I left thinking about the conversations.</span><span data-i18n="ro">Primul meu hackathon, câștigat cu echipa mea. Am venit cu gândul doar la ce construim. Am plecat cu gândul la discuții.</span></p></div></li>
+      <li class="log__item"><div class="log__when"><time datetime="2026-09"><span data-i18n="en">Sep 2026</span><span data-i18n="ro">sept. 2026</span></time></div><div class="log__main"><p class="log__title"><span data-i18n="en">TEDxAristide Demetriade</span><span data-i18n="ro">TEDxAristide Demetriade</span></p><p class="log__note"><span data-i18n="en">I built the guest check-in desk.</span><span data-i18n="ro">Am construit sistemul de check-in pentru invitați.</span></p></div></li>
+      <li class="log__item"><div class="log__when"><span><span data-i18n="en">Ongoing</span><span data-i18n="ro">Mereu</span></span></div><div class="log__main"><p class="log__title"><span data-i18n="en">CTFs</span><span data-i18n="ro">CTF-uri</span></p><p class="log__note"><span data-i18n="en">If your team needs one more person, message me.</span><span data-i18n="ro">Dacă echipei tale îi mai trebuie un om, scrie-mi.</span></p></div></li>
+      <li class="log__item"><div class="log__when"><span><span data-i18n="en">2025 &amp; 2026</span><span data-i18n="ro">2025 și 2026</span></span></div><div class="log__main"><p class="log__title"><span data-i18n="en">Artificial Intelligence Olympiad, national stage</span><span data-i18n="ro">Olimpiada de Inteligență Artificială, faza națională</span></p></div></li>
+      <li class="log__item"><div class="log__when"><span><span data-i18n="en">2025</span><span data-i18n="ro">2025</span></span></div><div class="log__main"><p class="log__title"><span data-i18n="en">Cybersecurity Olympiad, national stage</span><span data-i18n="ro">Olimpiada de Securitate Cibernetică, faza națională</span></p></div></li>
+    </ol>
+    <!-- CONFIRM out.next: <p class="log__next"><span data-i18n="en">Where I'll be next: [CONFIRM: next event]. If you're there too, come say hi.</span><span data-i18n="ro">Unde mă găsești data viitoare: [CONFIRM: next event]. Dacă vii și tu, salută-mă.</span></p> -->
+  </div></section>
 
   <!-- ── About ────────────────────────────────────────── -->
-  <section id="about" class="container section">
-    <h2><span class="section-label">04</span> About</h2>
-    <div class="about-grid">
-      <div class="about-text">
-        <p>I'm Albert, 18, from Romania. I got into AI through neuroscience — I wanted to understand how brains work and ended up training the artificial kind. That led to machine learning, which led to security, which led to a rack server at home running 130 containers.</p>
-        <p>I compete in CTFs and in the Romanian AI &amp; Cybersecurity Olympiad at the national level. University for AI is next. I'm endlessly curious, always diving into anything I find interesting or useful — lately that includes 3D art and photography, which can keep me away from a terminal just long enough.</p>
-      </div>
-      <div class="skills">
-        <div class="skill-group">
-          <h3 class="mono">languages</h3>
-          <ul class="tags"><li>Python</li><li>Bash</li><li>C</li><li>JS</li></ul>
-        </div>
-        <div class="skill-group">
-          <h3 class="mono">ml / ai</h3>
-          <ul class="tags"><li>PyTorch</li><li>n8n</li><li>Ollama</li><li>Docker</li><li>Linux</li></ul>
-        </div>
-        <div class="skill-group">
-          <h3 class="mono">security</h3>
-          <ul class="tags"><li>CTFs</li><li>Cryptography</li><li>OSINT</li><li>Network sec</li><li>Reverse engineering</li></ul>
-        </div>
-        <div class="skill-group">
-          <h3 class="mono">infra</h3>
-          <ul class="tags"><li>Docker</li><li>Linux</li><li>Nginx</li><li>PostgreSQL</li><li>Self-hosting</li></ul>
-        </div>
-      </div>
+  <section id="about" class="section" aria-labelledby="about-h"><div class="container">
+  <header class="sec-head" data-reveal>
+    <span class="sec-index" aria-hidden="true">05</span>
+    <h2 id="about-h"><span data-i18n="en">About</span><span data-i18n="ro">Despre mine</span></h2>
+    <span class="sec-rule" aria-hidden="true"></span>
+  </header>
+    <div class="prose">
+      <p><span data-i18n="en">I'm Albert, 18, from Romania. I got into AI through neuroscience: I wanted to understand how brains work, and somewhere along the way I started training neural networks instead. ML got me into security, and security got me into running my own servers.</span><span data-i18n="ro">Sunt Albert, am 18 ani și sunt din România. Am intrat în AI prin neuroștiințe: voiam să înțeleg cum funcționează creierul și, pe undeva pe drum, m-am apucat să antrenez rețele neuronale. ML-ul m-a dus la securitate, iar securitatea, la propriile mele servere.</span></p>
+      <p><span data-i18n="en">Now I'm in my first year of an AI degree at West University of Timișoara (UVT). I'm a really curious student and always have been, and most of what I learn ends up as a project on this page.</span><span data-i18n="ro">Acum sunt în anul I la Inteligență Artificială, la Universitatea de Vest din Timișoara (UVT). Am fost mereu foarte curios, așa că mare parte din ce învăț ajunge un proiect pe pagina asta.</span></p>
+      <!-- CONFIRM about.offline: <p><span data-i18n="en">Away from the terminal, I do 3D art and photography. [CONFIRM: still true?]</span><span data-i18n="ro">Când nu stau la terminal, fac artă 3D și fotografie. [CONFIRM: still true?]</span></p> -->
+      <p><span data-i18n="en">Languages: Romanian (native), English (Cambridge C1 Advanced, 2025).</span><span data-i18n="ro">Limbi: română (limba maternă), engleză (Cambridge C1 Advanced, 2025).</span></p>
     </div>
-  </section>
+    <p class="skills-label"><span data-i18n="en">What I use most</span><span data-i18n="ro">Ce folosesc cel mai des</span></p>
+    <ul class="tags" data-i18n="en"><li>Python</li><li>TypeScript</li><li>Bash</li><li>C</li><li>PyTorch</li><li>Ollama</li><li>MCP</li><li>n8n</li><li>Linux</li><li>Docker</li><li>Proxmox</li><li>Nginx</li><li>PostgreSQL</li><li>cryptography</li><li>OSINT</li><li>network security</li></ul><ul class="tags" data-i18n="ro"><li>Python</li><li>TypeScript</li><li>Bash</li><li>C</li><li>PyTorch</li><li>Ollama</li><li>MCP</li><li>n8n</li><li>Linux</li><li>Docker</li><li>Proxmox</li><li>Nginx</li><li>PostgreSQL</li><li>criptografie</li><li>OSINT</li><li>securitatea rețelelor</li></ul>
+  </div></section>
 
   <!-- ── Contact ──────────────────────────────────────── -->
-  <section id="contact" class="container section">
-    <h2><span class="section-label">05</span> Contact</h2>
-    <p>Want to collaborate, exchange CTF write-ups, or share feedback? My inbox is always open.</p>
-    <ul class="contact-list">
-      <li><span class="mono contact-label">email</span><a href="mailto:contact@alberyt.xyz">contact@alberyt.xyz</a></li>
-      <li><span class="mono contact-label">github</span><a href="https://github.com/Albert-4096" rel="noopener">github.com/Albert-4096</a></li>
-      <li><span class="mono contact-label">blog</span><a href="https://blog.alberyt.xyz" rel="noopener">blog.alberyt.xyz</a></li>
-      <li><span class="mono contact-label">dark web</span><a href="http://albertghf2dx6d7bfjibjhtejlyr26gtznotx27fqfapaz2zlkugctad.onion" rel="noopener">albertghf…ctad.onion</a></li>
-    </ul>
-                <!-- <p class="cv-hint no-print">Need a CV? <button class="linklike" onclick="window.print()">Print this page</button> — the stylesheet collapses it to one page. -->
-      <!-- CV download slot: uncomment and drop cv.pdf in /assets
-      Or <a href="/assets/cv.pdf">download the PDF</a>. -->
-    </p>
-  </section>
+  <section id="contact" class="section" aria-labelledby="contact-h"><div class="container">
+  <header class="sec-head" data-reveal>
+    <span class="sec-index" aria-hidden="true">06</span>
+    <h2 id="contact-h"><span data-i18n="en">Contact</span><span data-i18n="ro">Contact</span></h2>
+    <span class="sec-rule" aria-hidden="true"></span>
+  </header>
+    <div class="bridge">
+      <div class="bridge__who" data-reveal>
+        <h3 class="bridge__lede"><span data-i18n="en">I like meeting people who build things. Reach out if you…</span><span data-i18n="ro">Îmi place să cunosc oameni care construiesc lucruri. Scrie-mi dacă…</span></h3>
+        <ul class="bridge__list">
+          <li><span class="bridge__k" aria-hidden="true">→</span><span><span data-i18n="en">…are hiring an intern for ML, security or infrastructure (tech CV and LinkedIn below).</span><span data-i18n="ro">…cauți un intern pentru ML, securitate sau infrastructură (CV tehnic și LinkedIn mai jos).</span></span></li>
+          <li><span class="bridge__k" aria-hidden="true">→</span><span><span data-i18n="en">…run a startup and want a working prototype of an ML or automation idea.</span><span data-i18n="ro">…ai un startup și vrei un prototip pentru o idee de ML sau automatizare.</span></span></li>
+          <li><span class="bridge__k" aria-hidden="true">→</span><span><span data-i18n="en">…run a small business that needs a website or an automation (<a href="https://gallery.alberyt.xyz" rel="noopener">examples</a>).</span><span data-i18n="ro">…ai o afacere mică și îți trebuie un site sau o automatizare (<a href="https://gallery.alberyt.xyz" rel="noopener">exemple</a>).</span></span></li>
+          <li><span class="bridge__k" aria-hidden="true">→</span><span><span data-i18n="en">…teach or research AI or security and are looking for a first-year student.</span><span data-i18n="ro">…predai ori cercetezi AI sau securitate și cauți un student din anul I.</span></span></li>
+          <li><span class="bridge__k" aria-hidden="true">→</span><span><span data-i18n="en">…organise a hackathon, a CTF or a tech event.</span><span data-i18n="ro">…organizezi un hackathon, un CTF sau un eveniment tech.</span></span></li>
+          <li><span class="bridge__k" aria-hidden="true">→</span><span><span data-i18n="en">…are a student and want to team up for a CTF or compare homelabs.</span><span data-i18n="ro">…ești student și vrei să facem echipă la un CTF sau să comparăm homelab-uri.</span></span></li>
+        </ul>
+        <p class="bridge__coffee"><span data-i18n="en">In Timișoara? I'm always up for a coffee :)</span><span data-i18n="ro">Ești în Timișoara? Hai la o cafea :)</span></p>
+      </div>
+      <div class="bridge__how" data-reveal>
+        <p class="bridge__hint"><span data-i18n="en">Email is the easiest way to reach me.</span><span data-i18n="ro">Cel mai simplu mă găsești pe email.</span></p>
+        <div class="bridge__mail">
+          <a class="bridge__email" href="mailto:contact@alberyt.xyz"><span class="vh"><span data-i18n="en">email</span><span data-i18n="ro">email</span>: </span>contact@alberyt.xyz</a>
+          <button class="btn btn--ghost btn--sm bridge__copy" type="button" data-copy="contact@alberyt.xyz" data-copied-en="copied" data-copied-ro="copiat" data-status-en="Email address copied." data-status-ro="Adresa de email a fost copiată."><span data-i18n="en">copy</span><span data-i18n="ro">copiază</span></button>
+        </div>
+        <span class="vh" aria-live="polite" id="copy-status"></span>
+        <ul class="channels">
+          <li><span class="channels__k"><span data-i18n="en">linkedin</span><span data-i18n="ro">linkedin</span></span><a href="https://www.linkedin.com/in/albert-gabor-5a763b36a/" rel="noopener">Albert Gabor</a></li>
+          <li><span class="channels__k"><span data-i18n="en">cv (tech)</span><span data-i18n="ro">cv tehnic</span></span><button type="button" class="linklike" data-print-cv><span data-i18n="en">print this page as a one-page CV</span><span data-i18n="ro">tipărește pagina ca CV de o pagină</span></button></li>
+          <li><span class="channels__k"><span data-i18n="en">cv (business)</span><span data-i18n="ro">cv pentru firme</span></span><span data-i18n="en"><a href="https://gallery.alberyt.xyz/cv?lang=en" rel="noopener">gallery.alberyt.xyz/cv</a></span><span data-i18n="ro"><a href="https://gallery.alberyt.xyz/cv?lang=ro" rel="noopener">gallery.alberyt.xyz/cv</a></span></li>
+          <li><span class="channels__k"><span data-i18n="en">websites</span><span data-i18n="ro">site-uri</span></span><a href="https://gallery.alberyt.xyz" rel="noopener">gallery.alberyt.xyz</a></li>
+          <li><span class="channels__k"><span data-i18n="en">github</span><span data-i18n="ro">github</span></span><a href="https://github.com/Albert-4096" rel="noopener">github.com/Albert-4096</a></li>
+          <li><span class="channels__k"><span data-i18n="en">blog</span><span data-i18n="ro">blog</span></span><a href="https://blog.alberyt.xyz" rel="noopener">blog.alberyt.xyz</a></li>
+        </ul>
+      </div>
+    </div>
+  </div></section>
 
 </main>
 
 <footer class="site-footer">
   <div class="container">
-    <p>Self-hosted in a home-lab in Romania.</p>
-    <p class="mono">© 2026 Albert G</p>
+    <div class="footer-row"><p class="terrain-cap terrain-cap--live"><span data-i18n="en">Retezat Mountains, 306–2,505 m · 1 m LiDAR, ANCPI tile F06 · rendered live with three.js</span><span data-i18n="ro">Munții Retezat, 306–2.505 m · LiDAR de 1 m, date ANCPI F06 · randat live cu three.js</span></p>
+    <p class="terrain-cap terrain-cap--still"><span data-i18n="en">Retezat Mountains, 306–2,505 m · 1 m LiDAR, ANCPI tile F06 · here as a still image</span><span data-i18n="ro">Munții Retezat, 306–2.505 m · LiDAR de 1 m, date ANCPI F06 · aici ca imagine statică</span></p></div>
+    <div class="footer-row"><p class="footer-links">
+      <a href="/privacy.html"><span data-i18n="en">Privacy</span><span data-i18n="ro">Confidențialitate</span></a>
+      <button type="button" class="linklike" id="privacy-settings"><span data-i18n="en">analytics settings</span><span data-i18n="ro">setări statistici</span></button>
+      <a class="mono" href="http://albertghf2dx6d7bfjibjhtejlyr26gtznotx27fqfapaz2zlkugctad.onion" rel="noopener"><span data-i18n="en">Tor mirror</span><span data-i18n="ro">Oglindă Tor</span></a>
+      <a href="/" hreflang="en" lang="en">English</a>
+      <a href="/ro/" hreflang="ro" lang="ro">Română</a>
+    </p></div>
+    <div class="footer-row"><p class="footer-meta footer-base"><span class="mono">© 2026 Albert Gabor</span><span aria-hidden="true"> · </span><span data-i18n="en">Self-hosted on a mini PC in Romania. If you can read this, it's up :)</span><span data-i18n="ro">Găzduit pe un mini PC în România. Dacă poți citi asta, merge :)</span></p></div>
   </div>
 </footer>
 
+<script src="/js/consent.js" defer></script>
 <script src="/js/main.js" defer></script>
-<script src="/vendor/gsap.min.js" defer></script>
-<script src="/vendor/ScrollTrigger.min.js" defer></script>
 <script type="module" src="/js/terrain.js"></script>
 </body>
 </html>

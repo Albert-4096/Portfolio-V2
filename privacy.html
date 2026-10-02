@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy · alberyt.xyz</title>
+  <meta name="description" content="How alberyt.xyz handles your data: no analytics unless you say yes, server logs for security, and nothing sold or shared.">
+  <script>
+  window.SITE_META={"en": {"title": "Privacy · alberyt.xyz", "desc": "How alberyt.xyz handles your data: no analytics unless you say yes, server logs for security, and nothing sold or shared."}, "ro": {"title": "Confidențialitate · alberyt.xyz", "desc": "Cum tratează alberyt.xyz datele tale: fără statistici dacă nu spui da, jurnale de server pentru securitate și nimic vândut sau dat altcuiva."}};
+  (function(){var d=document.documentElement,s=null,l;
+  try{s=localStorage.getItem('lang')}catch(e){}
+  if(s==='en'||s==='ro')l=s;else l=/^ro\b/i.test(navigator.language||'')?'ro':'en';
+  d.lang=l;d.setAttribute('data-lang',l);
+  if(l==='ro'){document.title=SITE_META.ro.title;document.querySelector('meta[name=description]').content=SITE_META.ro.desc}})();
+  </script>
+  <meta name="theme-color" content="#0a0d0b">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header"><div class="container header-row">
+  <a class="brand" href="/">alberyt.xyz</a>
+  <div class="header-tools">
+    <div class="lang-toggle" role="group" data-aria-en="Language" data-aria-ro="Limbă" aria-label="Language">
+        <a class="lang-opt" href="/privacy.html" hreflang="en" lang="en">EN</a>
+        <a class="lang-opt" href="/privacy.html" hreflang="ro" lang="ro">RO</a>
+        <span class="lang-thumb" aria-hidden="true"><span>EN</span><span>RO</span></span>
+      </div>
+  </div>
+</div></header>
+
+<main id="top" class="container section legal">
+  <h1><span data-i18n="en">Privacy</span><span data-i18n="ro">Confidențialitate</span></h1>
+  <p class="legal__meta"><span data-i18n="en">Last updated: 2 October 2026</span><span data-i18n="ro">Actualizat: 2 octombrie 2026</span></p>
+  <p class="lede"><span data-i18n="en">Short version: no analytics unless you say yes. The only things logged for everyone are standard server logs, kept for security.</span><span data-i18n="ro">Pe scurt: fără statistici dacă nu spui da. Pentru toată lumea se notează doar jurnalele obișnuite ale serverului, păstrate pentru securitate.</span></p>
+
+    <section class="legal__sec" aria-labelledby="priv-1">
+      <h2 id="priv-1"><span data-i18n="en">Who is responsible</span><span data-i18n="ro">Cine răspunde de date</span></h2>
+      <div data-i18n="en"><p>I'm Albert Gabor, and I run alberyt.xyz from my own server in Romania. I'm the controller of any personal data this site handles, so there is nobody else to ask. Write to <a href="mailto:contact@alberyt.xyz">contact@alberyt.xyz</a>.</p></div>
+      <div data-i18n="ro"><p>Sunt Albert Gabor și țin alberyt.xyz pe propriul meu server, în România. Eu sunt operatorul datelor personale pe care le prelucrează site-ul ăsta, deci nu trebuie să cauți pe altcineva. Scrie-mi la <a href="mailto:contact@alberyt.xyz">contact@alberyt.xyz</a>.</p></div>
+    </section>
+    <section class="legal__sec" aria-labelledby="priv-2">
+      <h2 id="priv-2"><span data-i18n="en">What is collected</span><span data-i18n="ro">Ce se colectează</span></h2>
+      <div data-i18n="en"><p>If you say yes to analytics, two scripts load from my own Umami server (analytics.alberyt.xyz). One counts page views, referrers, country, device and browser, without cookies. The other records about 15% of visits as replays of what happens on the page, with every form field masked. The 3D background isn't recorded, and each recording stops after 5 minutes.</p><p>If you say no, none of those scripts load and no request goes to analytics.alberyt.xyz. If your browser sends Do Not Track, I don't even ask. If you email me, I get your address and whatever you write, and I use it only to reply.</p></div>
+      <div data-i18n="ro"><p>Dacă accepți statisticile, se încarcă două scripturi de pe serverul meu Umami (analytics.alberyt.xyz). Unul numără paginile vizitate, de unde vii, țara, dispozitivul și browserul, fără cookie-uri. Celălalt înregistrează cam 15% din vizite ca reluări a ce se întâmplă în pagină, cu toate câmpurile de formular ascunse. Fundalul 3D nu se înregistrează, iar fiecare înregistrare se oprește după 5 minute.</p><p>Dacă spui nu, niciunul dintre scripturi nu se încarcă și nu pleacă nicio cerere spre analytics.alberyt.xyz. Dacă browserul tău trimite Do Not Track, nici nu te mai întreb. Dacă îmi scrii pe email, primesc adresa ta și ce scrii, și le folosesc doar ca să-ți răspund.</p></div>
+    </section>
+    <section class="legal__sec" aria-labelledby="priv-logs">
+      <h2 id="priv-logs"><span data-i18n="en">Server logs</span><span data-i18n="ro">Jurnalele serverului</span></h2>
+      <div data-i18n="en"><p>Like almost every web server, mine keeps logs. On every visit, consent or not, the reverse proxy (Nginx Proxy Manager) writes down your IP address, the time, the page you asked for, the response status, your browser's user agent and the referrer. fail2ban reads these logs to block abuse.</p><p>The proxy keeps its access logs for 4 weeks and its error logs, which can include an IP address, for 10 weeks. Older ones are deleted automatically. The site's own web server keeps a log too. It only sees the proxy's internal address, not yours, but it records paths, user agents and referrers, and it stays until I clear it. The legal basis is my legitimate interest in keeping the server secure and running (Art. 6(1)(f) GDPR).</p></div>
+      <div data-i18n="ro"><p>Ca aproape orice server web, și al meu ține jurnale. La fiecare vizită, cu sau fără acordul tău, proxy-ul (Nginx Proxy Manager) notează adresa IP, ora, pagina cerută, codul de răspuns, user agent-ul browserului și referrer-ul. fail2ban citește jurnalele ca să blocheze abuzurile.</p><p>Proxy-ul păstrează jurnalele de acces 4 săptămâni, iar pe cele de erori, care pot conține o adresă IP, 10 săptămâni. Cele mai vechi se șterg automat. Și serverul web al site-ului ține un jurnal. El vede doar adresa internă a proxy-ului, nu pe a ta, dar notează paginile cerute, user agent-ul și referrer-ul. Jurnalul ăsta rămâne până îl șterg eu. Temeiul legal e interesul meu legitim de a ține serverul sigur și funcțional (art. 6 alin. (1) lit. (f) GDPR).</p></div>
+    </section>
+    <section class="legal__sec" aria-labelledby="priv-3">
+      <h2 id="priv-3"><span data-i18n="en">Cookies and browser storage</span><span data-i18n="ro">Cookie-uri și stocare în browser</span></h2>
+      <div data-i18n="en"><ul><li>A first-party cookie that remembers your analytics choice, so I don't ask on every visit. It is strictly necessary and expires after about 6 months.</li><li>Your language choice (EN or RO), kept in your browser's local storage so the site opens the way you left it.</li><li>If you decline, a small flag in local storage that keeps the analytics scripts switched off.</li></ul><p>Your choice is saved in your browser. You can change it anytime with the "analytics settings" button, in the footer of the home page or under "Your rights" below.</p><p>If you allow analytics, its scripts may keep a small technical value in your browser too. Nothing is set by anyone but me.</p></div>
+      <div data-i18n="ro"><ul><li>Un cookie propriu care ține minte alegerea ta despre statistici, ca să nu te întreb la fiecare vizită. E strict necesar și expiră după vreo 6 luni.</li><li>Limba aleasă (EN sau RO), păstrată în local storage în browserul tău, ca site-ul să se deschidă așa cum l-ai lăsat.</li><li>Dacă refuzi, un mic marcaj în local storage care ține scripturile de statistici oprite.</li></ul><p>Alegerea ta rămâne salvată în browser. O poți schimba oricând din butonul „setări statistici”, din subsolul paginii principale sau de mai jos, de la „Drepturile tale”.</p><p>Dacă accepți statisticile, scripturile lor pot păstra și ele o mică valoare tehnică în browser. Nimic nu e setat de altcineva în afară de mine.</p></div>
+    </section>
+    <section class="legal__sec" aria-labelledby="priv-4">
+      <h2 id="priv-4"><span data-i18n="en">Legal basis</span><span data-i18n="ro">Temeiul legal</span></h2>
+      <div data-i18n="en"><ul><li>Analytics (Umami and the session recorder): your consent, Art. 6(1)(a) GDPR. You can withdraw it at any time, and that doesn't affect what happened before.</li><li>The consent cookie and the language setting: strictly necessary to remember what you chose, so they don't need consent.</li><li>Email: my legitimate interest in answering a message you chose to send (Art. 6(1)(f) GDPR).</li></ul></div>
+      <div data-i18n="ro"><ul><li>Statisticile (Umami și înregistrările de sesiune): acordul tău, art. 6 alin. (1) lit. (a) GDPR. Îl poți retrage oricând, iar asta nu afectează ce s-a întâmplat înainte.</li><li>Cookie-ul de acord și setarea de limbă: strict necesare ca să țină minte ce ai ales, deci nu e nevoie de acordul tău.</li><li>Emailul: interesul meu legitim de a răspunde unui mesaj trimis de tine (art. 6 alin. (1) lit. (f) GDPR).</li></ul></div>
+    </section>
+    <section class="legal__sec" aria-labelledby="priv-5">
+      <h2 id="priv-5"><span data-i18n="en">Where it lives and who sees it</span><span data-i18n="ro">Unde stau datele și cine le vede</span></h2>
+      <div data-i18n="en"><p>Analytics data and server logs stay on my own server in Romania. Nothing is sold or shared with anyone, and there are no ads or third-party trackers.</p><p>Email works like any email: it passes through mail servers on its way to my inbox.</p></div>
+      <div data-i18n="ro"><p>Statisticile și jurnalele serverului rămân pe serverul meu, în România. Nu vând și nu dau nimic nimănui, iar pe site nu există reclame sau trackere ale altor firme.</p><p>Emailul funcționează ca orice email: trece prin servere de mail până ajunge în inboxul meu.</p></div>
+    </section>
+    <section class="legal__sec" aria-labelledby="priv-6">
+      <h2 id="priv-6"><span data-i18n="en">How long I keep it</span><span data-i18n="ro">Cât le păstrez</span></h2>
+      <div data-i18n="en"><p>The proxy deletes its access logs after about 4 weeks and its error logs after about 10. The site's own server log, analytics data and emails have no automatic deletion yet, so they stay until I delete them. Want yours gone sooner? Email contact@alberyt.xyz and I'll delete it.</p><p>The consent cookie expires after about 6 months. The language setting stays until you clear this site's data in your browser.</p></div>
+      <div data-i18n="ro"><p>Proxy-ul își șterge automat jurnalele de acces după vreo 4 săptămâni, iar pe cele de erori după vreo 10. Pentru jurnalul site-ului, statistici și emailuri n-am setat încă ștergere automată, așa că rămân până le șterg eu. Vrei să dispară mai devreme? Scrie-mi la contact@alberyt.xyz și le șterg.</p><p>Cookie-ul de acord expiră după vreo 6 luni. Setarea de limbă rămâne până ștergi datele site-ului din browser.</p></div>
+    </section>
+    <section class="legal__sec" aria-labelledby="priv-7">
+      <h2 id="priv-7"><span data-i18n="en">Your rights</span><span data-i18n="ro">Drepturile tale</span></h2>
+      <div data-i18n="en"><p>Under the GDPR you can ask to see your data, correct it, delete it, restrict or object to how it's used, and take a copy of it. You can also withdraw your analytics consent whenever you like, with the button below. To use any of these rights, email <a href="mailto:contact@alberyt.xyz">contact@alberyt.xyz</a>.</p><p><button type="button" class="linklike" id="privacy-settings"><span data-i18n="en">analytics settings</span><span data-i18n="ro">setări statistici</span></button></p><p>If you think I got something wrong, you can complain to the Romanian authority, <a href="https://www.dataprotection.ro" rel="noopener">ANSPDCP (dataprotection.ro)</a>.</p></div>
+      <div data-i18n="ro"><p>Conform GDPR, ai dreptul să-ți vezi datele, să ceri corectarea sau ștergerea lor, să restricționezi prelucrarea sau să te opui ei și să primești o copie. Îți poți retrage oricând și acordul pentru statistici, cu butonul de mai jos. Pentru oricare dintre drepturile astea, scrie-mi la <a href="mailto:contact@alberyt.xyz">contact@alberyt.xyz</a>.</p><p><button type="button" class="linklike" id="privacy-settings"><span data-i18n="en">analytics settings</span><span data-i18n="ro">setări statistici</span></button></p><p>Dacă crezi că am greșit ceva, poți face plângere la autoritatea din România, <a href="https://www.dataprotection.ro" rel="noopener">ANSPDCP (dataprotection.ro)</a>.</p></div>
+    </section>
+    <section class="legal__sec" aria-labelledby="priv-8">
+      <h2 id="priv-8"><span data-i18n="en">Contact</span><span data-i18n="ro">Contact</span></h2>
+      <div data-i18n="en"><p>Questions about any of this: <a href="mailto:contact@alberyt.xyz">contact@alberyt.xyz</a>.</p></div>
+      <div data-i18n="ro"><p>Întrebări despre oricare dintre astea: <a href="mailto:contact@alberyt.xyz">contact@alberyt.xyz</a>.</p></div>
+    </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-row"><p class="footer-links"><a href="/"><span data-i18n="en">Back to alberyt.xyz</span><span data-i18n="ro">Înapoi la alberyt.xyz</span></a></p></div>
+    <div class="footer-row"><p class="footer-meta footer-base"><span class="mono">© 2026 Albert Gabor</span></p></div>
+  </div>
+</footer>
+
+<script>
+(function(){var d=document.documentElement;
+function apply(l){document.querySelectorAll('[data-aria-en]').forEach(function(e){e.setAttribute('aria-label',e.getAttribute(l==='ro'?'data-aria-ro':'data-aria-en'))});
+document.querySelectorAll('.lang-opt').forEach(function(o){o.hreflang===l?o.setAttribute('aria-current','true'):o.removeAttribute('aria-current')})}
+document.querySelectorAll('.lang-opt').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var l=a.hreflang;d.lang=l;d.setAttribute('data-lang',l);
+try{localStorage.setItem('lang',l)}catch(x){}
+document.title=SITE_META[l].title;document.querySelector('meta[name=description]').content=SITE_META[l].desc;apply(l)})});
+apply(d.getAttribute('data-lang'))})();
+</script>
+<script src="/js/consent.js" defer></script>
+</body>
+</html>

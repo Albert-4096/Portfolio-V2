@@ -3,18 +3,24 @@
    Renders a 1 m LiDAR DTM of the Retezat massif (ANCPI F06 tile)
    as a dark scene with glowing accent-coloured contour lines.
 
-   Dependencies: three.js (core), gsap + ScrollTrigger
+   Dependencies: three.js (core), gsap + ScrollTrigger, fetched only
+   when the live scene will run (see skipLiveScene).
    Data: retezat-heightmap.png (16-bit packed R/G), retezat-meta.json
-   Fallback: retezat-hillshade.png via CSS for mobile / reduced-motion
+   Fallback: retezat-poster-*.webp via CSS for touch / small screens /
+   reduced-motion / WebGL failure
    ─────────────────────────────────────────────────────── */
 
-import * as THREE from 'three';
+let THREE, gsap, ScrollTrigger;
 
-/* gsap + ScrollTrigger loaded as UMD scripts (defer), available as globals */
-const { gsap } = window;
-const { ScrollTrigger } = window;
-
-gsap.registerPlugin(ScrollTrigger);
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
 
 /* ── CSS token reader ──────────────────────────────────── */
 function cssVar(name) {
@@ -30,7 +36,14 @@ const MOBILE_BP = 768;
 const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isCoarse = matchMedia('(pointer: coarse)').matches;
 const isSmallViewport = window.innerWidth < MOBILE_BP;
-const skipLiveScene = isCoarse || isSmallViewport;
+const skipLiveScene = isCoarse || isSmallViewport || prefersReducedMotion;
+document.documentElement.dataset.terrain = skipLiveScene ? 'still' : 'live';
+
+/* Start the heavy dependencies at module evaluation, only for the live scene */
+const deps = skipLiveScene ? null : Promise.all([
+  import('three'),
+  loadScript('/vendor/gsap.min.js').then(() => loadScript('/vendor/ScrollTrigger.min.js')),
+]);
 
 /* ── Vertex Shader ─────────────────────────────────────── */
 const vertexShader = /* glsl */ `
@@ -125,7 +138,7 @@ const fragmentShader = /* glsl */ `
     vec3 rimColor = uAccentDimColor * fresnel * 0.15;
 
     // ── Compose ──
-    vec3 color = mix(baseColor, contourColor, totalContour * 0.85);
+    vec3 color = mix(baseColor, contourColor, totalContour * 0.6);
     color += rimColor;
 
     // ── Distance fog ──
@@ -137,26 +150,40 @@ const fragmentShader = /* glsl */ `
   }
 `;
 
-/* ── Main init ─────────────────────────────────────────── */
-function initTerrain() {
-  const body = document.body;
-
-  // ── Mobile / coarse → static hillshade fallback ──
-  if (skipLiveScene) {
-    const div = document.createElement('div');
-    div.className = 'terrain-static-bg';
-    div.setAttribute('aria-hidden', 'true');
-    body.prepend(div);
-
+/* ── Static background (poster image, set in CSS) ─────── */
+function showStatic() {
+  document.documentElement.dataset.terrain = 'still';
+  const div = document.createElement('div');
+  div.className = 'terrain-static-bg';
+  div.setAttribute('aria-hidden', 'true');
+  document.body.prepend(div);
+  if (!document.querySelector('.terrain-overlay')) {
     const overlay = document.createElement('div');
     overlay.className = 'terrain-overlay';
     overlay.setAttribute('aria-hidden', 'true');
-    body.prepend(overlay);
+    document.body.prepend(overlay);
+  }
+}
+
+/* ── Main init ─────────────────────────────────────────── */
+async function initTerrain() {
+  const body = document.body;
+
+  // ── Touch / small / reduced motion → static poster ──
+  if (skipLiveScene) {
+    showStatic();
     return;
   }
 
-  // ── Reduced motion → will render one static frame ──
-  const animationEnabled = !prefersReducedMotion;
+  try {
+    [THREE] = await deps;
+    ({ gsap, ScrollTrigger } = window);
+    gsap.registerPlugin(ScrollTrigger);
+  } catch (err) {
+    console.warn('[terrain] Failed to load dependencies, falling back to static:', err);
+    showStatic();
+    return;
+  }
 
   // ── Canvas & Overlay ──
   const canvas = document.createElement('canvas');
@@ -173,10 +200,7 @@ function initTerrain() {
   function triggerFallback(err) {
     console.warn('[terrain] WebGL initialization failed, falling back to static:', err);
     canvas.remove();
-    const div = document.createElement('div');
-    div.className = 'terrain-static-bg';
-    div.setAttribute('aria-hidden', 'true');
-    body.prepend(div);
+    showStatic();
   }
 
   // ── Read design tokens & create WebGL context ──
@@ -192,7 +216,7 @@ function initTerrain() {
       alpha: true,
       powerPreference: 'high-performance',
     });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
 
@@ -213,6 +237,7 @@ function initTerrain() {
   let isVisible = true;
   let isTabVisible = true;
   let disposed = false;
+  let frozen = false;
 
   // Decoupled camera controls for scroll, parallax, drift, and intro dolly
   const cameraBase = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
@@ -246,8 +271,8 @@ function initTerrain() {
     geometry.rotateX(-Math.PI / 2); // lay flat
 
     // ── Contour interval in normalised units ──
-    // Target ~50m contour intervals in real-world space
-    const contourRealM = 50;
+    // Target ~100m contour intervals in real-world space
+    const contourRealM = 100;
     const contourInterval = contourRealM / meta.verticalRangeM;
 
     // ── Material ──
@@ -307,7 +332,7 @@ function initTerrain() {
     }
 
     function loop() {
-      if (disposed) return;
+      if (disposed || frozen) return;
       if (!isVisible || !isTabVisible) {
         rafId = null;
         return;
@@ -317,7 +342,7 @@ function initTerrain() {
     }
 
     function startLoop() {
-      if (rafId != null || disposed) return;
+      if (rafId != null || disposed || frozen) return;
       clock.start();
       loop();
     }
@@ -329,6 +354,34 @@ function initTerrain() {
       }
     }
 
+    // ── Adaptive quality: median of 90 frame deltas; >22 ms → DPR 1, still >28 ms → freeze ──
+    function sampleFrames(done) {
+      const deltas = [];
+      let last = performance.now();
+      (function tick(now) {
+        if (disposed) return;
+        if (isVisible && isTabVisible) deltas.push(now - last);
+        last = now;
+        if (deltas.length < 90) { requestAnimationFrame(tick); return; }
+        deltas.sort((x, y) => x - y);
+        done(deltas[45]);
+      })(last);
+    }
+
+    function tuneQuality() {
+      sampleFrames((median) => {
+        if (median <= 22) return;
+        renderer.setPixelRatio(1);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        sampleFrames((again) => {
+          if (again <= 28) return;
+          frozen = true;
+          stopLoop();
+          console.info('[terrain] low fps, frozen');
+        });
+      });
+    }
+
     // ── Resize handler ──
     function onResize() {
       const w = window.innerWidth;
@@ -336,7 +389,7 @@ function initTerrain() {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
-      if (!animationEnabled) render(); // re-render static frame
+      if (frozen) render(); // resize clears the canvas; redraw the last frame
     }
     window.addEventListener('resize', onResize, { passive: true });
 
@@ -344,7 +397,7 @@ function initTerrain() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
-        if (isVisible && isTabVisible && animationEnabled) startLoop();
+        if (isVisible && isTabVisible) startLoop();
         else stopLoop();
       },
       { threshold: 0 }
@@ -354,111 +407,103 @@ function initTerrain() {
     // ── Visibility: Page Visibility API ──
     document.addEventListener('visibilitychange', () => {
       isTabVisible = !document.hidden;
-      if (isTabVisible && isVisible && animationEnabled) startLoop();
+      if (isTabVisible && isVisible) startLoop();
       else stopLoop();
     });
 
     // ── Pointer parallax ──
-    if (animationEnabled && !isCoarse) {
-      const parallaxRange = 0.08;
-      const quickX = gsap.quickTo(cameraOffset, 'x', { duration: 0.8, ease: 'power2.out' });
-      const quickY = gsap.quickTo(cameraOffset, 'y', { duration: 0.8, ease: 'power2.out' });
+    const parallaxRange = 0.08;
+    const quickX = gsap.quickTo(cameraOffset, 'x', { duration: 0.8, ease: 'power2.out' });
+    const quickY = gsap.quickTo(cameraOffset, 'y', { duration: 0.8, ease: 'power2.out' });
 
-      window.addEventListener('mousemove', (e) => {
-        const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-        const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-        quickX(nx * parallaxRange);
-        quickY(ny * parallaxRange * 0.5);
-      }, { passive: true });
-    }
+    window.addEventListener('mousemove', (e) => {
+      const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+      quickX(nx * parallaxRange);
+      quickY(ny * parallaxRange * 0.5);
+    }, { passive: true });
 
     // ── GSAP: Intro timeline ──
-    if (animationEnabled) {
-      const tl = gsap.timeline({
-        delay: 0.2,
-        onStart: startLoop,
+    const tl = gsap.timeline({
+      delay: 0.2,
+      onStart: startLoop,
+      onComplete: tuneQuality,
+    });
+
+    // Displacement rises from 0
+    tl.to(uniforms.uDisplacement, {
+      value: targetDisplacement,
+      duration: 2.2,
+      ease: 'power2.out',
+    }, 0);
+
+    // Opacity fades in
+    tl.to(uniforms.uOpacity, {
+      value: 1.0,
+      duration: 1.5,
+      ease: 'power2.inOut',
+    }, 0);
+
+    // Camera dollies in
+    tl.to(cameraIntroOffset, {
+      y: 0,
+      z: 0,
+      duration: 2.5,
+      ease: 'power2.out',
+    }, 0);
+
+    // ── GSAP: Idle drift (after intro) ──
+    tl.add(() => {
+      // Very slow continuous camera orbit
+      gsap.to(cameraDrift, {
+        x: 0.15,
+        duration: 30,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+      });
+      gsap.to(cameraDrift, {
+        y: 0.04,
+        duration: 25,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+      });
+    });
+
+    // ── GSAP: ScrollTrigger — camera traverses the massif ──
+    const mainEl = document.querySelector('main');
+    if (mainEl) {
+      const scrollTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: mainEl,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1.5,
+        }
       });
 
-      // Displacement rises from 0
-      tl.to(uniforms.uDisplacement, {
-        value: targetDisplacement,
-        duration: 2.2,
-        ease: 'power2.out',
-      }, 0);
+      scrollTl
+        // 1. To Building
+        .to(cameraBase, { x: -0.5, y: 0.35, z: 1.1, ease: 'power1.inOut' }, 0)
+        .to(lookAtTarget, { x: -0.15, y: 0.08, z: -0.2, ease: 'power1.inOut' }, 0)
+        .to(uniforms.uFogFar, { value: 3.4, ease: 'power1.inOut' }, 0)
 
-      // Opacity fades in
-      tl.to(uniforms.uOpacity, {
-        value: 1.0,
-        duration: 1.5,
-        ease: 'power2.inOut',
-      }, 0);
+        // 2. To Projects
+        .to(cameraBase, { x: 0.5, y: 0.3, z: 0.9, ease: 'power1.inOut' }, 1)
+        .to(lookAtTarget, { x: 0.1, y: 0.12, z: 0.15, ease: 'power1.inOut' }, 1)
+        .to(uniforms.uFogFar, { value: 3.0, ease: 'power1.inOut' }, 1)
 
-      // Camera dollies in
-      tl.to(cameraIntroOffset, {
-        y: 0,
-        z: 0,
-        duration: 2.5,
-        ease: 'power2.out',
-      }, 0);
+        // 3. To Infra
+        .to(cameraBase, { x: -0.2, y: 0.25, z: 0.75, ease: 'power1.inOut' }, 2)
+        .to(lookAtTarget, { x: 0.15, y: 0.06, z: -0.25, ease: 'power1.inOut' }, 2)
+        .to(uniforms.uFogFar, { value: 2.6, ease: 'power1.inOut' }, 2)
 
-      // ── GSAP: Idle drift (after intro) ──
-      tl.add(() => {
-        // Very slow continuous camera orbit
-        gsap.to(cameraDrift, {
-          x: 0.15,
-          duration: 30,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-        });
-        gsap.to(cameraDrift, {
-          y: 0.04,
-          duration: 25,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-        });
-      });
-
-      // ── GSAP: ScrollTrigger — camera traverses the massif ──
-      const mainEl = document.querySelector('main');
-      if (mainEl) {
-        const scrollTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: mainEl,
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: 1.5,
-          }
-        });
-
-        scrollTl
-          // 1. To Building
-          .to(cameraBase, { x: -0.5, y: 0.35, z: 1.1, ease: 'power1.inOut' }, 0)
-          .to(lookAtTarget, { x: -0.15, y: 0.08, z: -0.2, ease: 'power1.inOut' }, 0)
-          .to(uniforms.uFogFar, { value: 3.4, ease: 'power1.inOut' }, 0)
-
-          // 2. To Projects
-          .to(cameraBase, { x: 0.5, y: 0.3, z: 0.9, ease: 'power1.inOut' }, 1)
-          .to(lookAtTarget, { x: 0.1, y: 0.12, z: 0.15, ease: 'power1.inOut' }, 1)
-          .to(uniforms.uFogFar, { value: 3.0, ease: 'power1.inOut' }, 1)
-
-          // 3. To Infra
-          .to(cameraBase, { x: -0.2, y: 0.25, z: 0.75, ease: 'power1.inOut' }, 2)
-          .to(lookAtTarget, { x: 0.15, y: 0.06, z: -0.25, ease: 'power1.inOut' }, 2)
-          .to(uniforms.uFogFar, { value: 2.6, ease: 'power1.inOut' }, 2)
-
-          // 4. To About / Contact
-          .to(cameraBase, { x: 0.0, y: 0.75, z: 1.5, ease: 'power1.inOut' }, 3)
-          .to(lookAtTarget, { x: 0.0, y: 0.1, z: 0.0, ease: 'power1.inOut' }, 3)
-          .to(uniforms.uFogFar, { value: 2.2, ease: 'power1.inOut' }, 3)
-          .to(uniforms.uContourWidth, { value: 1.2, ease: 'power1.inOut' }, 3);
-      }
-    } else {
-      // ── Reduced motion: single static frame ──
-      uniforms.uDisplacement.value = targetDisplacement;
-      uniforms.uOpacity.value = 1.0;
-      render();
+        // 4. To About / Contact
+        .to(cameraBase, { x: 0.0, y: 0.75, z: 1.5, ease: 'power1.inOut' }, 3)
+        .to(lookAtTarget, { x: 0.0, y: 0.1, z: 0.0, ease: 'power1.inOut' }, 3)
+        .to(uniforms.uFogFar, { value: 2.2, ease: 'power1.inOut' }, 3)
+        .to(uniforms.uContourWidth, { value: 1.2, ease: 'power1.inOut' }, 3);
     }
 
     // ── Cleanup ──
@@ -474,12 +519,8 @@ function initTerrain() {
 
   }).catch(err => {
     console.warn('[terrain] Failed to load terrain assets, falling back to static:', err);
-    // Fallback to static hillshade
     canvas.remove();
-    const div = document.createElement('div');
-    div.className = 'terrain-static-bg';
-    div.setAttribute('aria-hidden', 'true');
-    body.prepend(div);
+    showStatic();
   });
 }
 
