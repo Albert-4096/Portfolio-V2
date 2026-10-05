@@ -700,7 +700,7 @@
     if (!SYSTEMS[ds] || ds === current()) return;
     root.setAttribute("data-ds", ds);
     try { localStorage.setItem("ds", ds); } catch (e) {}
-    if (history.replaceState) history.replaceState(null, "", "#" + ds);
+    try { history.replaceState(null, "", "#" + ds); } catch (e) {}
     var tok = document.getElementById("ds-tokens"), sig = document.getElementById("ds-signature"), left = 2;
     function done() { if (--left === 0) renderAll(); }
     tok.onload = sig.onload = tok.onerror = sig.onerror = done;
