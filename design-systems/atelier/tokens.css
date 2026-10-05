@@ -1,0 +1,202 @@
+/* ─── Atelier · tokens ─────────────────────────────────────
+   Extracted from gallery.alberyt.xyz (portfolio-gallery,
+   src/index.css "editorial-luxury" palette). Light-first; the
+   dark "espresso" theme is new and follows the OS.
+   The UI recedes so the work (screenshots, photos) is the only
+   colour on the page. */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=Plus+Jakarta+Sans:wght@400..700&display=swap");
+
+:root {
+  color-scheme: light;
+
+  /* colour: canvas, paper, ink, one sage */
+  --bg: #fbf7f0;            /* canvas */
+  --surface: #ffffff;       /* paper: the bezel around work */
+  --surface-2: #f1e9da;     /* canvas-deep: image wells */
+  --border: #e6dcc8;        /* line */
+  --border-strong: #cdbfa5;
+  --control: #948975;
+  --text: #211c16;          /* ink */
+  --text-2: #6b5f52;        /* ink-soft */
+  --muted: #6b5f52;
+  --accent: #211c16;        /* actions are ink, not colour */
+  --accent-hover: #6b5f52;
+  --accent-ink: #fbf7f0;
+  --accent-soft: rgba(33, 28, 22, 0.05);
+  --accent-line: rgba(33, 28, 22, 0.12);
+  --sage: #5f7452;          /* the one warm accent: small marks only */
+  --focus: #2f5cff;         /* digital ink: focus rings only */
+  --selection: #211c16;
+  --selection-ink: #fbf7f0;
+  --success: #4f6a40;
+  --warning: #8a5a12;
+  --danger: #a3352a;
+  --overlay: rgba(33, 28, 22, 0.4);
+  --grain-opacity: 0.035;
+  --grain-blend: multiply;
+
+  /* type */
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --fs-display: clamp(2.75rem, 1.6rem + 4.6vw, 5rem);   /* 44px → 80px */
+  --fs-h1: clamp(2.25rem, 1.6rem + 2.6vw, 3.75rem);
+  --fs-h2: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  --fs-h3: 1.5rem;
+  --fs-lede: 1.125rem;
+  --fs-body: 1rem;
+  --fs-small: 0.9375rem;
+  --fs-label: 0.875rem;
+  --fs-micro: 0.625rem;
+  --lh-tight: 0.98;
+  --lh-heading: 1.1;
+  --lh-body: 1.6;
+  --weight-display: 500;
+  --weight-heading: 500;
+  --weight-strong: 600;
+  --tracking-display: -0.015em;
+  --tracking-heading: -0.01em;
+  --tracking-label: 0.2em;
+  --label-font: var(--font-body);
+  --label-weight: 500;
+  --label-transform: uppercase;
+
+  /* space: aggressive. 64px within chapters, 128px between. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+  --gutter: clamp(1.5rem, 0.5rem + 4vw, 4rem);
+  --section-pad: clamp(5rem, 3rem + 6vw, 8rem);
+  --maxw: 90rem;
+  --prose: 28rem;
+  --header-h: 4.5rem;
+
+  /* shape: soft, concentric */
+  --radius-xs: 0.5rem;
+  --radius-sm: 1.1rem;      /* inner core */
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;     /* outer shell */
+  --radius-pill: 999px;
+
+  /* depth: warm, diffuse, offset. Never grey. */
+  --shadow-sm: 0 8px 30px -14px rgba(33, 28, 22, 0.35);
+  --shadow-md: 0 16px 40px -30px rgba(33, 28, 22, 0.4);
+  --shadow-lg: 0 30px 55px -25px rgba(33, 28, 22, 0.45);
+
+  /* motion: heavy, settled */
+  --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-in-out: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --ease-snap: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-fast: 300ms;
+  --dur-ui: 500ms;
+  --dur-slow: 800ms;
+
+  /* component hooks */
+  --btn-font: var(--font-body);
+  --btn-weight: 600;
+  --btn-size: 0.875rem;
+  --btn-tracking: 0.05em;
+  --btn-transform: none;
+  --btn-height: 3rem;
+  --btn-pad-x: 1.5rem;
+  --btn-radius: var(--radius-pill);
+  --btn-ghost-bg: transparent;
+  --card-bg: var(--surface);
+  --card-border: 1px solid rgba(33, 28, 22, 0.05);
+  --card-radius: var(--radius-lg);
+  --card-pad: 0.5rem;
+  --card-shadow: var(--shadow-md);
+  --card-shadow-hover: var(--shadow-lg);
+  --card-border-hover: rgba(33, 28, 22, 0.08);
+  --card-lift: -6px;
+  --card-blur: 0px;
+  --input-bg: #ffffff;
+  --input-height: 3rem;
+  --input-radius: 0.875rem;
+  --badge-font: var(--font-body);
+  --badge-size: 0.625rem;
+  --badge-weight: 500;
+  --badge-transform: uppercase;
+  --badge-tracking: 0.2em;
+  --badge-radius: var(--radius-pill);
+  --header-bg: rgba(251, 247, 240, 0.8);
+  --header-blur: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #16120e;
+    --surface: #201b16;
+    --surface-2: #2a241d;
+    --border: #3a3128;
+    --border-strong: #54483b;
+  --control: #756a5b;
+    --text: #f3ebde;
+    --text-2: #c2b4a2;
+    --muted: #b0a28f;
+    --accent: #f3ebde;
+    --accent-hover: #c2b4a2;
+    --accent-ink: #16120e;
+    --accent-soft: rgba(243, 235, 222, 0.06);
+    --accent-line: rgba(243, 235, 222, 0.14);
+    --sage: #a3b593;
+    --focus: #8aa4ff;
+    --selection: #f3ebde;
+    --selection-ink: #16120e;
+    --success: #a3b593;
+    --warning: #e3b35c;
+    --danger: #f08a7a;
+    --overlay: rgba(10, 8, 6, 0.55);
+    --grain-opacity: 0.05;
+    --grain-blend: screen;
+    --shadow-sm: 0 8px 30px -14px rgba(0, 0, 0, 0.6);
+    --shadow-md: 0 16px 40px -28px rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 30px 55px -25px rgba(0, 0, 0, 0.75);
+    --card-border: 1px solid rgba(243, 235, 222, 0.06);
+    --card-border-hover: rgba(243, 235, 222, 0.12);
+    --input-bg: #201b16;
+    --header-bg: rgba(22, 18, 14, 0.8);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #16120e;
+  --surface: #201b16;
+  --surface-2: #2a241d;
+  --border: #3a3128;
+  --border-strong: #54483b;
+  --control: #756a5b;
+  --text: #f3ebde;
+  --text-2: #c2b4a2;
+  --muted: #b0a28f;
+  --accent: #f3ebde;
+  --accent-hover: #c2b4a2;
+  --accent-ink: #16120e;
+  --accent-soft: rgba(243, 235, 222, 0.06);
+  --accent-line: rgba(243, 235, 222, 0.14);
+  --sage: #a3b593;
+  --focus: #8aa4ff;
+  --selection: #f3ebde;
+  --selection-ink: #16120e;
+  --success: #a3b593;
+  --warning: #e3b35c;
+  --danger: #f08a7a;
+  --overlay: rgba(10, 8, 6, 0.55);
+  --grain-opacity: 0.05;
+  --grain-blend: screen;
+  --shadow-sm: 0 8px 30px -14px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 16px 40px -28px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 30px 55px -25px rgba(0, 0, 0, 0.75);
+  --card-border: 1px solid rgba(243, 235, 222, 0.06);
+  --card-border-hover: rgba(243, 235, 222, 0.12);
+  --input-bg: #201b16;
+  --header-bg: rgba(22, 18, 14, 0.8);
+}

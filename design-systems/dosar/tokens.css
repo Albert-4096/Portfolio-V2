@@ -1,0 +1,188 @@
+/* ─── Dosar · tokens ───────────────────────────────────────
+   Trust-first system for professional practices: law offices,
+   tax and accounting, clinics, notaries. Built from what the
+   client sites (example-law-1/2/3, global-taxexpert) have in
+   common, minus the navy-and-gold default.
+   The world: a Romanian case file. Cool white paper, registry
+   numbers, and the blue-violet of a rubber stamp. */
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&display=swap");
+
+:root {
+  color-scheme: light;
+
+  /* colour: paper, graphite, stamp ink */
+  --bg: #f5f6f7;
+  --surface: #ffffff;
+  --surface-2: #eceef1;
+  --border: #d9dde3;
+  --border-strong: #b4bbc6;
+  --control: #848a94;
+  --text: #141821;
+  --text-2: #3b4250;
+  --muted: #5a6271;
+  --accent: #2f3aa3;        /* stamp ink */
+  --accent-hover: #232c85;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(47, 58, 163, 0.07);
+  --accent-line: rgba(47, 58, 163, 0.28);
+  --focus: #2f3aa3;
+  --selection: #d6d9f5;
+  --selection-ink: #141821;
+  --success: #1d7349;
+  --warning: #965a00;
+  --danger: #b42318;
+  --overlay: rgba(20, 24, 33, 0.45);
+
+  /* type: a book serif for headings, a working sans for the rest */
+  --font-display: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --font-body: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --fs-display: clamp(2.5rem, 1.7rem + 3.2vw, 4rem);
+  --fs-h1: clamp(2.125rem, 1.6rem + 2vw, 3rem);
+  --fs-h2: clamp(1.625rem, 1.35rem + 1vw, 2rem);
+  --fs-h3: 1.25rem;
+  --fs-lede: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+  --fs-body: 1.0625rem;
+  --fs-small: 0.9375rem;
+  --fs-label: 0.8125rem;
+  --fs-micro: 0.75rem;
+  --lh-tight: 1.08;
+  --lh-heading: 1.18;
+  --lh-body: 1.65;
+  --weight-display: 600;
+  --weight-heading: 600;
+  --weight-strong: 600;
+  --tracking-display: -0.02em;
+  --tracking-heading: -0.01em;
+  --tracking-label: 0.06em;
+  --label-font: var(--font-body);
+  --label-weight: 600;
+  --label-transform: uppercase;
+
+  /* space: calm, 8px rhythm */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 3.5rem;
+  --space-9: 4.5rem;
+  --space-10: 6rem;
+  --gutter: clamp(1.25rem, 0.75rem + 2vw, 2rem);
+  --section-pad: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  --maxw: 72rem;
+  --prose: 38rem;
+  --header-h: 4.25rem;
+
+  /* shape: crisp paper corners */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+
+  /* depth: borders carry structure; one paper shadow for raised sheets */
+  --shadow-sm: 0 1px 2px rgba(20, 24, 33, 0.06);
+  --shadow-md: 0 1px 2px rgba(20, 24, 33, 0.05), 0 8px 24px -12px rgba(20, 24, 33, 0.16);
+  --shadow-lg: 0 2px 4px rgba(20, 24, 33, 0.05), 0 24px 48px -20px rgba(20, 24, 33, 0.22);
+
+  /* motion: quiet */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-snap: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-fast: 120ms;
+  --dur-ui: 200ms;
+  --dur-slow: 400ms;
+
+  /* component hooks */
+  --btn-font: var(--font-body);
+  --btn-weight: 600;
+  --btn-size: 0.9375rem;
+  --btn-tracking: 0;
+  --btn-transform: none;
+  --btn-height: 2.875rem;
+  --btn-pad-x: 1.25rem;
+  --btn-radius: var(--radius-sm);
+  --btn-ghost-bg: var(--surface);
+  --card-bg: var(--surface);
+  --card-border: 1px solid var(--border);
+  --card-radius: var(--radius-md);
+  --card-pad: 1.75rem;
+  --card-shadow: none;
+  --card-shadow-hover: var(--shadow-md);
+  --card-border-hover: var(--border-strong);
+  --card-lift: 0px;
+  --card-blur: 0px;
+  --input-bg: #ffffff;
+  --input-height: 2.875rem;
+  --input-radius: var(--radius-sm);
+  --badge-font: var(--font-body);
+  --badge-size: 0.75rem;
+  --badge-weight: 600;
+  --badge-transform: none;
+  --badge-tracking: 0.01em;
+  --badge-radius: var(--radius-xs);
+  --header-bg: rgba(245, 246, 247, 0.92);
+  --header-blur: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f1218;
+    --surface: #161a22;
+    --surface-2: #1d222c;
+    --border: #2a303c;
+    --border-strong: #404858;
+  --control: #606777;
+    --text: #eef0f4;
+    --text-2: #c4c9d3;
+    --muted: #959dac;
+    --accent: #a3abff;
+    --accent-hover: #c0c6ff;
+    --accent-ink: #0f1218;
+    --accent-soft: rgba(163, 171, 255, 0.08);
+    --accent-line: rgba(163, 171, 255, 0.3);
+    --focus: #a3abff;
+    --selection: #343c7a;
+    --selection-ink: #eef0f4;
+    --success: #5cc493;
+    --warning: #e2a64a;
+    --danger: #f2877d;
+    --overlay: rgba(5, 7, 10, 0.6);
+    --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.3), 0 24px 48px -20px rgba(0, 0, 0, 0.7);
+    --input-bg: #11141b;
+    --header-bg: rgba(15, 18, 24, 0.9);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1218;
+  --surface: #161a22;
+  --surface-2: #1d222c;
+  --border: #2a303c;
+  --border-strong: #404858;
+  --control: #606777;
+  --text: #eef0f4;
+  --text-2: #c4c9d3;
+  --muted: #959dac;
+  --accent: #a3abff;
+  --accent-hover: #c0c6ff;
+  --accent-ink: #0f1218;
+  --accent-soft: rgba(163, 171, 255, 0.08);
+  --accent-line: rgba(163, 171, 255, 0.3);
+  --focus: #a3abff;
+  --selection: #343c7a;
+  --selection-ink: #eef0f4;
+  --success: #5cc493;
+  --warning: #e2a64a;
+  --danger: #f2877d;
+  --overlay: rgba(5, 7, 10, 0.6);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.3), 0 24px 48px -20px rgba(0, 0, 0, 0.7);
+  --input-bg: #11141b;
+  --header-bg: rgba(15, 18, 24, 0.9);
+}

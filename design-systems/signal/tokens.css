@@ -1,0 +1,189 @@
+/* ─── Signal · tokens ──────────────────────────────────────
+   Product UI: dashboards, admin panels, internal tools, webmail
+   (mail-platform), the TEDx check-in desk. Scanned and operated,
+   not read top to bottom. Dense, quiet, one accent.
+   The accent is the "digital ink" cobalt (#2f5cff) from the
+   earlier "Albert Portfolio" Stitch system. Follows the OS theme. */
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Geist:wght@400..700&display=swap");
+
+:root {
+  color-scheme: light;
+
+  /* colour: cool neutrals tinted toward the cobalt */
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #eff1f4;
+  --border: #e1e4ea;
+  --border-strong: #c7ccd5;
+  --control: #868a92;
+  --text: #0e1117;
+  --text-2: #3c4350;
+  --muted: #5c6472;
+  --accent: #2f5cff;
+  --accent-hover: #1e47e6;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(47, 92, 255, 0.09);
+  --accent-line: rgba(47, 92, 255, 0.35);
+  --focus: #2f5cff;
+  --selection: #cfdaff;
+  --selection-ink: #0e1117;
+  --success: #17784c;
+  --warning: #965800;
+  --danger: #c4302a;
+  --overlay: rgba(14, 17, 23, 0.4);
+
+  /* type: one family, mono for data */
+  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --fs-display: clamp(2rem, 1.6rem + 1.6vw, 2.75rem);
+  --fs-h1: 1.75rem;
+  --fs-h2: 1.375rem;
+  --fs-h3: 1.0625rem;
+  --fs-lede: 1rem;
+  --fs-body: 0.875rem;
+  --fs-small: 0.8125rem;
+  --fs-label: 0.75rem;
+  --fs-micro: 0.6875rem;
+  --lh-tight: 1.1;
+  --lh-heading: 1.25;
+  --lh-body: 1.5;
+  --weight-display: 600;
+  --weight-heading: 600;
+  --weight-strong: 500;
+  --tracking-display: -0.025em;
+  --tracking-heading: -0.015em;
+  --tracking-label: 0.02em;
+  --label-font: var(--font-body);
+  --label-weight: 500;
+  --label-transform: none;
+
+  /* space: 4px grid, tight */
+  --space-1: 0.125rem;
+  --space-2: 0.25rem;
+  --space-3: 0.375rem;
+  --space-4: 0.5rem;
+  --space-5: 0.75rem;
+  --space-6: 1rem;
+  --space-7: 1.25rem;
+  --space-8: 1.5rem;
+  --space-9: 2rem;
+  --space-10: 3rem;
+  --gutter: 1rem;
+  --section-pad: 2rem;
+  --maxw: 80rem;
+  --prose: 36rem;
+  --header-h: 3rem;
+
+  /* shape: small, consistent */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  /* depth: flat surfaces, shadows only for things that float */
+  --shadow-sm: 0 1px 2px rgba(14, 17, 23, 0.06);
+  --shadow-md: 0 4px 12px -2px rgba(14, 17, 23, 0.1), 0 1px 2px rgba(14, 17, 23, 0.06);
+  --shadow-lg: 0 16px 40px -12px rgba(14, 17, 23, 0.25), 0 2px 6px rgba(14, 17, 23, 0.06);
+
+  /* motion: fast, functional */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-snap: cubic-bezier(0.2, 0, 0, 1);
+  --dur-fast: 100ms;
+  --dur-ui: 160ms;
+  --dur-slow: 240ms;
+
+  /* component hooks */
+  --btn-font: var(--font-body);
+  --btn-weight: 500;
+  --btn-size: 0.8125rem;
+  --btn-tracking: 0;
+  --btn-transform: none;
+  --btn-height: 2rem;
+  --btn-pad-x: 0.75rem;
+  --btn-radius: var(--radius-sm);
+  --btn-ghost-bg: var(--surface);
+  --card-bg: var(--surface);
+  --card-border: 1px solid var(--border);
+  --card-radius: var(--radius-md);
+  --card-pad: 1rem;
+  --card-shadow: none;
+  --card-shadow-hover: none;
+  --card-border-hover: var(--border-strong);
+  --card-lift: 0px;
+  --card-blur: 0px;
+  --input-bg: #ffffff;
+  --input-height: 2rem;
+  --input-radius: var(--radius-sm);
+  --badge-font: var(--font-body);
+  --badge-size: 0.6875rem;
+  --badge-weight: 500;
+  --badge-transform: none;
+  --badge-tracking: 0.01em;
+  --badge-radius: var(--radius-pill);
+  --header-bg: rgba(246, 247, 249, 0.9);
+  --header-blur: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0b0d10;
+    --surface: #121418;
+    --surface-2: #191c21;
+    --border: #24282f;
+    --border-strong: #363c46;
+  --control: #5d636c;
+    --text: #e8eaee;
+    --text-2: #b4bac4;
+    --muted: #8b939f;
+    --accent: #7090ff;
+    --accent-hover: #8fa8ff;
+    --accent-ink: #0b0d10;
+    --accent-soft: rgba(112, 144, 255, 0.12);
+    --accent-line: rgba(112, 144, 255, 0.4);
+    --focus: #7090ff;
+    --selection: #26386e;
+    --selection-ink: #e8eaee;
+    --success: #45c486;
+    --warning: #e0a53d;
+    --danger: #f26b61;
+    --overlay: rgba(0, 0, 0, 0.55);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+    --shadow-lg: 0 16px 40px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    --input-bg: #0e1013;
+    --header-bg: rgba(11, 13, 16, 0.9);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b0d10;
+  --surface: #121418;
+  --surface-2: #191c21;
+  --border: #24282f;
+  --border-strong: #363c46;
+  --control: #5d636c;
+  --text: #e8eaee;
+  --text-2: #b4bac4;
+  --muted: #8b939f;
+  --accent: #7090ff;
+  --accent-hover: #8fa8ff;
+  --accent-ink: #0b0d10;
+  --accent-soft: rgba(112, 144, 255, 0.12);
+  --accent-line: rgba(112, 144, 255, 0.4);
+  --focus: #7090ff;
+  --selection: #26386e;
+  --selection-ink: #e8eaee;
+  --success: #45c486;
+  --warning: #e0a53d;
+  --danger: #f26b61;
+  --overlay: rgba(0, 0, 0, 0.55);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-lg: 0 16px 40px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --input-bg: #0e1013;
+  --header-bg: rgba(11, 13, 16, 0.9);
+}
