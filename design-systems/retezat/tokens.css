@@ -1,0 +1,168 @@
+/* ─── Retezat · tokens ─────────────────────────────────────
+   Extracted from alberyt.xyz (css/style.css). Dark-first: the
+   identity lives on the night-green ground. The light "paper"
+   theme is opt-in only (data-theme="light"), it does not follow
+   the OS, and it doubles as the print palette.
+   Fonts: Google Fonts here for portability. In production,
+   self-host the woff2 files the way alberyt.xyz does (/fonts). */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;700&display=swap");
+
+:root {
+  color-scheme: dark;
+
+  /* colour: night ground, pine accent */
+  --bg: #0a0d0b;
+  --surface: #0f1310;
+  --surface-2: #131815;
+  --surface-glass: rgba(15, 19, 16, 0.72);
+  --surface-glass-strong: rgba(20, 25, 21, 0.84);
+  --border: #1f2722;
+  --border-strong: #2e3a32;
+  --control: #5c665f;
+  --text: #d9dfda;
+  --text-2: #b4bdb6;
+  --muted: #8d978f;
+  --accent: #4cd97b;
+  --accent-hover: #72e597;
+  --accent-ink: #0a0d0b;
+  --accent-dim: #2c7a4a;
+  --accent-soft: rgba(76, 217, 123, 0.07);
+  --accent-line: rgba(76, 217, 123, 0.28);
+  --focus: #4cd97b;
+  --selection: #2c7a4a;
+  --selection-ink: #ffffff;
+  --success: #4cd97b;
+  --warning: #e0b44c;
+  --danger: #f2766b;
+  --overlay: rgba(10, 13, 11, 0.6);
+
+  /* type */
+  --font-display: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --fs-display: clamp(2.5rem, 11vw, 4.75rem);
+  --fs-h1: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+  --fs-h2: clamp(1.75rem, 1.35rem + 1.4vw, 2.25rem);
+  --fs-h3: 1.1875rem;
+  --fs-lede: clamp(1.125rem, 1rem + 0.55vw, 1.3125rem);
+  --fs-body: 1.0625rem;
+  --fs-small: 0.9375rem;
+  --fs-label: 0.8125rem;
+  --fs-micro: 0.75rem;
+  --lh-tight: 1.02;
+  --lh-heading: 1.15;
+  --lh-body: 1.65;
+  --weight-display: 700;
+  --weight-heading: 700;
+  --weight-strong: 500;
+  --tracking-display: -0.03em;
+  --tracking-heading: -0.02em;
+  --tracking-label: 0.08em;
+  --label-font: var(--font-mono);
+  --label-weight: 400;
+  --label-transform: none;
+
+  /* space: rem steps, 4px base */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 3rem;
+  --space-9: 4rem;
+  --space-10: 6rem;
+  --gutter: 1.25rem;
+  --section-pad: clamp(4rem, 10vh, 7rem);
+  --maxw: 64rem;
+  --prose: 40rem;
+  --header-h: 3.25rem;
+
+  /* shape: square. Nothing on this system is rounded. */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-pill: 0;
+
+  /* depth: borders and glass, one accent-tinted lift on hover */
+  --shadow-sm: none;
+  --shadow-md: 0 12px 32px -14px rgba(76, 217, 123, 0.22);
+  --shadow-lg: 0 24px 48px -20px rgba(0, 0, 0, 0.7);
+
+  /* motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-snap: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-fast: 150ms;
+  --dur-ui: 250ms;
+  --dur-slow: 550ms;
+
+  /* component hooks */
+  --btn-font: var(--font-mono);
+  --btn-weight: 500;
+  --btn-size: 0.875rem;
+  --btn-tracking: 0.02em;
+  --btn-transform: none;
+  --btn-height: 44px;
+  --btn-pad-x: 1.15rem;
+  --btn-radius: 0;
+  --btn-ghost-bg: rgba(10, 13, 11, 0.55);
+  --card-bg: var(--surface-glass);
+  --card-border: 1px solid var(--border);
+  --card-radius: 0;
+  --card-pad: 1.5rem;
+  --card-shadow: none;
+  --card-shadow-hover: var(--shadow-md);
+  --card-border-hover: rgba(76, 217, 123, 0.55);
+  --card-lift: -3px;
+  --card-blur: 8px;
+  --input-bg: rgba(10, 13, 11, 0.55);
+  --input-height: 44px;
+  --input-radius: 0;
+  --badge-font: var(--font-mono);
+  --badge-size: 0.72rem;
+  --badge-weight: 500;
+  --badge-transform: uppercase;
+  --badge-tracking: 0.07em;
+  --badge-radius: 0;
+  --header-bg: rgba(10, 13, 11, 0.88);
+  --header-blur: 8px;
+}
+@media (min-width: 900px) { :root { --header-h: 3.5rem; } }
+
+/* paper: opt-in light theme, also used for print */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f2f5f1;
+  --surface: #ffffff;
+  --surface-2: #e7ece6;
+  --surface-glass: rgba(255, 255, 255, 0.8);
+  --surface-glass-strong: rgba(255, 255, 255, 0.92);
+  --border: #d2dad3;
+  --border-strong: #a7b3aa;
+  --control: #7f8982;
+  --text: #0c120e;
+  --text-2: #2e3a32;
+  --muted: #536058;
+  --accent: #157a3c;
+  --accent-hover: #0f6330;
+  --accent-ink: #ffffff;
+  --accent-dim: #8cc7a1;
+  --accent-soft: rgba(21, 122, 60, 0.07);
+  --accent-line: rgba(21, 122, 60, 0.3);
+  --focus: #157a3c;
+  --selection: #bfe3cb;
+  --selection-ink: #0c120e;
+  --success: #157a3c;
+  --warning: #8a5a00;
+  --danger: #b3261e;
+  --overlay: rgba(12, 18, 14, 0.35);
+  --shadow-md: 0 12px 32px -16px rgba(21, 122, 60, 0.28);
+  --shadow-lg: 0 24px 48px -24px rgba(12, 18, 14, 0.25);
+  --btn-ghost-bg: rgba(255, 255, 255, 0.6);
+  --card-border-hover: rgba(21, 122, 60, 0.55);
+  --input-bg: #ffffff;
+  --header-bg: rgba(242, 245, 241, 0.9);
+}

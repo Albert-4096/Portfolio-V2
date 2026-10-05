@@ -1,0 +1,197 @@
+/* ─── Marquee · tokens ─────────────────────────────────────
+   Events, hackathons, launches and campaigns: TEDx check-in
+   pages, HackTM write-ups, 1st Step Karting, one-off promos.
+   Committed colour: one saturated field owns whole regions of
+   the page, and condensed type does the shouting.
+   Swap the field per event by changing --field and --field-ink
+   only (presets at the bottom). Follows the OS theme; the field
+   stays the same in both. */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap");
+
+:root {
+  color-scheme: light;
+
+  /* colour: off-white, off-black, one field */
+  --field: #ff5a1f;         /* signal orange */
+  --field-ink: #141414;
+  --invert: #141414;         /* the ink band: page colours swapped */
+  --invert-ink: #f3f2ef;
+  --bg: #f3f2ef;
+  --surface: #ffffff;
+  --surface-2: #e7e5e0;
+  --border: #d3d0c9;
+  --border-strong: #141414;
+  --control: var(--border-strong);
+  --text: #141414;
+  --text-2: #3d3b38;
+  --muted: #5f5c57;
+  --accent: #141414;        /* actions are ink; the field is a surface, not a link colour */
+  --accent-hover: #3d3b38;
+  --accent-ink: #f3f2ef;
+  --accent-soft: rgba(20, 20, 20, 0.05);
+  --accent-line: rgba(20, 20, 20, 0.2);
+  --focus: #141414;
+  --selection: #ff5a1f;
+  --selection-ink: #141414;
+  --success: #1d7a45;
+  --warning: #8f5800;
+  --danger: #c22a1d;
+  --overlay: rgba(20, 20, 20, 0.5);
+
+  /* type: one family, three widths */
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --display-stretch: 68%;
+  --heading-stretch: 82%;
+  --fs-display: clamp(3.5rem, 1.5rem + 9vw, 8.5rem);
+  --fs-h1: clamp(2.75rem, 1.6rem + 4.6vw, 5rem);
+  --fs-h2: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  --fs-h3: 1.5rem;
+  --fs-lede: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
+  --fs-body: 1.0625rem;
+  --fs-small: 0.9375rem;
+  --fs-label: 0.8125rem;
+  --fs-micro: 0.75rem;
+  --lh-tight: 0.88;
+  --lh-heading: 0.98;
+  --lh-body: 1.55;
+  --weight-display: 800;
+  --weight-heading: 750;
+  --weight-strong: 600;
+  --tracking-display: -0.01em;
+  --tracking-heading: -0.005em;
+  --tracking-label: 0.08em;
+  --label-font: var(--font-body);
+  --label-weight: 600;
+  --label-transform: uppercase;
+
+  /* space: big jumps between bands, tight inside them */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+  --space-10: 10rem;
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --section-pad: clamp(4rem, 2rem + 8vw, 9rem);
+  --maxw: 96rem;
+  --prose: 34rem;
+  --header-h: 4rem;
+
+  /* shape: all sharp. Rules are 2px. */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-pill: 0;
+  --rule: 2px solid var(--border-strong);
+
+  /* depth: none. Colour fields and rules separate things. */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: 0 24px 48px -24px rgba(20, 20, 20, 0.35);
+
+  /* motion: snappy, mechanical */
+  --ease-out: cubic-bezier(0.2, 0.9, 0.1, 1);
+  --ease-in-out: cubic-bezier(0.7, 0, 0.3, 1);
+  --ease-snap: cubic-bezier(0.85, 0, 0.15, 1);
+  --dur-fast: 120ms;
+  --dur-ui: 220ms;
+  --dur-slow: 600ms;
+
+  /* component hooks */
+  --btn-font: var(--font-body);
+  --btn-weight: 700;
+  --btn-size: 0.9375rem;
+  --btn-tracking: 0.04em;
+  --btn-transform: uppercase;
+  --btn-height: 3.25rem;
+  --btn-pad-x: 1.5rem;
+  --btn-radius: 0;
+  --btn-ghost-bg: transparent;
+  --card-bg: var(--surface);
+  --card-border: 2px solid var(--border-strong);
+  --card-radius: 0;
+  --card-pad: 1.5rem;
+  --card-shadow: none;
+  --card-shadow-hover: none;
+  --card-border-hover: var(--border-strong);
+  --card-lift: 0px;
+  --card-blur: 0px;
+  --input-bg: #ffffff;
+  --input-height: 3.25rem;
+  --input-radius: 0;
+  --badge-font: var(--font-body);
+  --badge-size: 0.75rem;
+  --badge-weight: 700;
+  --badge-transform: uppercase;
+  --badge-tracking: 0.06em;
+  --badge-radius: 0;
+  --header-bg: #f3f2ef;
+  --header-blur: 0px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --invert: #f3f2ef;
+    --invert-ink: #131312;
+    --bg: #131312;
+    --surface: #1c1c1a;
+    --surface-2: #262624;
+    --border: #3a3936;
+    --border-strong: #f3f2ef;
+    --text: #f3f2ef;
+    --text-2: #c9c6bf;
+    --muted: #a3a099;
+    --accent: #f3f2ef;
+    --accent-hover: #c9c6bf;
+    --accent-ink: #131312;
+    --accent-soft: rgba(243, 242, 239, 0.06);
+    --accent-line: rgba(243, 242, 239, 0.25);
+    --focus: #f3f2ef;
+    --success: #4fc283;
+    --warning: #e5a83f;
+    --danger: #ff7a6b;
+    --overlay: rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 24px 48px -24px rgba(0, 0, 0, 0.8);
+    --input-bg: #1c1c1a;
+    --header-bg: #131312;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --invert: #f3f2ef;
+  --invert-ink: #131312;
+  --bg: #131312;
+  --surface: #1c1c1a;
+  --surface-2: #262624;
+  --border: #3a3936;
+  --border-strong: #f3f2ef;
+  --text: #f3f2ef;
+  --text-2: #c9c6bf;
+  --muted: #a3a099;
+  --accent: #f3f2ef;
+  --accent-hover: #c9c6bf;
+  --accent-ink: #131312;
+  --accent-soft: rgba(243, 242, 239, 0.06);
+  --accent-line: rgba(243, 242, 239, 0.25);
+  --focus: #f3f2ef;
+  --success: #4fc283;
+  --warning: #e5a83f;
+  --danger: #ff7a6b;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 24px 48px -24px rgba(0, 0, 0, 0.8);
+  --input-bg: #1c1c1a;
+  --header-bg: #131312;
+}
+
+/* field presets: put one of these on :root (or a section) */
+[data-field="cobalt"] { --field: #2440e6; --field-ink: #ffffff; }
+[data-field="lime"]   { --field: #c6f03a; --field-ink: #141414; }
+[data-field="red"]    { --field: #d92a1d; --field-ink: #ffffff; }

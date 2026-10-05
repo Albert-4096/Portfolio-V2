@@ -1,0 +1,84 @@
+/* ─── Signal · signature components ────────────────────────
+   App shell, dense tables, status, stats, toasts, empty states.
+   Load after core/components.css. */
+
+.brand { font-weight: 600; font-size: 0.9375rem; letter-spacing: -0.01em; }
+.label, .table th { text-transform: none; }
+
+/* app shell: sidebar + main. The sidebar collapses to a top strip under 800px. */
+.app {
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  min-height: 32rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+}
+@media (min-width: 800px) { .app { grid-template-columns: 13.5rem minmax(0, 1fr); } }
+.app__side { display: flex; flex-direction: column; gap: var(--space-6); padding: var(--space-6) var(--space-4); background: var(--surface); border-right: 1px solid var(--border); }
+@media (max-width: 799px) { .app__side { border-right: 0; border-bottom: 1px solid var(--border); } }
+.app__main { display: flex; flex-direction: column; min-width: 0; }
+.app__bar {
+  display: flex; align-items: center; gap: var(--space-4); min-height: var(--header-h);
+  padding: 0 var(--space-6); border-bottom: 1px solid var(--border); background: var(--surface);
+}
+.app__body { display: grid; gap: var(--space-6); padding: var(--space-6); }
+
+.side-nav { display: grid; gap: 1px; margin: 0; padding: 0; list-style: none; }
+.side-nav a {
+  display: flex; align-items: center; gap: var(--space-4); min-height: 2rem; padding: 0 var(--space-4);
+  font-size: var(--fs-small); color: var(--text-2); border-radius: var(--radius-sm);
+}
+.side-nav a:hover { background: var(--surface-2); color: var(--text); text-decoration: none; }
+.side-nav a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+.side-nav__count { margin-left: auto; font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--muted); font-variant-numeric: tabular-nums; }
+.side-nav a[aria-current="page"] .side-nav__count { color: var(--accent); }
+.side-nav__group { padding: 0 var(--space-4) var(--space-2); font-size: var(--fs-micro); font-weight: 500; color: var(--muted); }
+@media (pointer: coarse) { .side-nav a { min-height: 44px; } }
+
+/* search field with a shortcut hint */
+.search { position: relative; flex: 1; max-width: 22rem; }
+.search .input { padding-right: 2.75rem; }
+.search kbd { position: absolute; right: 0.5rem; top: 50%; translate: 0 -50%; pointer-events: none; }
+
+/* status: a dot that carries real state, then words that say it */
+.status { display: inline-flex; align-items: center; gap: 0.45rem; font-size: var(--fs-small); color: var(--text-2); white-space: nowrap; }
+.status::before { content: ""; width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--muted); }
+.status[data-state="ok"]::before { background: var(--success); }
+.status[data-state="warn"]::before { background: var(--warning); }
+.status[data-state="fail"]::before { background: var(--danger); }
+.status[data-state="busy"]::before { background: var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .status[data-state="busy"]::before { animation: signal-blink 1.2s ease-in-out infinite; }
+}
+@keyframes signal-blink { 50% { opacity: 0.3; } }
+
+/* stats: label over a mono figure; the delta says which way and how much */
+.stats { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr)); }
+.stat { display: grid; gap: var(--space-2); padding: var(--space-6); background: var(--surface); }
+.stat__label { font-size: var(--fs-label); color: var(--muted); }
+.stat__value { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.stat__delta { font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--muted); }
+.stat__delta[data-dir="up"] { color: var(--success); }
+.stat__delta[data-dir="down"] { color: var(--danger); }
+
+/* dense table: rows you can scan, hover and select */
+.table--dense th { padding-block: 0.5rem; }
+.table--dense td { padding-block: 0.5rem; }
+.table--dense tbody tr { transition: background-color var(--dur-fast) ease; }
+.table--dense tbody tr:hover { background: var(--surface-2); }
+.table--dense tbody tr[aria-selected="true"] { background: var(--accent-soft); }
+.table .mono { font-family: var(--font-mono); font-size: var(--fs-label); }
+
+/* toast: transient confirmation, bottom right, says what happened */
+.toast {
+  display: inline-flex; align-items: center; gap: var(--space-5); padding: 0.6rem 0.6rem 0.6rem 0.9rem;
+  font-size: var(--fs-small); color: var(--surface); background: var(--text);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+}
+.toast .btn { color: var(--surface); border-color: transparent; background: transparent; min-height: 1.75rem; }
+.toast .btn:hover { background: color-mix(in srgb, var(--surface) 12%, transparent); }
+
+/* empty state: names what will appear and how to add the first one */
+.empty {
+  display: grid; justify-items: center; gap: var(--space-4); padding: var(--space-10) var(--space-6);
+  text-align: center; border: 1px dashed var(--border-strong); border-radius: var(--radius-md);
+}
+.empty__title { font-size: var(--fs-h3); font-weight: 600; }
+.empty p { max-width: 28rem; color: var(--muted); font-size: var(--fs-small); }

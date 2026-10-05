@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en" data-ds="retezat">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alberyt Design Systems</title>
+<link id="ds-tokens" rel="stylesheet" href="retezat/tokens.css">
+<link rel="stylesheet" href="core/base.css">
+<link rel="stylesheet" href="core/components.css">
+<link id="ds-signature" rel="stylesheet" href="retezat/signature.css">
+<script>
+  (function () {
+    var ok = ["retezat", "atelier", "dosar", "signal", "marquee"];
+    var h = location.hash.slice(1), s = null, t = null;
+    try { s = localStorage.getItem("ds"); t = localStorage.getItem("ds-theme"); } catch (e) {}
+    var ds = ok.indexOf(h) > -1 ? h : ok.indexOf(s) > -1 ? s : "retezat";
+    var r = document.documentElement;
+    r.setAttribute("data-ds", ds);
+    document.getElementById("ds-tokens").href = ds + "/tokens.css";
+    document.getElementById("ds-signature").href = ds + "/signature.css";
+    if (t === "light" || t === "dark") r.setAttribute("data-theme", t);
+  })();
+</script>
+<style>
+  /* Specimen chrome. Layout: one long column of plates; the active
+     system's tokens drive everything, including this chrome. */
+  html:not([data-ds="retezat"]) [data-only="retezat"],
+  html:not([data-ds="atelier"]) [data-only="atelier"],
+  html:not([data-ds="dosar"]) [data-only="dosar"],
+  html:not([data-ds="signal"]) [data-only="signal"],
+  html:not([data-ds="marquee"]) [data-only="marquee"] { display: none !important; }
+
+  body { overflow-x: clip; }
+  .spec-bar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30;
+    background: var(--header-bg); border-bottom: 1px solid var(--border);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  }
+  .spec-bar__row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; padding-block: 0.6rem; }
+  .spec-bar__title { font-family: var(--font-body); font-weight: var(--weight-strong); font-size: var(--fs-small); margin-right: auto; white-space: nowrap; color: var(--text); }
+  .spec-bar .segmented { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .spec-bar .segmented > button { white-space: nowrap; }
+  @media (max-width: 699px) { .spec-bar { position: static; } }
+
+  .spec { padding-block: var(--space-8) var(--space-10); display: grid; gap: var(--space-10); }
+  .spec-sec { display: grid; gap: var(--space-6); min-width: 0; }
+  .spec-sec__head { display: grid; gap: var(--space-2); max-width: 44rem; }
+  .spec-sec__head h2 { font-size: var(--fs-h2); }
+  .spec-sec__head p { color: var(--text-2); }
+  .spec-sub { font-family: var(--label-font); font-size: var(--fs-label); font-weight: var(--label-weight); letter-spacing: var(--tracking-label); text-transform: var(--label-transform); color: var(--muted); margin-bottom: var(--space-3); }
+
+  /* intro */
+  .intro { display: grid; gap: var(--space-6); }
+  .intro__name { overflow-wrap: anywhere; }
+  .facts { display: grid; gap: 0; margin: 0; border-top: 1px solid var(--border); }
+  .facts > div { display: grid; grid-template-columns: minmax(0, 9rem) minmax(0, 1fr); gap: var(--space-4); padding-block: var(--space-3); border-bottom: 1px solid var(--border); }
+  .facts dt { font-family: var(--label-font); font-size: var(--fs-label); font-weight: var(--label-weight); letter-spacing: var(--tracking-label); text-transform: var(--label-transform); color: var(--muted); }
+  .facts dd { margin: 0; color: var(--text-2); min-width: 0; }
+  .facts code { overflow-wrap: anywhere; }
+  @media (max-width: 599px) { .facts > div { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); } }
+
+  /* swatches */
+  .swatches { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(9.5rem, 100%), 1fr)); }
+  .swatch { min-width: 0; overflow: hidden; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); }
+  .swatch__chip { height: 4.25rem; border-bottom: 1px solid var(--border); display: grid; place-items: center; font-weight: 600; font-size: 1.125rem; }
+  .swatch__meta { display: grid; gap: 0.15rem; padding: 0.6rem 0.75rem; }
+  .swatch__name { font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--text); }
+  .swatch__val, .swatch__ratio { font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--muted); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+  /* type */
+  .type-rows { border-top: 1px solid var(--border); }
+  .type-row { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: var(--space-5); align-items: baseline; padding-block: var(--space-5); border-bottom: 1px solid var(--border); }
+  .type-row__meta { display: grid; gap: 0.15rem; font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--muted); }
+  .type-row__meta b { color: var(--text); font-weight: 500; }
+  .type-row__sample { min-width: 0; overflow-wrap: anywhere; }
+  @media (max-width: 699px) { .type-row { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); } }
+
+  /* space, shape, depth, motion */
+  .space-rows { display: grid; gap: 0.35rem; }
+  .space-row { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) 4.5rem; gap: var(--space-4); align-items: center; font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--muted); }
+  .space-row__bar { height: 0.75rem; background: var(--accent); max-width: 100%; }
+  .space-row__val { text-align: right; font-variant-numeric: tabular-nums; }
+  .shapes { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+  .shape { display: grid; justify-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--muted); text-align: center; }
+  .shape__box { width: 4.5rem; height: 4.5rem; background: var(--surface); border: 1px solid var(--border-strong); }
+  .shadow-box { width: 7rem; height: 4.5rem; background: var(--surface); border-radius: var(--card-radius); border: 1px solid var(--border); }
+  .motion { display: grid; gap: 0.5rem; }
+  .motion__lane { position: relative; height: 1.75rem; background: var(--surface-2); border-radius: var(--radius-xs); overflow: hidden; }
+  .motion__dot { position: absolute; left: 0.25rem; top: 0.25rem; width: 1.25rem; height: 1.25rem; background: var(--accent); border-radius: var(--btn-radius); }
+  .motion[data-run="1"] .motion__dot { left: calc(100% - 1.5rem); }
+  .motion__lane span { position: absolute; right: 0.5rem; top: 50%; translate: 0 -50%; font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--muted); }
+
+  /* component plates */
+  .plates { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr)); }
+  .demo { min-width: 0; display: grid; gap: var(--space-4); align-content: start; padding: var(--space-6); border: 1px dashed var(--border); border-radius: var(--radius-md); }
+  .demo > .spec-sub { margin: 0; }
+
+  /* in-context frame */
+  .frame { min-width: 0; overflow: clip; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg); }
+  .frame .site-header { position: relative; top: 0; }
+  .frame .island { position: relative; top: 0; }
+  .code {
+    margin: 0; padding: var(--space-5); overflow-x: auto;
+    font-size: var(--fs-label); line-height: 1.7; color: var(--text-2);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-md);
+  }
+  .spec-foot { padding-block: var(--space-7); border-top: 1px solid var(--border); color: var(--muted); font-size: var(--fs-small); }
+</style>
+</head>
+<body>
+
+<div class="grain" data-only="atelier" aria-hidden="true"></div>
+
+<header class="spec-bar">
+  <div class="container spec-bar__row">
+    <span class="spec-bar__title">Design systems</span>
+    <div class="segmented" role="group" aria-label="System" id="pick-ds">
+      <button type="button" data-ds="retezat">Retezat</button>
+      <button type="button" data-ds="atelier">Atelier</button>
+      <button type="button" data-ds="dosar">Dosar</button>
+      <button type="button" data-ds="signal">Signal</button>
+      <button type="button" data-ds="marquee">Marquee</button>
+    </div>
+    <div class="segmented" role="group" aria-label="Theme" id="pick-theme">
+      <button type="button" data-theme-pick="auto">Auto</button>
+      <button type="button" data-theme-pick="light">Light</button>
+      <button type="button" data-theme-pick="dark">Dark</button>
+    </div>
+  </div>
+</header>
+
+<main class="container spec" id="top">
+
+  <!-- ── Intro ─────────────────────────────────────── -->
+  <section class="intro" aria-labelledby="ds-name">
+    <h1 class="display intro__name" id="ds-name">Retezat</h1>
+    <p class="lede" id="ds-north"></p>
+    <dl class="facts" id="ds-facts"></dl>
+  </section>
+
+  <!-- ── Colour ────────────────────────────────────── -->
+  <section class="spec-sec" aria-labelledby="h-colour">
+    <div class="spec-sec__head">
+      <h2 id="h-colour">Colour</h2>
+      <p>Resolved from the live tokens in the current theme. Ratios are measured against <code>--bg</code>; every text pair in every theme passes 4.5:1 (<code>scripts/contrast.py</code>).</p>
+    </div>
+    <div class="swatches" id="swatches"></div>
+  </section>
+
+  <!-- ── Type ──────────────────────────────────────── -->
+  <section class="spec-sec" aria-labelledby="h-type">
+    <div class="spec-sec__head">
+      <h2 id="h-type">Type</h2>
+      <p>The full scale with real copy. Romanian diacritics (ș ț ă â î) render in face in every system.</p>
+    </div>
+    <div class="type-rows" id="type-rows"></div>
+  </section>
+
+  <!-- ── Space, shape, depth, motion ───────────────── -->
+  <section class="spec-sec" aria-labelledby="h-space">
+    <div class="spec-sec__head">
+      <h2 id="h-space">Space, shape, depth, motion</h2>
+      <p>Ten spacing steps, the radius scale, three elevations and the system's easing. The steps differ per system; the names do not.</p>
+    </div>
+    <div class="split" style="--split: minmax(0, 1.2fr) minmax(0, 1fr)">
+      <div>
+        <p class="spec-sub">Spacing</p>
+        <div class="space-rows" id="space-rows"></div>
+      </div>
+      <div class="stack stack-lg">
+        <div>
+          <p class="spec-sub">Radius</p>
+          <div class="shapes" id="shapes"></div>
+        </div>
+        <div>
+          <p class="spec-sub">Elevation</p>
+          <div class="shapes">
+            <div class="shape"><div class="shadow-box" style="box-shadow: var(--shadow-sm)"></div>shadow-sm</div>
+            <div class="shape"><div class="shadow-box" style="box-shadow: var(--shadow-md)"></div>shadow-md</div>
+            <div class="shape"><div class="shadow-box" style="box-shadow: var(--shadow-lg)"></div>shadow-lg</div>
+          </div>
+        </div>
+        <div class="motion" id="motion">
+          <div class="cluster cluster--between"><p class="spec-sub" style="margin:0">Motion</p><button class="btn btn--secondary btn--sm" type="button" id="play">Play</button></div>
+          <div class="motion__lane"><div class="motion__dot" style="transition: left var(--dur-fast) var(--ease-out)"></div><span>dur-fast · ease-out</span></div>
+          <div class="motion__lane"><div class="motion__dot" style="transition: left var(--dur-ui) var(--ease-out)"></div><span>dur-ui · ease-out</span></div>
+          <div class="motion__lane"><div class="motion__dot" style="transition: left var(--dur-slow) var(--ease-in-out)"></div><span>dur-slow · ease-in-out</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Components ────────────────────────────────── -->
+  <section class="spec-sec" aria-labelledby="h-comp">
+    <div class="spec-sec__head">
+      <h2 id="h-comp">Components</h2>
+      <p>The same markup in every system (<code>core/components.css</code>). Each system changes how they look through its tokens and component hooks.</p>
+    </div>
+
+    <div class="plates">
+      <div class="demo">
+        <p class="spec-sub">Buttons</p>
+        <div class="cluster">
+          <button class="btn btn--primary" type="button">Book a call <span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></button>
+          <button class="btn btn--secondary" type="button">See the work</button>
+          <button class="btn btn--quiet" type="button">Read more</button>
+        </div>
+        <div class="cluster">
+          <button class="btn btn--primary btn--sm" type="button">Save</button>
+          <button class="btn btn--secondary btn--sm" type="button">Cancel</button>
+          <button class="btn btn--secondary btn--lg" type="button">Large</button>
+          <button class="btn btn--primary" type="button" disabled>Disabled</button>
+        </div>
+      </div>
+
+      <div class="demo">
+        <p class="spec-sub">Badges and tags</p>
+        <div class="cluster">
+          <span class="badge">Winner</span>
+          <span class="badge badge--outline">Live</span>
+          <span class="badge badge--muted">Private</span>
+        </div>
+        <div class="cluster">
+          <span class="badge badge--success"><span class="badge__dot"></span>Delivered</span>
+          <span class="badge badge--warning"><span class="badge__dot"></span>Queued</span>
+          <span class="badge badge--danger"><span class="badge__dot"></span>Bounced</span>
+        </div>
+        <ul class="tags"><li>Python</li><li>FastAPI</li><li>React</li><li>HL7 FHIR R4</li></ul>
+        <div class="cluster">
+          <div class="segmented" role="group" aria-label="Filter">
+            <button type="button" aria-pressed="true">All</button>
+            <button type="button" aria-pressed="false">Unread</button>
+            <button type="button" aria-pressed="false">Flagged</button>
+          </div>
+          <label class="check"><input class="switch" type="checkbox" checked> Notifications</label>
+        </div>
+      </div>
+
+      <div class="demo">
+        <p class="spec-sub">Form</p>
+        <div class="field">
+          <label class="field__label" for="f-name">Full name</label>
+          <input class="input" id="f-name" autocomplete="name" placeholder="Ioana Mureșan">
+        </div>
+        <div class="field">
+          <label class="field__label" for="f-mail">Email</label>
+          <input class="input" id="f-mail" type="email" value="ioana@exemplu" aria-invalid="true" aria-describedby="f-mail-err">
+          <p class="field__error" id="f-mail-err">This address is missing a domain ending, like .ro or .com.</p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="f-topic">Topic</label>
+          <select class="select" id="f-topic"><option>A new website</option><option>An automation</option><option>Something else</option></select>
+          <p class="field__help">Pick the closest one; you can explain below.</p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="f-msg">Message</label>
+          <textarea class="textarea" id="f-msg" placeholder="What should the site help people do?"></textarea>
+        </div>
+        <label class="check"><input type="checkbox" id="f-ok" checked> I agree to be contacted about this request.</label>
+      </div>
+
+      <div class="demo">
+        <p class="spec-sub">Cards and callout</p>
+        <article class="card">
+          <div class="card__meta"><time datetime="2026-05">May 2026</time><span class="badge">Winner</span></div>
+          <h3 class="card__title"><a class="card__link" href="#top">EHDS-Service</a></h3>
+          <p class="card__body">Turns Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles through a 9-stage pipeline.</p>
+          <ul class="tags"><li>Python</li><li>FastAPI</li><li>React</li></ul>
+        </article>
+        <div class="callout">
+          <p class="callout__title">Heads up</p>
+          <p>The demo runs on a synthetic patient. No real medical data leaves the server.</p>
+        </div>
+        <div class="callout callout--danger">
+          <p class="callout__title">Payment failed</p>
+          <p>The card was declined by the bank. Try another card or pay by transfer.</p>
+        </div>
+      </div>
+
+      <div class="demo">
+        <p class="spec-sub">Table</p>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Service</th><th>Host</th><th class="num">Containers</th></tr></thead>
+            <tbody>
+              <tr><td>Immich</td><td>ThinkCentre</td><td class="num">5</td></tr>
+              <tr><td>Paperless</td><td>ThinkCentre</td><td class="num">4</td></tr>
+              <tr><td>Backup Server</td><td>PowerEdge R610</td><td class="num">1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="demo">
+        <p class="spec-sub">Rows and dialog</p>
+        <ul class="rows">
+          <li class="row"><div><p class="row__title">Won Product Innovation at HackTM</p><p class="row__note">What I actually took away.</p></div><span class="row__meta">May 2026</span></li>
+          <li class="row"><div><p class="row__title">Locking down a private site with Romanian eID</p><p class="row__note">mTLS with the national ID card.</p></div><span class="row__meta">Oct 2025</span></li>
+        </ul>
+        <div><button class="btn btn--secondary" type="button" id="open-dialog">Open dialog</button></div>
+        <dialog class="dialog" id="dialog" aria-labelledby="dialog-h">
+          <div class="stack stack-sm">
+            <h3 id="dialog-h">Delete this draft?</h3>
+            <p class="text-2">The draft and its two attachments will be removed. This cannot be undone.</p>
+            <form method="dialog" class="cluster" style="justify-content: flex-end">
+              <button class="btn btn--secondary" value="cancel">Keep draft</button>
+              <button class="btn btn--primary" value="delete">Delete draft</button>
+            </form>
+          </div>
+        </dialog>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── In context ────────────────────────────────── -->
+  <section class="spec-sec" aria-labelledby="h-context">
+    <div class="spec-sec__head">
+      <h2 id="h-context">In context</h2>
+      <p id="ctx-note">A page composed with this system's signature components (<code>signature.css</code>).</p>
+    </div>
+
+    <!-- Retezat: alberyt.xyz -->
+    <div class="frame" data-only="retezat">
+      <header class="site-header"><div class="container site-header__row">
+        <a class="brand" href="#top">alberyt.xyz</a>
+        <ul class="nav"><li><a href="#top" aria-current="location">work</a></li><li><a href="#top">now</a></li><li><a href="#top">homelab</a></li><li><a href="#top">contact</a></li></ul>
+        <div class="lang-toggle" role="group" aria-label="Language" data-active="1">
+          <a href="#top" lang="en">EN</a><a href="#top" lang="ro">RO</a>
+          <span class="lang-toggle__thumb" aria-hidden="true"><span>EN</span><span>RO</span></span>
+        </div>
+      </div></header>
+      <div class="container stack stack-lg" style="padding-block: var(--space-9)">
+        <div class="stack">
+          <h2 class="display caret">Albert Gabor</h2>
+          <p class="lede">Hey there, I'm Albert, a first-year AI student at UVT. I learn by building: ML models, security tools, and the servers this site runs on.</p>
+          <div class="cluster"><a class="btn btn--primary" href="#top">Get in touch</a><a class="btn btn--secondary" href="#top">See my work</a></div>
+          <p class="proof">Self-hosting since Jan 2024 · ~130 containers · served from my home</p>
+        </div>
+        <div class="win-banner">
+          <span class="win-tag">winner</span>
+          <div><p class="win-title">HackTM 2026 · Product Innovation track</p><p class="win-detail">My first hackathon. I led the build, with my team, and we won the track (€2,000). The project turns hospital discharge PDFs into valid HL7 FHIR R4 bundles.</p></div>
+        </div>
+        <ul class="chips">
+          <li class="chip"><span class="chip__k">UVT</span><span class="chip__v">AI, year 1</span></li>
+          <li class="chip"><span class="chip__k">olympiads</span><span class="chip__v">national stage 2025–26</span></li>
+          <li class="chip"><span class="chip__k">open source</span><span class="chip__v">2 fixes merged</span></li>
+        </ul>
+        <div>
+          <header class="sec-head"><span class="sec-index" aria-hidden="true">02</span><h2>Now</h2><span class="sec-rule" aria-hidden="true"></span><span class="sec-meta">updated Oct 2026</span></header>
+          <ul class="log">
+            <li class="log__item" data-status="active"><div class="log__when"><time>Sep 2026</time><span class="log__status">active</span></div><div><p class="log__title">K-Project</p><p class="log__note">5,500+ saved YouTube videos as a searchable library, queried over MCP.</p></div><span class="log__aside">pgvector</span></li>
+            <li class="log__item" data-status="shipped"><div class="log__when"><time>Sep 2026</time><span class="log__status">shipped</span></div><div><p class="log__title">mail-platform</p><p class="log__note">Personal webmail for own-domain email on Resend, with required TOTP.</p></div><span class="log__aside">Next.js</span></li>
+          </ul>
+        </div>
+        <div class="split">
+          <ul class="log log--timeline">
+            <li class="log__item"><div class="log__when"><time>Jan 2024</time></div><p class="log__title">First Ubuntu server</p></li>
+            <li class="log__item"><div class="log__when"><time>2025</time></div><p class="log__title">Moved to a ThinkCentre mini PC</p></li>
+            <li class="log__item"><div class="log__when"><time>2026</time></div><p class="log__title">~130 containers, weekly Proxmox backups</p></li>
+          </ul>
+          <div class="tree"><ul>
+            <li><span class="tree__node">thinkcentre · ubuntu 24.04</span><span class="tree__note">always on</span>
+              <ul><li><span class="tree__node">nginx proxy manager</span></li><li><span class="tree__node">immich, jellyfin, paperless</span></li><li><span class="tree__node">crowdsec, fail2ban</span></li></ul></li>
+            <li><span class="tree__node tree__node--off">poweredge r610 · proxmox</span><span class="tree__note">wakes weekly for backups</span></li>
+          </ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atelier: gallery.alberyt.xyz -->
+    <div class="frame" data-only="atelier">
+      <nav class="island" aria-label="Gallery">
+        <a class="brand" href="#top">Albert</a>
+        <ul class="nav"><li><a href="#top">Work</a></li><li><a href="#top">CV</a></li></ul>
+        <a class="btn btn--primary btn--sm" href="#top">Contact</a>
+      </nav>
+      <div class="container" style="padding-block: var(--space-9) var(--space-8)">
+        <div class="split" style="--split: minmax(0, 1.25fr) minmax(0, 1fr); --split-align: center; --split-gap: var(--space-8)">
+          <div class="stack" style="--stack-gap: var(--space-5)">
+            <span class="eyebrow-pill" style="justify-self: start; width: max-content">Websites, designed &amp; built</span>
+            <h2 class="display">Creating diverse, <em>impactful</em> digital experiences.</h2>
+            <p class="lede">Explore my websites below.</p>
+            <div><a class="btn btn--primary btn--island" href="#top">View CV <span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a></div>
+          </div>
+          <div class="showcase" aria-hidden="true">
+            <div><div><img src="assets/ehds.webp" alt="" loading="lazy"></div></div>
+            <div><div><img src="assets/alberyt-hub.webp" alt="" loading="lazy"></div></div>
+            <div><div><img src="assets/karting.webp" alt="" loading="lazy"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="container" style="padding-bottom: var(--space-9)">
+        <div class="grid" style="--grid-min: 18rem; --grid-gap: var(--gutter)">
+          <a class="plate" href="#top"><div class="plate__media"><img src="assets/alberyt-hub.webp" alt="" loading="lazy"></div><div class="plate__label"><p class="plate__title">Alberyt Main Website</p><p class="plate__url">alberyt.xyz</p><p class="plate__desc">My personal digital portfolio website for all my online projects.</p></div></a>
+          <a class="plate" href="#top"><div class="plate__media"><img src="assets/ehds.webp" alt="" loading="lazy"></div><div class="plate__label"><p class="plate__title">EHDS Service</p><p class="plate__url">ehds.alberyt.xyz</p><p class="plate__desc">Hospital discharge PDFs in, valid FHIR bundles out. Built at HackTM 2026.</p></div></a>
+          <a class="plate" href="#top"><div class="plate__media"><img src="assets/karting.webp" alt="" loading="lazy"></div><div class="plate__label"><p class="plate__title">1st Step Karting</p><p class="plate__url">karting.alberyt.xyz</p><p class="plate__desc">A karting school's site: classes, the track, and how to book a first session.</p></div></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dosar: a law office -->
+    <div class="frame" data-only="dosar" lang="ro">
+      <header class="site-header"><div class="container site-header__row">
+        <a class="brand" href="#top">Cabinet Mureșan</a>
+        <ul class="nav"><li><a href="#top">Servicii</a></li><li><a href="#top">Onorarii</a></li><li><a href="#top">Întrebări</a></li><li><a href="#top">Contact</a></li></ul>
+      </div></header>
+      <div class="container stack stack-xl" style="padding-block: var(--space-9)">
+        <div class="split" style="--split: minmax(0, 1.4fr) minmax(0, 1fr); --split-align: end">
+          <div class="stack">
+            <span class="stamp" style="align-self: start">Membru Baroul Timiș</span>
+            <h2 class="display">Drept civil și comercial, în Timișoara.</h2>
+            <p class="lede">Răspundem în aceeași zi lucrătoare. Prima discuție, de 30 de minute, este gratuită.</p>
+            <div class="cluster"><a class="btn btn--primary" href="#top">Programează o consultație</a><a class="btn btn--secondary" href="#top">Vezi onorariile</a></div>
+          </div>
+          <dl class="registry"><div><dt>Decizie</dt><dd>nr. 2147 / 2019</dd></div><div><dt>CIF</dt><dd>40518327</dd></div></dl>
+        </div>
+        <div class="split">
+          <div class="stack" style="--stack-gap: var(--space-7)">
+            <article class="card dossier">
+              <span class="dossier__tab">Muncă</span>
+              <h3 class="card__title"><a class="card__link" href="#top">Litigii de muncă</a></h3>
+              <p class="card__body">Concedieri, salarii neplătite, contestații la decizii disciplinare. Vă spunem din prima întâlnire dacă merită să mergeți în instanță.</p>
+            </article>
+            <article class="card dossier">
+              <span class="dossier__tab">Comercial</span>
+              <h3 class="card__title"><a class="card__link" href="#top">Contracte și recuperări</a></h3>
+              <p class="card__body">Redactăm și verificăm contracte, trimitem somații și recuperăm creanțe, inclusiv prin ordonanță de plată.</p>
+            </article>
+          </div>
+          <div class="card" style="--card-pad: var(--space-6)">
+            <h3>Onorarii orientative</h3>
+            <ul class="leaders">
+              <li><span class="leaders__label">Consultație inițială (30 min)</span><span class="leaders__fill"></span><span class="leaders__value">gratuit</span></li>
+              <li><span class="leaders__label">Consultație (60 min)</span><span class="leaders__fill"></span><span class="leaders__value">350 lei</span></li>
+              <li><span class="leaders__label">Redactare contract</span><span class="leaders__fill"></span><span class="leaders__value">de la 900 lei</span></li>
+              <li><span class="leaders__label">Ordonanță de plată</span><span class="leaders__fill"></span><span class="leaders__value">de la 1.500 lei</span></li>
+            </ul>
+            <p class="small muted">Prețurile nu includ TVA și taxele judiciare de timbru.</p>
+          </div>
+        </div>
+        <div class="faq">
+          <details open><summary>Ce documente aduc la prima întâlnire?</summary><p>Contractul, corespondența relevantă și orice decizie primită. Dacă nu sunteți sigur, aduceți tot ce aveți; facem noi selecția.</p></details>
+          <details><summary>Cât durează un litigiu de muncă?</summary><p>De obicei între 6 și 14 luni la prima instanță, în funcție de complexitate și de încărcarea completului.</p></details>
+        </div>
+        <dl class="letterhead">
+          <div><dt>Adresă</dt><dd>Str. Mărășești 6, ap. 4, Timișoara</dd></div>
+          <div><dt>Telefon</dt><dd>0256 491 237</dd></div>
+          <div><dt>Program</dt><dd>Luni–Vineri, 9:00–17:30</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Signal: a webmail / delivery dashboard -->
+    <div class="frame" data-only="signal" style="padding: var(--space-6); background: var(--surface-2)">
+      <div class="app">
+        <aside class="app__side">
+          <a class="brand" href="#top">mail.alberyt.xyz</a>
+          <ul class="side-nav">
+            <li><a href="#top" aria-current="page">Inbox <span class="side-nav__count">12</span></a></li>
+            <li><a href="#top">Sent</a></li>
+            <li><a href="#top">Drafts <span class="side-nav__count">2</span></a></li>
+            <li><a href="#top">Archive</a></li>
+          </ul>
+          <div><p class="side-nav__group">Labels</p>
+          <ul class="side-nav"><li><a href="#top">Clients <span class="side-nav__count">4</span></a></li><li><a href="#top">Invoices</a></li></ul></div>
+        </aside>
+        <div class="app__main">
+          <div class="app__bar">
+            <label class="search"><span class="vh">Search mail</span><input class="input" type="search" placeholder="Search mail"><kbd>/</kbd></label>
+            <button class="btn btn--primary" type="button" style="margin-left: auto">Compose</button>
+          </div>
+          <div class="app__body">
+            <div class="stats">
+              <div class="stat"><span class="stat__label">Sent, last 7 days</span><span class="stat__value">214</span><span class="stat__delta" data-dir="up">+38 vs prior week</span></div>
+              <div class="stat"><span class="stat__label">Delivered</span><span class="stat__value">98.6%</span><span class="stat__delta">211 of 214</span></div>
+              <div class="stat"><span class="stat__label">Bounced</span><span class="stat__value">3</span><span class="stat__delta" data-dir="down">addresses no longer exist</span></div>
+            </div>
+            <div class="cluster cluster--between">
+              <div class="segmented" role="group" aria-label="Filter"><button type="button" aria-pressed="true">All</button><button type="button" aria-pressed="false">Unread</button><button type="button" aria-pressed="false">Flagged</button></div>
+              <span class="status" data-state="busy">Syncing</span>
+            </div>
+            <div class="table-wrap">
+              <table class="table table--dense">
+                <thead><tr><th>From</th><th>Subject</th><th>Status</th><th class="num">Received</th></tr></thead>
+                <tbody>
+                  <tr aria-selected="true"><td>Radu Ciobanu</td><td>Quote for the karting site redesign</td><td><span class="status" data-state="ok">Delivered</span></td><td class="num mono">09:42</td></tr>
+                  <tr><td>Resend</td><td>Domain alberyt.xyz verified</td><td><span class="status" data-state="ok">Delivered</span></td><td class="num mono">08:15</td></tr>
+                  <tr><td>Bianca Toma</td><td>Re: Invoice 2026-031</td><td><span class="status" data-state="warn">Queued</span></td><td class="num mono">Mon</td></tr>
+                  <tr><td>office@vechi-domeniu.ro</td><td>Undeliverable: Programare</td><td><span class="status" data-state="fail">Bounced</span></td><td class="num mono">Sun</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="split" style="--split-gap: var(--space-6); --split-align: center">
+              <div class="empty"><p class="empty__title">No flagged messages</p><p>Flag a message with <kbd>F</kbd> to keep it here until you deal with it.</p></div>
+              <div><div class="toast" role="status">Message sent to Radu Ciobanu. <button class="btn btn--sm" type="button">Undo</button></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marquee: an event -->
+    <div class="frame" data-only="marquee">
+      <header class="site-header"><div class="container site-header__row">
+        <a class="brand" href="#top">Hack the Bega</a>
+        <ul class="nav"><li><a href="#top">Agenda</a></li><li><a href="#top">Prizes</a></li><li><a href="#top">Venue</a></li></ul>
+        <a class="btn btn--primary btn--sm" href="#top">Register</a>
+      </div></header>
+      <div class="band">
+        <div class="container stack stack-lg" style="padding-block: var(--space-8) var(--space-9)">
+          <div class="datebox"><span class="datebox__day">14</span><span class="datebox__rest"><span>Nov 2026</span><span>Timișoara</span></span></div>
+          <h2 class="display">48 hours. One river. Your build.</h2>
+          <div class="cluster" style="--cluster-gap: var(--space-5)">
+            <a class="btn btn--primary btn--lg" href="#top">Register your team</a>
+            <span class="sticker">Free entry</span>
+          </div>
+        </div>
+      </div>
+      <div class="ticker" aria-label="Key facts">
+        <div class="ticker__track"><span>€6,000 in prizes</span><span>Teams of 2 to 4</span><span>Politehnica campus</span><span>Mentors on site</span></div>
+        <div class="ticker__track" aria-hidden="true"><span>€6,000 in prizes</span><span>Teams of 2 to 4</span><span>Politehnica campus</span><span>Mentors on site</span></div>
+      </div>
+      <div class="container stack stack-lg" style="padding-block: var(--space-8)">
+        <h2>Saturday</h2>
+        <ol class="agenda">
+          <li class="agenda__item"><span class="agenda__time">09:00</span><div><p class="agenda__title">Doors, coffee, team matching</p><p class="agenda__who">Bring a laptop and an idea, or just the laptop.</p></div><span class="agenda__where">Hall A</span></li>
+          <li class="agenda__item" data-now><span class="agenda__time">10:30</span><div><p class="agenda__title">Opening: what the city wants fixed</p><p class="agenda__who">Three problems from the city hall's open data team</p></div><span class="agenda__where">Aula Magna</span></li>
+          <li class="agenda__item"><span class="agenda__time">12:00</span><div><p class="agenda__title">Hacking starts</p><p class="agenda__who">Mentor slots open every hour</p></div><span class="agenda__where">Labs 1-6</span></li>
+        </ol>
+      </div>
+      <div class="band band--ink">
+        <div class="container cluster cluster--between" style="padding-block: var(--space-8)">
+          <h2>Places left: 23 teams</h2>
+          <a class="btn btn--secondary btn--lg" href="#top">Register</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Use it ────────────────────────────────────── -->
+  <section class="spec-sec" aria-labelledby="h-use">
+    <div class="spec-sec__head">
+      <h2 id="h-use">Use it in a project</h2>
+      <p>Copy <code>core/</code> and the system's folder into the project, then load four stylesheets in this order. For impeccable or taste-skill, copy the system's <code>DESIGN.md</code> to the project root.</p>
+    </div>
+    <pre class="code" id="use-code"></pre>
+  </section>
+
+</main>
+
+<footer class="container spec-foot">
+  Five systems, one token contract. Source: <code>design-systems/</code> in the Portfolio-V2 repository.
+</footer>
+
+<script>
+  var SYSTEMS = {
+    retezat: {
+      name: "Retezat", north: "A field notebook kept on a night ridge: mono notes, pine-green signal, square edges over the terrain.",
+      facts: [["Built from", "alberyt.xyz (this repository's css/style.css)"], ["Best for", "Your personal site, technical write-ups, project microsites (Cryptography Atlas, LCG Visualizer, EHDS demo), homelab pages"], ["Mode", "Experience and Read"], ["Dials", "Variance 6 · Motion 4 · Density 4"], ["Type", "IBM Plex Sans, IBM Plex Mono for data and labels"], ["Shape", "Square corners, 1px borders, glass over a backdrop"], ["Theme", "Dark-first. Light “paper” only when asked for (data-theme=\"light\") and in print"]],
+      extras: ["accent-dim"],
+      sample: { display: "Albert Gabor", h1: "Self-hosting since January 2024", h2: "Homelab", h3: "EHDS-Service", lede: "I learn by building: ML models, security tools, and the servers this site runs on.", body: "An always-on ThinkCentre runs about 130 containers behind Nginx Proxy Manager. A PowerEdge R610 wakes once a week to run Proxmox Backup Server.", small: "Retezat Mountains · 1 m LiDAR. Munții Retezat, înregistrați în 2024.", label: "ml · security · homelab · ctf", mono: "docker compose up -d portfolio" }
+    },
+    atelier: {
+      name: "Atelier", north: "A gallery wall in daylight: paper plates on a warm canvas, ink type, and the work as the only colour.",
+      facts: [["Built from", "gallery.alberyt.xyz (portfolio-gallery, src/index.css)"], ["Best for", "Portfolio and showcase pages, premium small-business sites where photographs carry the page"], ["Mode", "Experience and Persuade"], ["Dials", "Variance 8 · Motion 7 · Density 3"], ["Type", "Fraunces display, Plus Jakarta Sans for everything else"], ["Shape", "Concentric 28px plates, pill controls, button-in-button arrows"], ["Theme", "Light-first; the espresso dark theme follows the OS"]],
+      extras: ["sage"],
+      sample: { display: "Websites, designed & built", h1: "Creating diverse, impactful digital experiences.", h2: "Let's work together", h3: "1st Step Karting", lede: "Explore my websites below. Each one opens the live site in a new tab.", body: "Twelve live sites, from a law office to a karting school. No jargon, no stack lists: just the work, and an email address when you want one of your own.", small: "Website-uri, concepute și construite în Timișoara.", label: "Selected work", mono: "karting.alberyt.xyz" }
+    },
+    dosar: {
+      name: "Dosar", north: "A well-kept case file: cool paper, ruled edges, registry numbers and the blue-violet of a rubber stamp.",
+      facts: [["Built from", "What the law and tax client sites share (example-law-1/2/3, global-taxexpert), without the navy-and-gold default"], ["Best for", "Law offices, tax and accounting, clinics, notaries: visitors who must trust you before they call"], ["Mode", "Persuade and Read"], ["Dials", "Variance 4 · Motion 3 · Density 4"], ["Type", "Source Serif 4 headings, Instrument Sans body, tabular figures"], ["Shape", "2 to 8px corners, 1px rules, folder tabs"], ["Theme", "Light-first; dark follows the OS"]],
+      extras: [],
+      sample: { display: "Drept civil și comercial", h1: "Consultanță juridică în Timișoara", h2: "Onorarii orientative", h3: "Litigii de muncă", lede: "Răspundem în aceeași zi lucrătoare. Prima discuție, de 30 de minute, este gratuită.", body: "Concedieri, salarii neplătite, contestații la decizii disciplinare. Vă spunem din prima întâlnire dacă merită să mergeți în instanță și cât ar costa.", small: "Prețurile nu includ TVA și taxele judiciare de timbru.", label: "Nr. înregistrare 2147", mono: "RO40518327" }
+    },
+    signal: {
+      name: "Signal", north: "An instrument panel that stays out of the way: quiet surfaces, one cobalt for action, numbers you can scan.",
+      facts: [["Built from", "New. Shaped by mail-platform, the dashboards and the TEDx check-in desk"], ["Best for", "Dashboards, admin panels, internal tools, webmail, check-in and booking desks"], ["Mode", "Operate"], ["Dials", "Variance 3 · Motion 2 · Density 8"], ["Type", "Geist for interface, Geist Mono for figures, IDs and times"], ["Shape", "6 to 12px, borders instead of shadows; shadows only for things that float"], ["Theme", "Light and dark, follows the OS"]],
+      extras: [],
+      sample: { display: "Inbox", h1: "Delivery overview", h2: "Domains", h3: "alberyt.xyz", lede: "214 messages sent this week across 3 domains.", body: "3 messages bounced because the addresses no longer exist. Remove them from the contact list or update them, and the next send will skip them.", small: "Last synced 2 minutes ago. Sincronizat acum 2 minute.", label: "Last 7 days", mono: "re_8f3c2d91a4" }
+    },
+    marquee: {
+      name: "Marquee", north: "A gig poster you can scroll: one colour field, condensed type at full volume, everything else in ink.",
+      facts: [["Built from", "New. For the event and campaign work: TEDx check-in, HackTM, 1st Step Karting"], ["Best for", "Hackathons, events, launches, campaign pages, sports and karting promos"], ["Mode", "Persuade"], ["Dials", "Variance 8 · Motion 7 · Density 3"], ["Type", "Archivo at three widths: condensed display, normal text"], ["Shape", "All sharp, 2px rules, full-bleed colour bands"], ["Theme", "Light and dark; the field colour stays the same. Presets: cobalt, lime, red"]],
+      extras: ["field", "field-ink"],
+      sample: { display: "Hack the Bega", h1: "48 hours", h2: "Agenda", h3: "Opening: what the city wants fixed", lede: "Teams of 2 to 4 build anything that makes Timișoara work better. Food, mentors and Wi-Fi are on us.", body: "Registration closes on 7 November or when 40 teams sign up, whichever comes first. Bring a laptop and an idea, or just the laptop.", small: "Sâmbătă, 14 noiembrie, Aula Magna.", label: "Saturday 14 November", mono: "#hackthebega" }
+    }
+  };
+
+  var COLOR_TOKENS = ["bg", "surface", "surface-2", "border", "border-strong", "control", "text", "text-2", "muted", "accent", "accent-hover", "accent-ink", "accent-soft", "focus", "success", "warning", "danger"];
+  var TEXTLIKE = { text: 1, "text-2": 1, muted: 1, accent: 1, "accent-hover": 1, success: 1, warning: 1, danger: 1, focus: 1, control: 1, sage: 1 };
+  var TYPE = [["display", "Display", "display"], ["h1", "Heading 1", "h1"], ["h2", "Heading 2", "h2"], ["h3", "Heading 3", "h3"], ["lede", "Lede", "lede"], ["body", "Body", ""], ["small", "Small", "small"], ["label", "Label", "label"], ["mono", "Mono", "mono"]];
+  var root = document.documentElement;
+
+  function current() { return root.getAttribute("data-ds"); }
+
+  function probe(prop, value) {
+    var el = document.createElement("div");
+    el.style[prop] = value;
+    el.style.position = "absolute"; el.style.visibility = "hidden";
+    document.body.appendChild(el);
+    var out = getComputedStyle(el)[prop];
+    el.remove();
+    return out;
+  }
+  function rgba(str) {
+    var m = str.match(/[\d.]+/g) || [0, 0, 0];
+    return [+m[0], +m[1], +m[2], m[3] === undefined ? 1 : +m[3]];
+  }
+  function over(fg, bg) { var a = fg[3]; return [0, 1, 2].map(function (k) { return fg[k] * a + bg[k] * (1 - a); }); }
+  function lum(c) {
+    return c.map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); })
+      .reduce(function (s, v, i) { return s + v * [0.2126, 0.7152, 0.0722][i]; }, 0);
+  }
+  function ratio(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  function hex(c) { return "#" + c.map(function (v) { return Math.round(v).toString(16).padStart(2, "0"); }).join(""); }
+
+  function renderIntro() {
+    var s = SYSTEMS[current()];
+    document.getElementById("ds-name").textContent = s.name;
+    document.getElementById("ds-north").textContent = s.north;
+    var dl = document.getElementById("ds-facts"); dl.textContent = "";
+    s.facts.concat([["Files", current() + "/tokens.css · " + current() + "/signature.css · " + current() + "/DESIGN.md"]]).forEach(function (f) {
+      var d = document.createElement("div"), dt = document.createElement("dt"), dd = document.createElement("dd");
+      dt.textContent = f[0]; dd.textContent = f[1]; d.append(dt, dd); dl.append(d);
+    });
+    document.getElementById("use-code").textContent =
+      '<link rel="stylesheet" href="/design-systems/' + current() + '/tokens.css">\n' +
+      '<link rel="stylesheet" href="/design-systems/core/base.css">\n' +
+      '<link rel="stylesheet" href="/design-systems/core/components.css">\n' +
+      '<link rel="stylesheet" href="/design-systems/' + current() + '/signature.css">';
+  }
+
+  function renderSwatches() {
+    var box = document.getElementById("swatches"); box.textContent = "";
+    var bg = rgba(probe("backgroundColor", "var(--bg)"));
+    COLOR_TOKENS.concat(SYSTEMS[current()].extras).forEach(function (t) {
+      var raw = rgba(probe("backgroundColor", "var(--" + t + ")"));
+      var solid = over(raw, bg);
+      var card = document.createElement("div"); card.className = "swatch";
+      var chip = document.createElement("div"); chip.className = "swatch__chip";
+      chip.style.background = "var(--" + t + ")";
+      if (TEXTLIKE[t]) { chip.style.background = "var(--bg)"; chip.style.color = "var(--" + t + ")"; chip.textContent = "Aa"; }
+      var meta = document.createElement("div"); meta.className = "swatch__meta";
+      var n = document.createElement("span"); n.className = "swatch__name"; n.textContent = "--" + t;
+      var v = document.createElement("span"); v.className = "swatch__val";
+      v.textContent = raw[3] < 1 ? "rgba(" + raw.slice(0, 3).join(", ") + ", " + (+raw[3].toFixed(2)) + ")" : hex(raw);
+      meta.append(n, v);
+      if (TEXTLIKE[t]) {
+        var r = document.createElement("span"); r.className = "swatch__ratio";
+        r.textContent = ratio(solid, bg).toFixed(2) + ":1 on bg"; meta.append(r);
+      }
+      card.append(chip, meta); box.append(card);
+    });
+  }
+
+  function renderType() {
+    var s = SYSTEMS[current()].sample, box = document.getElementById("type-rows"); box.textContent = "";
+    TYPE.forEach(function (t) {
+      var row = document.createElement("div"); row.className = "type-row";
+      var sample = document.createElement("p"); sample.className = "type-row__sample " + t[2]; sample.textContent = s[t[0]];
+      if (t[0].charAt(0) === "h") { sample.style.fontSize = "var(--fs-" + t[0] + ")"; sample.style.fontFamily = "var(--font-display)"; sample.style.fontWeight = "var(--weight-heading)"; sample.style.lineHeight = "var(--lh-heading)"; sample.style.letterSpacing = "var(--tracking-heading)"; sample.style.fontStretch = "var(--heading-stretch, normal)"; }
+      var meta = document.createElement("div"); meta.className = "type-row__meta";
+      row.append(meta, sample); box.append(row);
+      var cs = getComputedStyle(sample);
+      var fam = cs.fontFamily.split(",")[0].replace(/"/g, "");
+      meta.innerHTML = "<b></b><span></span><span></span>";
+      meta.children[0].textContent = t[1];
+      meta.children[1].textContent = parseFloat(cs.fontSize).toFixed(0) + "px / " + (parseFloat(cs.lineHeight) / parseFloat(cs.fontSize) || 0).toFixed(2) + " · " + cs.fontWeight;
+      meta.children[2].textContent = fam;
+    });
+  }
+
+  function renderSpace() {
+    var box = document.getElementById("space-rows"); box.textContent = "";
+    for (var i = 1; i <= 10; i++) {
+      var row = document.createElement("div"); row.className = "space-row";
+      var bar = document.createElement("div"); bar.className = "space-row__bar"; bar.style.width = "var(--space-" + i + ")";
+      var name = document.createElement("span"); name.textContent = "--space-" + i;
+      var val = document.createElement("span"); val.className = "space-row__val";
+      row.append(name, bar, val); box.append(row);
+      val.textContent = Math.round(parseFloat(getComputedStyle(bar).width)) + "px";
+    }
+    var sh = document.getElementById("shapes"); sh.textContent = "";
+    ["radius-xs", "radius-sm", "radius-md", "radius-lg", "radius-pill", "btn-radius", "card-radius", "input-radius"].forEach(function (r) {
+      var d = document.createElement("div"); d.className = "shape";
+      var b = document.createElement("div"); b.className = "shape__box"; b.style.borderRadius = "var(--" + r + ")";
+      d.append(b, document.createTextNode(r)); sh.append(d);
+    });
+  }
+
+  function renderAll() { renderIntro(); renderSwatches(); renderType(); renderSpace(); syncPickers(); }
+
+  function syncPickers() {
+    document.querySelectorAll("#pick-ds [data-ds]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.ds === current())); });
+    var t = root.getAttribute("data-theme") || "auto";
+    document.querySelectorAll("#pick-theme [data-theme-pick]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.themePick === t)); });
+  }
+
+  function setSystem(ds) {
+    if (!SYSTEMS[ds] || ds === current()) return;
+    root.setAttribute("data-ds", ds);
+    try { localStorage.setItem("ds", ds); } catch (e) {}
+    if (history.replaceState) history.replaceState(null, "", "#" + ds);
+    var tok = document.getElementById("ds-tokens"), sig = document.getElementById("ds-signature"), left = 2;
+    function done() { if (--left === 0) renderAll(); }
+    tok.onload = sig.onload = tok.onerror = sig.onerror = done;
+    tok.href = ds + "/tokens.css"; sig.href = ds + "/signature.css";
+    syncPickers();
+  }
+
+  function setTheme(t) {
+    if (t === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", t);
+    try { if (t === "auto") localStorage.removeItem("ds-theme"); else localStorage.setItem("ds-theme", t); } catch (e) {}
+    renderAll();
+  }
+
+  document.getElementById("pick-ds").addEventListener("click", function (e) { var b = e.target.closest("[data-ds]"); if (b) setSystem(b.dataset.ds); });
+  document.getElementById("pick-theme").addEventListener("click", function (e) { var b = e.target.closest("[data-theme-pick]"); if (b) setTheme(b.dataset.themePick); });
+  window.addEventListener("hashchange", function () { setSystem(location.hash.slice(1)); });
+  document.getElementById("play").addEventListener("click", function () { var m = document.getElementById("motion"); m.dataset.run = m.dataset.run === "1" ? "0" : "1"; });
+  document.getElementById("open-dialog").addEventListener("click", function () { document.getElementById("dialog").showModal(); });
+  document.querySelectorAll(".segmented:not(#pick-ds):not(#pick-theme)").forEach(function (g) {
+    g.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; g.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); });
+  });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderAll);
+
+  renderAll();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderType);
+  window.addEventListener("load", renderAll);
+</script>
+</body>
+</html>

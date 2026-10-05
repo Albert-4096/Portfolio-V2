@@ -1,0 +1,65 @@
+/* ─── Marquee · signature components ───────────────────────
+   Colour bands, the ticker, the date block, the agenda.
+   Load after core/components.css. */
+
+:root { --btn-press: translateY(2px); }
+
+.brand { font-weight: 800; font-stretch: 75%; font-size: 1.25rem; text-transform: uppercase; letter-spacing: 0.01em; }
+.nav a { font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: var(--fs-label); color: var(--text); }
+.site-header { border-bottom: var(--rule); }
+.btn--secondary { border-width: 2px; border-color: var(--border-strong); }
+.card__title, .display, h1, h2 { text-transform: var(--heading-transform, uppercase); }
+h3 { font-stretch: 90%; }
+
+/* band: a full-bleed region in the field colour. Everything inside reads in field-ink. */
+.band {
+  --text: var(--field-ink); --text-2: var(--field-ink); --muted: var(--field-ink);
+  --accent: var(--field-ink); --accent-ink: var(--field); --accent-hover: var(--field-ink);
+  --border: color-mix(in srgb, var(--field-ink) 30%, transparent); --border-strong: var(--field-ink); --control: var(--field-ink);
+  --focus: var(--field-ink); --btn-ghost-bg: transparent;
+  background: var(--field); color: var(--field-ink);
+}
+.band--ink { --field: var(--invert); --field-ink: var(--invert-ink); }
+.band ::selection { background: var(--field-ink); color: var(--field); }
+
+/* ticker: one line of real facts on a loop. Stops for reduced motion. */
+.ticker {
+  display: flex; overflow: hidden; border-block: var(--rule); background: var(--bg);
+  font-weight: 800; font-stretch: 75%; text-transform: uppercase; font-size: clamp(1.25rem, 1rem + 1.4vw, 2rem); line-height: 1;
+}
+.ticker__track { display: flex; flex: none; gap: 2.5rem; padding: 0.9rem 1.25rem; white-space: nowrap; }
+.ticker__track > span { display: inline-flex; align-items: center; gap: 2.5rem; }
+.ticker__track > span::after { content: ""; width: 0.6em; height: 0.6em; background: var(--field); }
+@media (prefers-reduced-motion: no-preference) {
+  .ticker__track { animation: marquee-roll var(--ticker-speed, 28s) linear infinite; }
+  .ticker:hover .ticker__track { animation-play-state: paused; }
+}
+@media (prefers-reduced-motion: reduce) { .ticker__track[aria-hidden="true"] { display: none; } }
+@keyframes marquee-roll { to { transform: translateX(-100%); } }
+
+/* date block: the day as the biggest thing on the page */
+.datebox { align-self: start; justify-self: start; display: inline-grid; grid-template-columns: auto auto; align-items: end; gap: 0 0.75rem; font-variant-numeric: tabular-nums; }
+.datebox__day { font-size: clamp(5rem, 3rem + 10vw, 11rem); font-weight: 800; font-stretch: 62%; line-height: 0.8; letter-spacing: -0.02em; }
+.datebox__rest { display: grid; gap: 0.25rem; padding-bottom: 0.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.1; }
+
+/* agenda: time · session · room, ruled like a printed programme */
+.agenda { margin: 0; padding: 0; list-style: none; border-top: var(--rule); }
+.agenda__item {
+  display: grid; gap: 0.25rem 1.5rem; padding: 1.1rem 0; border-bottom: 1px solid var(--border);
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+}
+@media (min-width: 760px) { .agenda__item { grid-template-columns: 7rem minmax(0, 1fr) 10rem; } }
+.agenda__time { font-size: 1.25rem; font-weight: 800; font-stretch: 75%; font-variant-numeric: tabular-nums; }
+.agenda__title { font-size: 1.25rem; font-weight: 700; font-stretch: 90%; line-height: 1.15; }
+.agenda__who { margin-top: 0.2rem; color: var(--text-2); font-size: var(--fs-small); }
+.agenda__where { font-size: var(--fs-label); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+@media (max-width: 759px) { .agenda__where { grid-column: 2; } }
+/* the session happening now: its time is marked in the field colour */
+.agenda__item[data-now] .agenda__time { justify-self: start; align-self: start; padding: 0.1em 0.3em; margin-left: -0.3em; background: var(--field); color: var(--field-ink); }
+
+/* sticker label: one per band, for a single fact (sold out, free, day 2) */
+.sticker {
+  display: inline-block; padding: 0.35em 0.7em;
+  font-weight: 800; font-stretch: 75%; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1;
+  color: var(--field); background: var(--field-ink);
+}
