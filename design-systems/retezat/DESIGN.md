@@ -121,6 +121,25 @@ The system is honest about what it is: a technical person's site, built and host
 - One accent, `#4cd97b`, used for signal only.
 - Bilingual by design (EN/RO); Plex covers Romanian comma-below ș ț.
 
+## Logo and icons
+
+The alberyt mark: a **peak** (the A of Albert, and the Retezat ridge), cut by a **contour** band where an A's crossbar would be, and ended by a **cursor** block. The peak takes `text`, the cursor takes `accent`, and nothing else about it changes between systems. Retezat is alberyt.xyz's own system, so the mark leads here.
+
+In Retezat the peak is Lichen (`#d9dfda`) and the cursor Pine Signal (`#4cd97b`); on the paper theme, `#0c120e` and `#157a3c`. It replaces the old "A_" text favicon and the pine block that stood before the header wordmark.
+
+- **Header.** The small mark, then `alberyt.xyz` in Plex Mono 500 (a hostname, so mono under the Mono-Is-Data Rule). `alberyt-lockup-*` (`brand/dist/systems/retezat/`) is the same pairing drawn as one file, for places where HTML can't set the type (slides, social cards, print).
+- **The caret.** The pine `_` after the hero name stays. It is the same cursor, set as type.
+
+**Using the files**
+
+- **Sizes.** From 32px up use `alberyt-mark-*`. Below 32px use `alberyt-mark-small-*`, which drops the contour band so it doesn't clog.
+- **Files.** `brand/dist/systems/retezat/` holds this system's files: `-dark` files are for dark grounds, `-light` files for light ones; each is painted in this system's colours. In HTML, inline the SVG instead (`brand/dist/alberyt-mark.svg`, or the snippet in `core/components.css`): the peak is `fill: currentColor`, the cursor `fill: var(--mark-signal)`, which `core/components.css` sets to `accent`, so it follows the theme.
+- **Clear space.** Leave at least one cursor width (about a quarter of the mark's height) on every side. Never outline, rotate, stretch or recolour the parts separately.
+- **Tile and favicon.** `alberyt-tile-*` is the app icon (field `bg`, peak `text`, cursor `accent`, corners rounded as much as this system rounds its cards); `alberyt-favicon.svg` is the tile in this system's default theme with the small cut.
+
+### Icons
+17 interface icons drawn on the mark's 24-unit grid: a 2-unit stroke, square caps, mitred joins, and any solid part (a calendar's header band, a PDF label, the share nodes) drawn as the cursor's flat block. They are painted in `currentColor`, so in a page they take the colour of the text around them. Set them at 16, 20 or 24px; at 16px the stroke is 1.33px. Files: `brand/dist/icons/` (one SVG each, plus `sprite.svg`), and orar.alberyt.xyz uses it. Square caps and mitred joins are Retezat's square-everything rule applied to strokes.
+
 ## Colors
 
 A green-tinted night palette: every neutral leans a few degrees toward the accent, so nothing reads as plain grey.
@@ -187,7 +206,7 @@ Square. Radius 0 on buttons, inputs, cards, badges, chips, the language toggle a
 - **Tree** (`.tree`): infrastructure as a file tree with ruled connectors; `--off` nodes are muted.
 - **Language toggle** (`.lang-toggle`): two labels and a pine thumb that slides by `clip-path` with the snap easing.
 - **Badges**: solid pine (winner), `--live` (pine outline with a square dot), `--muted` (private, dates).
-- **Header**: sticky, 88% night with blur, mono wordmark with a drawn pine block, mono nav whose active link gets a 1px pine underline that scales in.
+- **Header**: sticky, 88% night with blur, the small alberyt mark and the mono wordmark, mono nav whose active link gets a 1px pine underline that scales in.
 
 ## Do's and Don'ts
 

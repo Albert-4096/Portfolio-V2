@@ -130,6 +130,25 @@ Brand lives in precise details instead of decoration: Geist Mono figures that li
 - Light and dark, both following the OS, with equal care.
 - Every state designed: loading, empty, error, selected, disabled.
 
+## Logo and icons
+
+The alberyt mark: a **peak** (the A of Albert, and the Retezat ridge), cut by a **contour** band where an A's crossbar would be, and ended by a **cursor** block. The peak takes `text`, the cursor takes `accent`, and nothing else about it changes between systems.
+
+In Signal the peak is Text (`#0e1117`) and the cursor Cobalt (`#2f5cff`); in dark, `#e8eaee` and `#7090ff`.
+
+- **Sidebar.** The small mark before the app's name (`mail.alberyt.xyz`) in Geist 600. The mark links home, so the cobalt cursor stays inside the Colour-Means-State Rule ("act here").
+- **Favicon.** `alberyt-favicon.svg`, the light tile. For a tool with its own icon, keep that icon and put the cursor in its bottom-right corner in Cobalt, as orar does with its poster.
+
+**Using the files**
+
+- **Sizes.** From 32px up use `alberyt-mark-*`. Below 32px use `alberyt-mark-small-*`, which drops the contour band so it doesn't clog.
+- **Files.** `brand/dist/systems/signal/` holds this system's files: `-dark` files are for dark grounds, `-light` files for light ones; each is painted in this system's colours. In HTML, inline the SVG instead (`brand/dist/alberyt-mark.svg`, or the snippet in `core/components.css`): the peak is `fill: currentColor`, the cursor `fill: var(--mark-signal)`, which `core/components.css` sets to `accent`, so it follows the theme.
+- **Clear space.** Leave at least one cursor width (about a quarter of the mark's height) on every side. Never outline, rotate, stretch or recolour the parts separately.
+- **Tile and favicon.** `alberyt-tile-*` is the app icon (field `bg`, peak `text`, cursor `accent`, corners rounded as much as this system rounds its cards); `alberyt-favicon.svg` is the tile in this system's default theme with the small cut.
+
+### Icons
+17 interface icons drawn on the mark's 24-unit grid: a 2-unit stroke, square caps, mitred joins, and any solid part (a calendar's header band, a PDF label, the share nodes) drawn as the cursor's flat block. They are painted in `currentColor`, so in a page they take the colour of the text around them. Set them at 16, 20 or 24px; at 16px the stroke is 1.33px. Files: `brand/dist/icons/` (one SVG each, plus `sprite.svg`), and orar.alberyt.xyz uses it. At Signal's 32px controls set them at 16px; in the side nav, 16px before the label.
+
 ## Colors
 
 Cool neutrals with a faint cobalt bias, one action colour, three semantic colours.

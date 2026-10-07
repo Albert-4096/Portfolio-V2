@@ -303,6 +303,35 @@ def build_orar():
         png(OUT / "orar/favicon-dark.svg", OUT / "png" / f"orar-favicon-dark-{s}.png", s)
 
 
+# The theme each system opens in (its tokens list it first); its favicon uses that theme.
+DEFAULT_THEME = {"retezat": "dark", "atelier": "light", "dosar": "light", "signal": "light", "marquee": "light"}
+
+
+def build_systems():
+    """One logo set per design system, coloured from its own tokens, for the system to carry as
+    assets. Files are self-coloured (an <img> can't pass currentColor in), one per ground:
+    `-dark` files are for dark grounds, `-light` files for light ones."""
+    mark = (OUT / "alberyt-mark.svg").read_text()
+    small = (OUT / "alberyt-mark-small.svg").read_text()
+    lockup = (OUT / "alberyt-lockup.svg").read_text()
+
+    def paint(src, ink, sig):
+        return src.replace("var(--mark-signal, currentColor)", sig).replace("currentColor", ink)
+
+    for name, theme in DEFAULT_THEME.items():
+        s = SYSTEMS[name]
+        d = OUT / "systems" / name
+        d.mkdir(parents=True, exist_ok=True)
+        for t in ("dark", "light"):
+            fld, ink, sig = s[t]
+            (d / f"alberyt-tile-{t}.svg").write_text(svg(tile(fld, ink, sig, s["radius"])))
+            (d / f"alberyt-mark-{t}.svg").write_text(paint(mark, ink, sig))
+            (d / f"alberyt-mark-small-{t}.svg").write_text(paint(small, ink, sig))
+            (d / f"alberyt-lockup-{t}.svg").write_text(paint(lockup, ink, sig))
+        fld, ink, sig = s[theme]
+        (d / "alberyt-favicon.svg").write_text(svg(tile(fld, ink, sig, s["radius"], scale=0.86, small=True)))
+
+
 def build_site():
     """alberyt.xyz's own favicons, in the Retezat colourway. Written straight into assets/ so the
     site can never drift from the kit."""
@@ -319,6 +348,7 @@ if __name__ == "__main__":
     build_mark()
     build_icons()
     build_orar()
+    build_systems()
     build_site()
     print("leg weight:", round(LEG_WEIGHT, 3), "cursor height:", CUR_H)
     print("wrote", sum(1 for _ in OUT.rglob("*")), "files to", OUT)
