@@ -14,6 +14,8 @@ Open `specimen.html` (served over HTTP, e.g. `python3 -m http.server` in this fo
 
 *Mode* is impeccable's surface mode (what success looks like for the visitor). *Dials* are taste-skill's DESIGN_VARIANCE · MOTION_INTENSITY · VISUAL_DENSITY (1 to 10).
 
+The logo, an icon tile for each system and the shared UI icons live next door in `../brand/` (one generator, one grid). A project takes its tile colours from the system it uses.
+
 ## What's in here
 
 ```
