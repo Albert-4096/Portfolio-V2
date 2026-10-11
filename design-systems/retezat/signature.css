@@ -5,12 +5,9 @@
 .on-terrain { text-shadow: 0 2px 8px rgba(10, 13, 11, 0.95), 0 1px 3px rgba(10, 13, 11, 0.95); }
 .on-terrain :is(.btn, .badge, .card, .log, .tree, .chip, .site-header, .win-banner, .input) { text-shadow: none; }
 
-/* brand: mono wordmark with a pine block, drawn (not a glyph) */
+/* brand: the alberyt mark, then the mono wordmark (the mark is markup: see core/components.css) */
 .brand { font-family: var(--font-mono); font-weight: 500; font-size: 0.95rem; }
-.brand::before {
-  content: ""; display: inline-block; width: 0.55em; height: 0.95em; margin-right: 0.6ch;
-  background: var(--accent); vertical-align: -0.12em;
-}
+.brand .alberyt-mark { width: 1.25em; height: 1.25em; }
 .nav a { font-family: var(--font-mono); font-size: 0.875rem; position: relative; }
 .nav a::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0.35rem; height: 1px; background: var(--accent);

@@ -127,6 +127,24 @@ It replaces the category default (navy, gold, Playfair Display, Montserrat, marb
 - Real fees, real hours, real registry numbers on the page. Trust comes from specifics.
 - Light-first, dark follows the OS. Romanian-first copy; every face covers ș ț ă â î.
 
+## Logo and icons
+
+The alberyt mark: a **peak** (the A of Albert, and the Retezat ridge), cut by a **contour** band where an A's crossbar would be, and ended by a **cursor** block. The peak takes `text`, the cursor takes `accent`, and nothing else about it changes between systems.
+
+**Dosar dresses other people's brands.** On a practice's site the practice's name or logo leads the header; the alberyt mark never stands in for it. It appears in two places only:
+- **The footer credit.** The small mark and "Site: alberyt.xyz" in Pencil (`muted`) at the end of the letterhead strip, linking to alberyt.xyz. The cursor takes Stamp Ink there; that is not a second stamp.
+- **Your own projects built in Dosar**, as the tile and favicon: peak Graphite (`#141821`), cursor Stamp Ink (`#2f3aa3`); in dark, `#eef0f4` and `#a3abff`.
+
+**Using the files**
+
+- **Sizes.** From 32px up use `alberyt-mark-*`. Below 32px use `alberyt-mark-small-*`, which drops the contour band so it doesn't clog.
+- **Files.** `brand/dist/systems/dosar/` holds this system's files: `-dark` files are for dark grounds, `-light` files for light ones; each is painted in this system's colours. In HTML, inline the SVG instead (`brand/dist/alberyt-mark.svg`, or the snippet in `core/components.css`): the peak is `fill: currentColor`, the cursor `fill: var(--mark-signal)`, which `core/components.css` sets to `accent`, so it follows the theme.
+- **Clear space.** Leave at least one cursor width (about a quarter of the mark's height) on every side. Never outline, rotate, stretch or recolour the parts separately.
+- **Tile and favicon.** `alberyt-tile-*` is the app icon (field `bg`, peak `text`, cursor `accent`, corners rounded as much as this system rounds its cards); `alberyt-favicon.svg` is the tile in this system's default theme with the small cut.
+
+### Icons
+17 interface icons drawn on the mark's 24-unit grid: a 2-unit stroke, square caps, mitred joins, and any solid part (a calendar's header band, a PDF label, the share nodes) drawn as the cursor's flat block. They are painted in `currentColor`, so in a page they take the colour of the text around them. Set them at 16, 20 or 24px; at 16px the stroke is 1.33px. Files: `brand/dist/icons/` (one SVG each, plus `sprite.svg`), and orar.alberyt.xyz uses it. In Dosar use them sparingly, mostly in the fee table and forms; the folder tab and stamp carry the character.
+
 ## Colors
 
 Cool paper and graphite, with blue-violet ink.

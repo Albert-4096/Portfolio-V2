@@ -227,6 +227,16 @@
 .nav a[aria-current] { color: var(--text); }
 @media (pointer: coarse) { .nav a { min-height: 44px; } }
 
+/* alberyt mark: inline the small cut (brand/dist/alberyt-mark-small.svg) with the cursor path
+   classed, so the peak takes the text colour and the cursor the accent:
+   <svg class="alberyt-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="…peak…"/><path class="alberyt-mark__cursor" d="…"/></svg> */
+.alberyt-mark { display: inline-block; flex: none; width: 1.15em; height: 1.15em; vertical-align: -0.22em; fill: currentColor; }
+.alberyt-mark__cursor { fill: var(--mark-signal, var(--accent)); }
+.brand:has(.alberyt-mark) { display: inline-flex; align-items: center; gap: 0.5em; }
+/* the footer credit on sites made for someone else: small mark + "Site: alberyt.xyz" */
+.made-by { display: inline-flex; align-items: center; gap: 0.4em; color: inherit; }
+.made-by .alberyt-mark { width: 1em; height: 1em; }
+
 .site-footer { padding-block: var(--space-8); border-top: 1px solid var(--border); color: var(--muted); font-size: var(--fs-small); }
 
 /* ─── Dialog ─────────────────────────────────────────────── */

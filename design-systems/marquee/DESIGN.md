@@ -117,6 +117,24 @@ For hackathons (HackTM, the made-up "Hack the Bega" in the specimen), event micr
 - All sharp. Rules are 2px ink. No shadows at rest.
 - The ticker is the one moving thing, and it stops for reduced motion.
 
+## Logo and icons
+
+The alberyt mark: a **peak** (the A of Albert, and the Retezat ridge), cut by a **contour** band where an A's crossbar would be, and ended by a **cursor** block. The peak takes `text`, the cursor takes `accent`, and nothing else about it changes between systems.
+
+**Marquee dresses events.** The event's name leads the header and the field; the alberyt mark never stands in for it. It appears in two places only:
+- **The footer credit.** The small mark and "Site: alberyt.xyz" in the closing invert band, in that band's ink, linking to alberyt.xyz.
+- **Your own events and projects built in Marquee**, as the tile and favicon. Here `accent` is ink, so the mark is one colour: `#141414` on off-white, `#f3f2ef` on dark. Inside a field band it takes `--field-ink`, both parts.
+
+**Using the files**
+
+- **Sizes.** From 32px up use `alberyt-mark-*`. Below 32px use `alberyt-mark-small-*`, which drops the contour band so it doesn't clog.
+- **Files.** `brand/dist/systems/marquee/` holds this system's files: `-dark` files are for dark grounds, `-light` files for light ones; each is painted in this system's colours. In HTML, inline the SVG instead (`brand/dist/alberyt-mark.svg`, or the snippet in `core/components.css`): the peak is `fill: currentColor`, the cursor `fill: var(--mark-signal)`, which `core/components.css` sets to `accent`, so it follows the theme.
+- **Clear space.** Leave at least one cursor width (about a quarter of the mark's height) on every side. Never outline, rotate, stretch or recolour the parts separately.
+- **Tile and favicon.** `alberyt-tile-*` is the app icon (field `bg`, peak `text`, cursor `accent`, corners rounded as much as this system rounds its cards); `alberyt-favicon.svg` is the tile in this system's default theme with the small cut.
+
+### Icons
+17 interface icons drawn on the mark's 24-unit grid: a 2-unit stroke, square caps, mitred joins, and any solid part (a calendar's header band, a PDF label, the share nodes) drawn as the cursor's flat block. They are painted in `currentColor`, so in a page they take the colour of the text around them. Set them at 16, 20 or 24px; at 16px the stroke is 1.33px. Files: `brand/dist/icons/` (one SVG each, plus `sprite.svg`), and orar.alberyt.xyz uses it. Square caps match Marquee's hard 2px rules; in buttons, set them at 20px beside the uppercase label.
+
 ## Colors
 
 ### Primary
