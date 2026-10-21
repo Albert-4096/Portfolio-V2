@@ -153,6 +153,7 @@ const fragmentShader = /* glsl */ `
 /* ── Static background (poster image, set in CSS) ─────── */
 function showStatic() {
   document.documentElement.dataset.terrain = 'still';
+  dispatchEvent(new Event('terrain:ready'));
   const div = document.createElement('div');
   div.className = 'terrain-static-bg';
   div.setAttribute('aria-hidden', 'true');
@@ -329,6 +330,8 @@ async function initTerrain() {
       camera.lookAt(lookAtTarget);
 
       renderer.render(scene, camera);
+      // the first frame compiles the shaders and blocks the main thread; js/motion.js waits it out
+      if (!render.announced) { render.announced = true; dispatchEvent(new Event('terrain:ready')); }
     }
 
     function loop() {
