@@ -340,14 +340,16 @@ html[data-lang="ro"] .lang-thumb { clip-path: inset(0 0 0 50%); }
 @keyframes caret { 50% { opacity: 0; } }
 @keyframes caret-on { 50% { opacity: 0; } }
 
-/* ─── First-visit intro (js/intro.js) ─────────────────── */
-/* html[data-intro]: pending (head script) → hold → fly → over (the scene has the screen) → land (the text is in)
-   → done, or off when it gives up. Until it lands the page is all there for crawlers and screen readers,
-   only transparent. */
+/* ─── Intro (js/intro.js) ─────────────────────────────── */
+/* html[data-intro]: pending (head script) → hold → fly (js/terrain.js's own scene is the intro: its canvas shows) →
+   over (the scene has the screen) → land (the text is in) → done, or off when it gives up. Until it lands the page
+   is all there for crawlers and screen readers, only transparent; the scene's canvas stays out of sight until the
+   flight starts, and its vignette until js/intro.js fades it in (an inline opacity, which beats the rule here). */
 @media screen {
   html:is([data-intro="pending"], [data-intro="hold"], [data-intro="fly"], [data-intro="over"])
     :is(.site-header, main > :not(.hero), .site-footer, .hero-cap) { opacity: 0; }
-  html:is([data-intro="pending"], [data-intro="hold"], [data-intro="fly"]) :is(.terrain-static-bg, #terrain-canvas) { opacity: 0; }
+  html:is([data-intro="pending"], [data-intro="hold"]) :is(.terrain-static-bg, #terrain-canvas) { opacity: 0; }
+  html:is([data-intro="pending"], [data-intro="hold"], [data-intro="fly"]) .terrain-overlay { opacity: 0; }
   html[data-intro="pending"] .hero [data-enter] { animation-play-state: paused; }
   html:is([data-intro="hold"], [data-intro="fly"], [data-intro="over"], [data-intro="land"], [data-intro="done"]) .hero [data-enter] { animation: none; }
   html:is([data-intro="hold"], [data-intro="fly"], [data-intro="over"]) .hero [data-enter] { opacity: 0; }
@@ -361,9 +363,7 @@ html[data-lang="ro"] .lang-thumb { clip-path: inset(0 0 0 50%); }
 }
 .intro__cursor { fill: var(--accent); opacity: 0; }
 .intro__caret { position: fixed; left: 0; top: 0; background: var(--accent); }
-/* above js/terrain.js's overlay (it draws its own), below the page */
-.intro-canvas { position: fixed; left: 0; top: 0; z-index: -1; pointer-events: none; }
-@media print { .intro, .intro-canvas { display: none !important; } }
+@media print { .intro { display: none !important; } }
 
 /* ─── Sections ────────────────────────────────────────── */
 .section { padding-block: var(--section-pad); }
