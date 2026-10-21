@@ -1,7 +1,8 @@
 /* ─── Motion layer ───────────────────────────────────────
    Crafted moments on top of the CSS entrances and reveals.
-     anime.js  · the mark draws itself (once per session)
-               · the hero eyebrow decodes like terminal output
+     anime.js  · a first visit opens on the intro (js/intro.js), which owns the hero entrance
+               · otherwise the mark draws itself (once per session)
+               · and the hero eyebrow decodes like terminal output
                · the homelab tree boots top-down
      Motion    · section rules draw out as their heading scrolls in
                · buttons press on a spring
@@ -17,7 +18,21 @@ const motionOK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
 // the hero never stays held back longer than this, however slow the kit or the terrain
 const ENTRANCE_BUDGET = 1200;
 
-if (motionOK) {
+if (motionOK && root.dataset.intro === 'pending') {
+  // the head script picked this visit for the intro and preloaded both modules; past this budget it gives up
+  root.dataset.intro = 'hold';
+  const late = new Promise((_, no) => setTimeout(no, ENTRANCE_BUDGET));
+  Promise.race([Promise.all([import('/vendor/motion-kit.min.js'), import('/js/intro.js')]), late]).then(([k, intro]) => {
+    bootTree(k); drawRules(k); springButtons(k);
+    intro.playIntro(k);
+  }).catch(() => {
+    if (root.dataset.intro !== 'hold') return;
+    document.querySelectorAll('.intro, .intro-canvas').forEach(el => el.remove());
+    root.dataset.intro = 'off';
+    dispatchEvent(new Event('intro:land'));
+    dispatchEvent(new Event('intro:end'));
+  });
+} else if (motionOK) {
   const hold = [holdMark(), holdEyebrow()].filter(Boolean);
   const giveUp = () => hold.forEach(h => h.restore());
   const deadline = setTimeout(giveUp, ENTRANCE_BUDGET);

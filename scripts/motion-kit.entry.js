@@ -1,4 +1,4 @@
-// Entry for /vendor/motion-kit.min.js. Only what js/motion.js uses, so esbuild can tree-shake the rest.
-// anime.js: SVG drawing, text scramble, staggers. Motion: viewport triggers, WAAPI fills and gesture springs.
-export { animate, stagger, createDrawable, scrambleText } from 'animejs';
+// Entry for /vendor/motion-kit.min.js. Only what js/motion.js and js/intro.js use, so esbuild can tree-shake the rest.
+// anime.js: timelines, SVG drawing, text scramble, staggers, eases. Motion: viewport triggers, WAAPI fills and gesture springs.
+export { animate, createTimeline, stagger, createDrawable, scrambleText, cubicBezier, eases } from 'animejs';
 export { animateMini, inView, press, spring } from 'motion';
