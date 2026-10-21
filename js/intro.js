@@ -1,6 +1,6 @@
 /* ─── Intro ──────────────────────────────────────────────
-   A first visit (at most every two weeks: the inline script in index.html decides before first
-   paint) opens on the alberyt mark, big, and turns it into the landscape in one gesture:
+   Every visit (bar those the inline script in index.html rules out, before first paint) opens on
+   the alberyt mark, big, and turns it into the landscape in one gesture:
      1. the mark's outline draws itself from the apex down both flanks; the cursor holds solid
         while the line data loads, then blinks once: go
      2. the outline thins and turns green: it is now the top contour line of a real 2,250 m
@@ -99,9 +99,14 @@ export function playIntro({ animate, createTimeline, createDrawable, cubicBezier
 
   /* ── Skip: any intent to use the page lands it at once. Never swallows the event. ── */
   let pressed = false; // skipped by a press: its click is still to come
+  // a reload is put back where it was left (Chrome does it twice: at DOMContentLoaded and at load); the intro
+  // lands on the hero, so until the flight a scroll is the browser's and the page goes back to the top
+  const top = () => scrollY && scrollTo({ top: 0, behavior: 'instant' });
+  top();
   const skip = e => {
     if (e && e.type === 'keydown' && ['Shift', 'Control', 'Alt', 'Meta'].includes(e.key)) return;
     if (e && e.type === 'visibilitychange' && !document.hidden) return;
+    if (e && e.type === 'scroll' && (root.dataset.intro === 'hold' || !scrollY)) return void top();
     if (ended) return;
     pressed = e && (e.type === 'pointerdown' || e.type === 'touchstart');
     main ? main.complete() : abort();
