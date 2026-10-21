@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Albert Gabor · ML, security &amp; self-hosting</title>
   <meta name="description" content="I&#x27;m Albert Gabor, a first-year AI student in Timișoara. HackTM 2026 winner with my team, CTF player, and self-hosting my own servers since January 2024.">
+  <!-- first of all: Firefox ignores an import map once any module load has started, preloads included -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/vendor/three.module.min.js"
+    }
+  }
+  </script>
   <script>
   window.SITE_META={"en": {"title": "Albert Gabor · ML, security & self-hosting", "desc": "I'm Albert Gabor, a first-year AI student in Timișoara. HackTM 2026 winner with my team, CTF player, and self-hosting my own servers since January 2024."}, "ro": {"title": "Albert Gabor · ML, securitate și self-hosting", "desc": "Sunt Albert Gabor, student în anul I la AI, în Timișoara. Am câștigat HackTM 2026 cu echipa mea, joc CTF-uri și îmi țin propriile servere din ianuarie 2024."}};
   (function(){var d=document.documentElement,p=location.pathname,s=null,l;
@@ -51,13 +59,6 @@
   <link rel="preload" href="/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="modulepreload" href="/vendor/motion-kit.min.js" media="(prefers-reduced-motion: no-preference)">
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "/vendor/three.module.min.js"
-    }
-  }
-  </script>
 </head>
 <body>
 
