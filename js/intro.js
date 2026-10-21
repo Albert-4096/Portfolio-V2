@@ -7,11 +7,12 @@
         Retezat summit, and a canvas takes it over, pixel for pixel
      3. the camera lifts off that summit and tilts down into the exact frame js/terrain.js
         renders: contour levels bloom downhill, the A sinks into the real terrain
-     4. the cursor, the one still point, flies to the name and types it; the hero settles; the
-        live scene takes over from the flat drawing, where the two match line for line, and
-        raises the relief itself
+     4. the live scene takes over from the flat drawing, where the two match line for line, and
+        raises the relief itself; then the cursor, the one still point all along, flies to the
+        name and types it, and the hero settles
    Phones (static poster) take a shorter cut: a top-down bloom straight into the poster.
-   html[data-intro]: pending → hold → fly → land → done, or off when it gives up (css/style.css).
+   html[data-intro]: pending → hold → fly → over → land → done, or off when it gives up (css/style.css).
+   intro:over tells js/terrain.js the drawing has landed on its frame; intro:end, that the page is free.
    Lines: /assets/retezat-intro.bin (scripts/bake_intro.py). Camera, fog and colours mirror js/terrain.js.
    ─────────────────────────────────────────────────────── */
 
@@ -37,8 +38,9 @@ const REACH = [5.5, 11.5];  // the A's field fades into the real terrain between
 // js/terrain.js at rest
 const FOV = 45, CAM = [0, 0.6, 1.4], LOOK = [0, 0.15, 0], FOG = [1.5, 3.8];
 const BODY = 0.46;          // the shader's dark ground, as a share of its fog colour
-const LINE = { minor: [0.42, 1.8], major: [0.58, 2.5] }; // its contour lines, [alpha, CSS px], matched by eye and histogram
-const STRIPS = 64;          // depth strips for fog
+const LINE = { minor: [0.42, 1.8], major: [0.58, 2.5] }; // its contour lines: [alpha, px of its drawing buffer], matched by eye and histogram
+const GL_DPR = Math.min(devicePixelRatio, 1.5);          // js/terrain.js's pixel ratio: the shader's lines are that many times thinner in CSS px
+const STRIPS = 32, BANDS = 4; // depth strips by across bands: cells for fog
 
 const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -53,7 +55,7 @@ const hex = name => {
 // those linear values straight out: the scene's greens are deeper, its ground near black
 const scene = c => c.map(v => { v /= 255; return Math.round(255 * (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)); });
 
-export function playIntro({ animate, createTimeline, createDrawable, stagger, cubicBezier, eases }) {
+export function playIntro({ animate, createTimeline, createDrawable, cubicBezier, eases }) {
   const live = root.dataset.terrain === 'live';
   const W = innerWidth, H = innerHeight; // js/terrain.js sizes its scene the same way
   const kpx = A_SIZE * Math.min(W, H) / 17; // px per mark unit
@@ -81,24 +83,30 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
     .add(pen.slice(2), { draw: ['0 0', '0 1'], duration: 700 * FLANK_LEN[1] / (FLANK_LEN[0] + FLANK_LEN[1]), ease: 'linear' })
     .add(cursor, { opacity: [0, 1], duration: 1, ease: 'linear' });
 
-  /* ── Hold: the cursor stays solid until the lines are in, then blinks once and the flight starts ── */
+  /* ── Hold: the cursor stays solid until the lines are in (and for a beat at least), then blinks
+     once and the flight starts ── */
   const cap = new Promise((_, no) => setTimeout(no, live ? 1600 : 1000, new Error('intro: lines too slow')));
-  Promise.all([Promise.race([lines, cap]), tracing.then()]).then(([d]) => {
+  let traced = 0;
+  // the name is measured for the cursor to type it: its font has to be in first (preloaded by the head script)
+  const fonts = Promise.all(['700', '400'].map(w => document.fonts.load(`${w} 1em "IBM Plex Sans"`))).catch(() => {});
+  Promise.all([Promise.race([Promise.all([lines, fonts]).then(([d]) => d), cap]), tracing.then(() => { traced = performance.now(); })]).then(([d]) => {
     if (ended) return;
-    const fly = build(d);
-    animate(cursor, { opacity: [{ to: 0, duration: 1 }, { to: 1, delay: 260, duration: 1 }], ease: 'linear' })
-      .then(() => { if (!ended) { main = fly; root.dataset.intro = 'fly'; main.play(); } });
-    main = fly; // a skip during the blink lands straight away
+    main = build(d); // from here a skip lands straight away
+    const beat = Math.max(0, (live ? 400 : 200) - (performance.now() - traced));
+    animate(cursor, { opacity: [{ to: 0, delay: beat, duration: 1 }, { to: 1, delay: 200, duration: 1 }], ease: 'linear' })
+      .then(() => { if (!ended) { root.dataset.intro = 'fly'; main.play(); } });
   }, abort);
 
   /* ── Skip: any intent to use the page lands it at once. Never swallows the event. ── */
+  let pressed = false; // skipped by a press: its click is still to come
   const skip = e => {
     if (e && e.type === 'keydown' && ['Shift', 'Control', 'Alt', 'Meta'].includes(e.key)) return;
     if (e && e.type === 'visibilitychange' && !document.hidden) return;
     if (ended) return;
+    pressed = e && (e.type === 'pointerdown' || e.type === 'touchstart');
     main ? main.complete() : abort();
   };
-  const SKIPS = ['pointerdown', 'wheel', 'touchstart', 'keydown', 'scroll', 'resize', 'pagehide', 'error', 'unhandledrejection'];
+  const SKIPS = ['pointerdown', 'wheel', 'touchstart', 'keydown', 'scroll', 'resize', 'pagehide', 'beforeprint', 'error', 'unhandledrejection'];
   SKIPS.forEach(t => addEventListener(t, skip, { passive: true }));
   document.addEventListener('visibilitychange', skip);
   const ceiling = setTimeout(skip, 9000);
@@ -116,12 +124,16 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
     root.dataset.intro = 'off';
     dropLayer();
     canvas?.remove();
-    dispatchEvent(new Event('intro:land'));
+    dispatchEvent(new Event('intro:over'));
     dispatchEvent(new Event('intro:end'));
   }
   function dropLayer() {
-    // keep catching pointer events a moment, so the click that skipped can't fall through to a link
-    animate(layer, { opacity: 0, duration: 250, ease: 'out(2)' }).then(() => layer.remove());
+    animate(layer, { opacity: 0, duration: 250, ease: 'out(2)' });
+    if (!pressed) return void setTimeout(() => layer.remove(), 250);
+    // the press that skipped still has its click to come: catch it, so it can't land on a link it never saw
+    const gone = () => layer.remove();
+    layer.addEventListener('click', gone, { once: true });
+    setTimeout(gone, 800);
   }
 
   /* ── The flight ─────────────────────────────────────── */
@@ -131,11 +143,16 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
     const U = A_UNIT * 2 / d.grid;                                        // plane units per mark unit
     const sc = [-1 + 2 * s.c / d.grid, -1 + 2 * s.r / d.grid];            // summit on the plane (x, z)
     const toX = mx => sc[0] + (mx - A_CENTRE[0]) * U, toZ = my => sc[1] + (my - A_CENTRE[1]) * U;
-    const field = aField(d, Math.max(0.08, Math.min(0.2, 3 / kpx)));
+    // the A's field, marched again on every frame of the melt: about 4 px a cell while it's big, half the
+    // cells' count four times over once the camera has pulled back
+    const step = Math.max(0.08, Math.min(0.2, 4 / kpx));
+    const fields = [aField(d, step), aField(d, step * 2)];
     const strips = toStrips(d.levels);
     const bloom = Array.from({ length: s.top - 1 }, () => ({ a: 0 }));   // level top-1 … 1
     const alpha = k => k === s.top ? (st.own ? 1 : 0) : (bloom[s.top - 1 - k] ? bloom[s.top - 1 - k].a : 0);
-    const st = { p: 0, own: false };
+    // p: the camera; w: the A's field (1, all A … 0, all terrain); front: how far the bloom has spread
+    // from the summit (plane units); lift, type: the cursor's flight to the name and its typing
+    const st = { p: 0, w: 1, front: 0, own: false, lift: 0, type: 0 };
 
     const dpr = Math.min(devicePixelRatio, live ? 1.5 : 2);
     canvas = document.createElement('canvas');
@@ -160,34 +177,36 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
     const D1 = Math.hypot(CAM[1] - LOOK[1], CAM[2] - LOOK[2]), PH1 = Math.atan2(CAM[1] - LOOK[1], CAM[2] - LOOK[2]);
     const ZOOM = 2.4; // phones only pull up
     function pose(p) {
-      if (!live) return { C: [T0[0], D0 * ZOOM ** p, T0[2]], uy: 0, uz: -1, fy: -1, fz: 0, top: true };
+      if (!live) return { C: [T0[0], D0 * ZOOM ** p, T0[2]], uy: 0, uz: -1, fy: -1, fz: 0 };
       const e = inOut2(clamp01((p - 0.15) / 0.85));
       const ph = Math.PI / 2 + (PH1 - Math.PI / 2) * e, D = D0 * (D1 / D0) ** p;
-      const T = T0.map((v, i) => lerp(v, LOOK[i], inOut2(p)));
+      const T = T0.map((v, i) => lerp(v, LOOK[i], p ** 3)); // late: the summit glides from the centre to its place, never off screen
       const sp = Math.sin(ph), cp = Math.cos(ph);
-      return { C: [T[0], T[1] + D * sp, T[2] + D * cp], uy: cp, uz: -sp, fy: -sp, fz: -cp, top: e === 0 };
+      return { C: [T[0], T[1] + D * sp, T[2] + D * cp], uy: cp, uz: -sp, fy: -sp, fz: -cp };
     }
-    const melt = p => 1 - inOut2(clamp01((p - (live ? 0.1 : 0.3)) / 0.45));
     const rest = p => live ? smooth(0.55, 1, p) : 0; // js/terrain.js's ground, weight and vignette settle in
+    const FRONT = 3; // past the far corner from any summit: the bloom is everywhere
+    const reach = () => 16 * U * (FRONT / (16 * U)) ** st.front; // from the A's rings outwards, at the pace of the zoom
 
     // bright lines on the open map; the scene's own colour and weight by the time it takes over
     function style(k, a, r, fog) {
       const major = k % 5 === 0 || k === s.top; // the A's outline keeps its index-contour weight
       const ink = major ? mix(ACC, S.ACC, r) : mix(MID, S.MID, r);
       ctx.strokeStyle = rgba(mix(ink, mix(BG, S.BG, r), fog), a * (major ? lerp(0.95, LINE.major[0], r) : lerp(0.7, LINE.minor[0], r)));
-      return major ? lerp(1.5, LINE.major[1], r) : lerp(1.1, LINE.minor[1], r);
+      return major ? lerp(1.5, LINE.major[1] / GL_DPR, r) : lerp(1.1, LINE.minor[1] / GL_DPR, r);
     }
 
     /* ── A field: marched again whenever the melt moves ── */
-    let marchedW = -1;
+    let marched = '';
     const segs = [];
-    function marchAt(w) {
-      if (w === marchedW) return;
-      marchedW = w;
-      march(field, w, d.ci, s.top, segs, toX, toZ);
+    function marchAt(w, f) {
+      if (marched === `${w} ${f.step}`) return;
+      marched = `${w} ${f.step}`;
+      march(f, w, d.ci, s.top, segs, toX, toZ);
     }
-    const quad = c => [[field.x0, field.y0], [field.x1, field.y0], [field.x1, field.y1], [field.x0, field.y1]]
+    const quad = (c, f) => [[f.x0, f.y0], [f.x1, f.y0], [f.x1, f.y1], [f.x0, f.y1]]
       .map(([mx, my]) => project(c, toX(mx), 0, toZ(my)));
+    const summitDepth = c => Math.max((0 - c.C[1]) * c.fy + (sc[1] - c.C[2]) * c.fz, 1e-3);
 
     function project(c, x, y, z) {
       const dx = x - c.C[0], dy = y - c.C[1], dz = z - c.C[2];
@@ -195,28 +214,37 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
       return [W / 2 + dx / zc * K, H / 2 - (dy * c.uy + dz * c.uz) / zc * K];
     }
 
+    let drawn = '';
     function draw() {
-      const p = st.p, c = pose(p), w = melt(p), r = rest(p);
+      // once the camera has stopped and the bloom is in, the frame holds: don't redraw it under the scene
+      const key = `${st.p} ${st.w} ${st.front} ${st.own} ${bloom.reduce((n, l) => n + l.a, 0)}`;
+      if (key === drawn) return;
+      drawn = key;
+      const p = st.p, c = pose(p), w = st.w, r = rest(p);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      if (r > 0) drawGround(c, r);
-      if (w > 0) {
-        marchAt(w);
-        const q = quad(c);
-        ctx.save(); // the real lines, outside the A's field
-        ctx.beginPath(); ctx.rect(0, 0, W, H); q.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-        ctx.clip('evenodd');
-        drawFlat(c, (k, path) => {
-          for (const a of d.levels[k - 1].lines) path(a);
-        });
+      const f = w > 0 && fields[D0 / summitDepth(c) > 0.6 ? 0 : 1];
+      const q = f && quad(c, f);
+      const outline = (clip, rule) => {
+        ctx.beginPath(); if (rule) ctx.rect(0, 0, W, H);
+        q.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+        if (clip) ctx.clip(rule);
+      };
+      ctx.save(); // the real lines, outside the A's field while there is one
+      if (f) outline(true, 'evenodd');
+      drawStrips(c, r);
+      ctx.restore();
+      if (f) { // the A's field
+        marchAt(w, f);
+        ctx.save(); outline(true);
+        drawField(c, r, fogAt(c, sc[1], sc[0]));
         ctx.restore();
-        ctx.save(); // the A's field
-        ctx.beginPath(); q.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-        ctx.clip();
-        drawFlat(c, (k, path, seg) => { if (segs[k]) seg(segs[k]); }, s.top);
-        ctx.restore();
-      } else drawStrips(c, r);
+      }
+      if (st.front < 1) spread(c);
+      if (st.own && !st.lift) paint(); // the pinned cursor rides the camera
       if (r > 0) {
+        ctx.globalCompositeOperation = 'destination-over';
+        drawGround(c, r);
         ctx.globalCompositeOperation = 'source-atop';
         ctx.globalAlpha = r;
         ctx.fillStyle = vignette;
@@ -226,39 +254,18 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
       }
     }
 
-    // straight down, one stroke per level, through a transform; tilted, projected point by point
-    function drawFlat(c, each, top = d.levels.length) {
-      const affine = c.top, s0 = K / c.C[1];
-      const box = affine
-        ? [c.C[0] - W / 2 / s0, c.C[2] - H / 2 / s0, c.C[0] + W / 2 / s0, c.C[2] + H / 2 / s0]
-        : footprint(c);
-      for (let k = top; k >= 1; k--) {
-        const a = alpha(k);
-        if (a <= 0) continue;
-        const lw = style(k, a, 0, 0);
+    // the A's field: one stroke per level, of loose marched segments
+    function drawField(c, r, fog) {
+      for (let k = s.top; k >= 1; k--) {
+        const a = alpha(k), seg = segs[k];
+        if (a <= 0 || !seg || !seg.length) continue;
+        ctx.lineWidth = style(k, a, r, fog);
         ctx.beginPath();
-        if (affine) {
-          ctx.setTransform(dpr * s0, 0, 0, dpr * s0, dpr * (W / 2 - c.C[0] * s0), dpr * (H / 2 - c.C[2] * s0));
-          ctx.lineWidth = lw / s0;
-        } else ctx.lineWidth = lw;
-        each(k, line => {
-          if (box && !overlaps(line.box, box)) return;
-          for (let i = 0; i < line.length; i += 2) {
-            const x = line[i], z = line[i + 1];
-            if (affine) i ? ctx.lineTo(x, z) : ctx.moveTo(x, z);
-            else { const [sx, sy] = project(c, x, 0, z); i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); }
-          }
-        }, seg => {
-          for (let i = 0; i < seg.length; i += 4) {
-            if (affine) { ctx.moveTo(seg[i], seg[i + 1]); ctx.lineTo(seg[i + 2], seg[i + 3]); }
-            else {
-              const [ax, ay] = project(c, seg[i], 0, seg[i + 1]), [bx, by] = project(c, seg[i + 2], 0, seg[i + 3]);
-              ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
-            }
-          }
-        });
+        for (let i = 0; i < seg.length; i += 4) {
+          const [ax, ay] = project(c, seg[i], 0, seg[i + 1]), [bx, by] = project(c, seg[i + 2], 0, seg[i + 3]);
+          ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
+        }
         ctx.stroke();
-        if (affine) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
     }
 
@@ -275,8 +282,23 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
       return b;
     }
 
+    // the bloom spreads from the summit as well as downhill, so far-off peaks don't light up before it gets there:
+    // a soft disc on the ground (an ellipse once tilted) keeps only what's inside it
+    function spread(c) {
+      const [px, py] = project(c, sc[0], 0, sc[1]);
+      const a = reach() * K / summitDepth(c), b = a * Math.abs(c.fy); // foreshortened by the pitch
+      ctx.setTransform(dpr * a, 0, 0, dpr * Math.max(b, 1e-3), dpr * px, dpr * py);
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+      g.addColorStop(0.7, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.fillStyle = g;
+      ctx.fillRect(-1e4, -1e4, 2e4, 2e4);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
     // js/terrain.js fogs by distance; on flat ground seen head-on that runs with depth, so: strips of depth
-    const fogAt = (c, z) => smooth(FOG[0], FOG[1], Math.hypot(Math.max(-1, Math.min(1, c.C[0])) - c.C[0], c.C[1], z - c.C[2]));
+    const fogAt = (c, z, x = Math.max(-1, Math.min(1, c.C[0]))) => smooth(FOG[0], FOG[1], Math.hypot(x - c.C[0], c.C[1], z - c.C[2]));
     const ground = S.BG.map(v => v * BODY);
     function drawGround(c, r) {
       // the scene's dark ground, one gradient down its length so the strips leave no seams
@@ -292,8 +314,11 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
       ctx.fill();
     }
     function drawStrips(c, r) {
-      for (let i = 0; i < STRIPS; i++) {
-        const fog = fogAt(c, -1 + 2 * (i + 0.5) / STRIPS);
+      const box = footprint(c);
+      for (let i = 0; i < STRIPS * BANDS; i++) {
+        const z0 = -1 + 2 * Math.floor(i / BANDS) / STRIPS, x0 = -1 + 2 * (i % BANDS) / BANDS;
+        if (box && (x0 > box[2] || x0 + 2 / BANDS < box[0] || z0 > box[3] || z0 + 2 / STRIPS < box[1])) continue;
+        const fog = fogAt(c, z0 + 1 / STRIPS, x0 + 1 / BANDS);
         for (const major of [false, true]) {
           let any = false;
           ctx.beginPath();
@@ -332,20 +357,34 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
     caret.className = 'intro__caret';
     caret.hidden = true;
     const from = cursor.getBoundingClientRect();
-    const cur = { x: from.left, y: from.top, w: from.width, h: from.height };
+    const out4 = eases.out(4);
     let docked = false;
-    const paint = () => {
-      if (docked) return; // a skip can run the ride's last frame after the dock
-      Object.assign(caret.style, { transform: `translate(${cur.x}px,${cur.y}px)`, width: cur.w + 'px', height: cur.h + 'px' });
-      // the name shows up to the cursor's left edge
-      if (typing) h1.style.clipPath = `inset(-0.3em ${Math.max(0, typing.right - cur.x)}px -0.3em -0.3em)`;
+    // until it flies, the cursor sits where the mark put it, on the ground, and shrinks with the distance
+    const pinned = () => {
+      const c = pose(st.p), x = toX(CURSOR[0] + CURSOR[2] / 2), z = toZ(CURSOR[1] + CURSOR[3] / 2);
+      const [px, py] = project(c, x, 0, z), k = D0 / Math.max((0 - c.C[1]) * c.fy + (z - c.C[2]) * c.fz, 1e-3);
+      return { x: px - from.width * k / 2, y: py - from.height * k / 2, w: from.width * k, h: from.height * k };
     };
+    function paint() {
+      if (docked) return; // a skip can run the ride's last frame after the dock
+      let cur = pinned();
+      if (typing && st.type > 0) {
+        // typed, a glyph at a time: the cursor steps to the end of the last one, the name shows up to it
+        const n = Math.ceil(st.type * typing.edges.length);
+        const x = n ? typing.edges[n - 1] : typing.from;
+        cur = { x, y: typing.y, w: typing.w, h: typing.h };
+        h1.style.clipPath = `inset(-0.3em ${typing.right - (n ? x : typing.from - 100)}px -0.3em -0.3em)`;
+      } else if (typing && st.lift > 0) {
+        const e = out4(st.lift), to = { x: typing.from, y: typing.y, w: typing.w, h: typing.h };
+        cur = Object.fromEntries(Object.keys(to).map(k => [k, lerp(cur[k], to[k], e)]));
+      }
+      Object.assign(caret.style, { transform: `translate(${cur.x}px,${cur.y}px)`, width: cur.w + 'px', height: cur.h + 'px' });
+    }
     function takeOver() {
       st.own = true;
       flanks.forEach(f => { f.style.opacity = 0; });
       cursor.style.opacity = 0;
       caret.hidden = false;
-      paint();
       draw();
     }
     function dock() {
@@ -359,73 +398,86 @@ export function playIntro({ animate, createTimeline, createDrawable, stagger, cu
     const header = document.querySelector('.site-header');
     const below = [...document.querySelectorAll('main > :not(.hero)')].filter(el => el.getBoundingClientRect().top < H);
     const poster = () => document.querySelector('.terrain-static-bg');
+    // the landscape first (the camera, then the scene's own relief rising), then the text
     const t = live
-      ? { own: 250, p: [100, 1800], bloom: [150, 40], glide: 1050, type: [1450, 400], groups: 1650, cap: 1900, land: 1900 }
-      : { own: 200, p: [100, 1500], bloom: [150, 30], glide: 600, type: [1000, 350], groups: 1150, cap: 1300, land: 1650 };
+      ? { own: 250, p: [100, 1500], melt: [650, 700], front: [150, 1000], bloom: [150, 90, 25], over: 1600,
+          glide: 1900, type: [2350, 520], groups: 2550, cap: 2800, land: 2650 }
+      : { own: 200, p: [100, 1500], melt: [450, 500], front: [150, 650], bloom: [150, 60, 15], over: 1000,
+          glide: 1150, type: [1500, 440], groups: 1700, cap: 1700, land: 1800 };
+    const RINGS = 5; // the A's own rings, above the real summit
 
     const tl = createTimeline({ autoplay: false, onUpdate: draw, onComplete: () => land() })
       .add(flanks, { stroke: rgba(ACC, 0.95), strokeWidth: '1.5px', duration: 250, ease: 'out(3)' }, 0)
       .call(takeOver, t.own)
       .add(st, { p: [0, 1], duration: t.p[1], ease: live ? cubicBezier(0.6, 0, 0.1, 1) : 'inOut(2)' }, t.p[0])
-      .add(bloom, { a: [0, 1], duration: 240, ease: 'out(2)', delay: stagger(t.bloom[1], { ease: 'in(1.5)' }) }, t.bloom[0])
+      // the A holds a moment on its mountain, then sinks into it
+      .add(st, { w: [1, 0], duration: t.melt[1], ease: 'inOut(2)' }, t.melt[0])
+      // the bloom: the A's rings ripple out one by one, then the terrain's levels follow downhill, quicker,
+      // as a front spreads out from the summit
+      .add(bloom, { a: [0, 1], duration: 160, ease: 'out(2)',
+        delay: (_, i) => i < RINGS ? i * t.bloom[1] : RINGS * t.bloom[1] + (i - RINGS) * t.bloom[2] }, t.bloom[0])
+      .add(st, { front: [0, 1], duration: t.front[1], ease: 'linear' }, t.front[0])
       .call(dock, t.type[0] + t.type[1])
       .add(sel('.eyebrow'), { opacity: [0, 1], duration: 400, ease: 'out(2)' }, t.type[0])
       .add(header, { opacity: [0, 1], duration: 500, ease: 'out(2)' }, t.groups)
       .add(sel('.lede, .cta-row'), { opacity: [0, 1], y: [8, 0], duration: 600, ease: 'out(4)' }, t.groups)
       .add([...sel('.hero-proof, .win-banner'), ...below], { opacity: [0, 1], y: [8, 0], duration: 600, ease: 'out(4)' }, t.groups + 80)
       .add(sel('.hero-cap'), { opacity: [0, 1], duration: 400, ease: 'out(2)' }, t.cap)
+      .call(handOver, t.over)
       .call(land, t.land);
     if (typing) {
-      h1.style.clipPath = `inset(-0.3em ${typing.right - typing.from}px -0.3em -0.3em)`;
-      tl.add(cur, { x: typing.from, y: typing.y, w: typing.w, h: typing.h, duration: live ? 450 : 400, ease: 'out(4)', onUpdate: paint }, t.glide)
+      tl.add(st, { lift: [0, 1], duration: live ? 450 : 400, ease: 'linear', onUpdate: paint }, t.glide)
+        .call(paint, t.type[0])
         .add(h1, { opacity: [0, 1], duration: 1 }, t.type[0])
-        .add(cur, { x: typing.to, duration: t.type[1], ease: 'out(3)', onUpdate: paint }, t.type[0]);
+        .add(st, { type: [0, 1], duration: t.type[1], ease: 'linear', onUpdate: paint }, t.type[0]);
     } else {
       tl.add(caret, { opacity: [1, 0], duration: 300, ease: 'out(2)' }, t.glide)
         .add(h1, { opacity: [0, 1], duration: 500, ease: 'out(2)' }, t.type[0]);
     }
-    if (!live) {
-      if (poster()) tl.add(poster(), { opacity: [0, 0.55], scale: [1.12, 1], duration: 700, ease: 'out(3)' }, 1000);
-      tl.add(canvas, { opacity: [1, 0], duration: 600, ease: 'inOut(2)' }, 1050);
-    }
+    if (!live && poster()) tl.add(poster(), { opacity: [0, 0.55], scale: [1.12, 1], duration: 700, ease: 'out(3)' }, t.over - 50);
     return tl;
   }
 
-  /* ── Landing: the text is in, the live scene (or the poster) takes over under the drawing ── */
-  function land() {
-    if (ended) return;
-    ended = true;
-    unbind();
-    let gone;
-    const faded = new Promise(r => { gone = r; });
+  /* ── Hand-over: the drawing has landed on the scene's own frame; the scene (or the poster) takes over ── */
+  let gone;
+  const faded = new Promise(r => { gone = r; });
+  function handOver() {
+    if (root.dataset.intro === 'over' || !canvas) return;
     const fade = () => {
       if (!canvas.isConnected) return;
       animate(canvas, { opacity: 0, duration: 300, ease: 'inOut(2)' }).then(() => { canvas.remove(); gone(); });
     };
     if (live && root.dataset.terrain === 'live') {
-      // the scene compiles now if it couldn't during the flight; till it's up, the drawing is the backdrop.
-      // Listening first: it may reveal synchronously on intro:land.
+      // the scene builds and compiles now if it couldn't before; till it's up, the drawing is the backdrop.
+      // Listening first: it may reveal synchronously on intro:over.
       addEventListener('terrain:revealed', fade, { once: true });
       addEventListener('terrain:ready', () => { if (root.dataset.terrain !== 'live') fade(); }, { once: true });
       addEventListener('resize', fade, { once: true }); // the drawing is for one size only
+      if (innerWidth !== W || innerHeight !== H) fade();  // …and a resize may be what skipped to here
     } else fade();
+    root.dataset.intro = 'over';
+    dispatchEvent(new Event('intro:over'));
+  }
+
+  /* ── Landing: the text is in, the page is free ── */
+  function land() {
+    if (ended) return;
+    ended = true;
+    unbind();
+    handOver(); // a skip runs both at once
     root.dataset.intro = 'land';
-    dispatchEvent(new Event('intro:land'));
     dropLayer();
     setTimeout(() => dispatchEvent(new Event('intro:end')), 600); // the consent bar waits for this
-    // tidy up once both the text and the drawing are done
-    Promise.all([main.then(), faded]).then(finish);
-  }
-  function finish() {
-    document.querySelectorAll('.site-header, .hero [data-enter], .hero-cap, main > :not(.hero), .terrain-static-bg')
-      .forEach(el => ['opacity', 'transform', 'translate', 'scale', 'clip-path'].forEach(p => el.style.removeProperty(p)));
-    root.dataset.intro = 'done';
+    // tidy the text up once it's in; done once the drawing is gone too
+    const text = main.then(() => document.querySelectorAll('.site-header, .hero [data-enter], .hero-cap, main > :not(.hero), .terrain-static-bg')
+      .forEach(el => ['opacity', 'transform', 'translate', 'scale', 'clip-path'].forEach(p => el.style.removeProperty(p))));
+    Promise.all([text, faded]).then(() => { root.dataset.intro = 'done'; });
   }
 }
 
 /* ── Data ───────────────────────────────────────────── */
 async function load() {
-  const res = await fetch('/assets/retezat-intro.bin');
+  const res = await fetch('/assets/retezat-intro.bin?v=1'); // ?v= as in index.html: bump both after a rebake
   if (!res.ok) throw new Error(`intro: ${res.status}`);
   return parse(await res.arrayBuffer());
 }
@@ -444,12 +496,11 @@ function parse(buf) {
   for (let n = b[at++]; n--;) {
     const k = b[at++], lines = [];
     for (let m = vint(); m--;) {
-      const len = vint(), a = new Float32Array(len * 2), box = a.box = [Infinity, Infinity, -Infinity, -Infinity];
+      const len = vint(), a = new Float32Array(len * 2);
       let x = vint(), z = vint();
       for (let i = 0; i < len; i++) {
         if (i) { x += zz(vint()); z += zz(vint()); }
-        const px = a[2 * i] = x * q - 1, pz = a[2 * i + 1] = z * q - 1;
-        box[0] = Math.min(box[0], px); box[1] = Math.min(box[1], pz); box[2] = Math.max(box[2], px); box[3] = Math.max(box[3], pz);
+        a[2 * i] = x * q - 1; a[2 * i + 1] = z * q - 1;
       }
       lines.push(a);
     }
@@ -549,23 +600,22 @@ function march(F, w, ci, top, out, toX, toZ) {
   }
 }
 
-// every line cut into runs that each fall in one depth strip, so each can take its own fog
+// every line cut into runs that each fall in one cell (depth strip by across band), so each can take its own fog
 function toStrips(levels) {
-  const strips = Array.from({ length: STRIPS }, () => []);
-  const of = z => Math.max(0, Math.min(STRIPS - 1, Math.floor((z + 1) / 2 * STRIPS)));
+  const strips = Array.from({ length: STRIPS * BANDS }, () => []);
+  const at = (n, v) => Math.max(0, Math.min(n - 1, Math.floor((v + 1) / 2 * n)));
+  const of = (a, i) => at(STRIPS, (a[2 * i + 1] + a[2 * i + 3]) / 2) * BANDS + at(BANDS, (a[2 * i] + a[2 * i + 2]) / 2);
   for (const { k, lines } of levels) for (const a of lines) {
     const n = a.length / 2;
-    let i0 = 0, s0 = of((a[1] + a[3]) / 2);
+    let i0 = 0, s0 = of(a, 0);
     for (let i = 1; i < n - 1; i++) {
-      const s = of((a[2 * i + 1] + a[2 * i + 3]) / 2);
+      const s = of(a, i);
       if (s !== s0) { strips[s0].push([a, i0, i, k]); s0 = s; i0 = i; }
     }
     strips[s0].push([a, i0, n - 1, k]);
   }
   return strips;
 }
-
-const overlaps = (a, b) => a[2] >= b[0] && a[0] <= b[2] && a[3] >= b[1] && a[1] <= b[3];
 
 // where the cursor types the name: from the first letter to where the h1's own caret (::after) sits
 function measure(h1) {
@@ -584,8 +634,10 @@ function measure(h1) {
   const m = Object.assign(document.createElement('canvas').getContext('2d'), { font }).measureText('_');
   const base = r.top + m.fontBoundingBoxAscent;
   const h1r = h1.getBoundingClientRect();
+  // the right edge of each glyph, for typing it one at a time
+  const edges = [...text.textContent].map((_, i) => { range.setStart(text, i); range.setEnd(text, i + 1); return range.getBoundingClientRect().right; });
   return {
-    from: rects[0].left, to: r.left - m.actualBoundingBoxLeft, right: h1r.right,
+    from: rects[0].left, edges, right: h1r.right,
     y: base - m.actualBoundingBoxAscent, w: m.actualBoundingBoxLeft + m.actualBoundingBoxRight,
     h: m.actualBoundingBoxAscent + m.actualBoundingBoxDescent,
   };

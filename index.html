@@ -23,10 +23,12 @@
   if(!m('(prefers-reduced-motion: no-preference)')||m('(forced-colors: active)')||(c&&c.saveData)||location.hash||(n&&n.type!=='navigate')
   ||document.visibilityState!=='visible'||document.prerendering||Date.now()-t<12096e5)return;
   localStorage.setItem('intro-seen',Date.now());d.dataset.intro='pending'}catch(e){return}
-  [['preload','/assets/retezat-intro.bin'],['modulepreload','/js/intro.js']].forEach(function(a){var l=document.createElement('link');
-  l.rel=a[0];l.href=a[1];if(a[0]==='preload'){l.as='fetch';l.crossOrigin='anonymous'}h.appendChild(l)});
+  // the line data (keep ?v= in step with js/intro.js), the intro, and the h1's weight, which the intro measures
+  [['preload','/assets/retezat-intro.bin?v=1','fetch'],['modulepreload','/js/intro.js'],['preload','/fonts/ibm-plex-sans-latin-700-normal.woff2','font']]
+  .forEach(function(a){var l=document.createElement('link');l.rel=a[0];l.href=a[1];if(a[2]){l.as=a[2];l.crossOrigin='anonymous'}
+  if(a[2]==='font')l.type='font/woff2';h.appendChild(l)});
   // js/motion.js takes over within 3 s, or the page enters as usual
-  setTimeout(function(){if(d.dataset.intro==='pending'){d.dataset.intro='off';dispatchEvent(new Event('intro:land'));dispatchEvent(new Event('intro:end'))}},3000)})();
+  setTimeout(function(){if(d.dataset.intro==='pending'){d.dataset.intro='off';dispatchEvent(new Event('intro:over'));dispatchEvent(new Event('intro:end'))}},3000)})();
   </script>
   <link rel="alternate" hreflang="en" href="https://alberyt.xyz/">
   <link rel="alternate" hreflang="ro" href="https://alberyt.xyz/ro/">

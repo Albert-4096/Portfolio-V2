@@ -341,15 +341,17 @@ html[data-lang="ro"] .lang-thumb { clip-path: inset(0 0 0 50%); }
 @keyframes caret-on { 50% { opacity: 0; } }
 
 /* ─── First-visit intro (js/intro.js) ─────────────────── */
-/* html[data-intro]: pending (head script) → hold → fly → land → done, or off when it gives up.
-   Until it lands the page is all there for crawlers and screen readers, only transparent. */
+/* html[data-intro]: pending (head script) → hold → fly → over (the scene has the screen) → land (the text is in)
+   → done, or off when it gives up. Until it lands the page is all there for crawlers and screen readers,
+   only transparent. */
 @media screen {
-  html:is([data-intro="pending"], [data-intro="hold"], [data-intro="fly"])
-    :is(.site-header, main > :not(.hero), .site-footer, .hero-cap, .terrain-static-bg, #terrain-canvas) { opacity: 0; }
+  html:is([data-intro="pending"], [data-intro="hold"], [data-intro="fly"], [data-intro="over"])
+    :is(.site-header, main > :not(.hero), .site-footer, .hero-cap) { opacity: 0; }
+  html:is([data-intro="pending"], [data-intro="hold"], [data-intro="fly"]) :is(.terrain-static-bg, #terrain-canvas) { opacity: 0; }
   html[data-intro="pending"] .hero [data-enter] { animation-play-state: paused; }
-  html:is([data-intro="hold"], [data-intro="fly"], [data-intro="land"], [data-intro="done"]) .hero [data-enter] { animation: none; }
-  html:is([data-intro="hold"], [data-intro="fly"]) .hero [data-enter] { opacity: 0; }
-  html:is([data-intro="hold"], [data-intro="fly"]) .hero h1:not(.caret-on)::after { visibility: hidden; }
+  html:is([data-intro="hold"], [data-intro="fly"], [data-intro="over"], [data-intro="land"], [data-intro="done"]) .hero [data-enter] { animation: none; }
+  html:is([data-intro="hold"], [data-intro="fly"], [data-intro="over"]) .hero [data-enter] { opacity: 0; }
+  html:is([data-intro="hold"], [data-intro="fly"], [data-intro="over"]) .hero h1:not(.caret-on)::after { visibility: hidden; }
 }
 .intro { position: fixed; inset: 0; z-index: 40; }
 .intro__mark { position: absolute; overflow: visible; }
