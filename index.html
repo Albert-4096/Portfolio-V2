@@ -16,13 +16,13 @@
   if(l==='ro'){document.title=SITE_META.ro.title;document.querySelector('meta[name=description]').content=SITE_META.ro.desc}})();
   </script>
   <script>
-  /* First visit in two weeks: js/intro.js opens on the mark. Decided before first paint so the page never flashes in first;
-     never on a deep link, a reload, a background tab, reduced motion, forced colours or Save-Data. */
-  (function(){var d=document.documentElement,m=function(q){return matchMedia(q).matches},c=navigator.connection,n,t,h=document.head;
-  try{n=performance.getEntriesByType('navigation')[0];t=+localStorage.getItem('intro-seen')||0;
-  if(!m('(prefers-reduced-motion: no-preference)')||m('(forced-colors: active)')||(c&&c.saveData)||location.hash||(n&&n.type!=='navigate')
-  ||document.visibilityState!=='visible'||document.prerendering||Date.now()-t<12096e5)return;
-  localStorage.setItem('intro-seen',Date.now());d.dataset.intro='pending'}catch(e){return}
+  /* Every visit, reloads too, opens on js/intro.js's mark. Decided before first paint so the page never flashes in first;
+     never on a deep link, back/forward, a background tab, reduced motion, forced colours or Save-Data. */
+  (function(){var d=document.documentElement,m=function(q){return matchMedia(q).matches},c=navigator.connection,
+  n=performance.getEntriesByType('navigation')[0],h=document.head;
+  if(!m('(prefers-reduced-motion: no-preference)')||m('(forced-colors: active)')||(c&&c.saveData)||location.hash
+  ||(n&&n.type!=='navigate'&&n.type!=='reload')||document.visibilityState!=='visible'||document.prerendering)return;
+  d.dataset.intro='pending';
   // the line data (keep ?v= in step with js/intro.js), the intro, and the h1's weight, which the intro measures
   [['preload','/assets/retezat-intro.bin?v=1','fetch'],['modulepreload','/js/intro.js'],['preload','/fonts/ibm-plex-sans-latin-700-normal.woff2','font']]
   .forEach(function(a){var l=document.createElement('link');l.rel=a[0];l.href=a[1];if(a[2]){l.as=a[2];l.crossOrigin='anonymous'}

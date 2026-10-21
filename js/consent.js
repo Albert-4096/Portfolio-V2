@@ -118,7 +118,7 @@
       setTimeout(once, 8000);
     };
     const start = () => document.readyState === 'complete' ? go() : addEventListener('load', go);
-    // a first visit's intro (js/intro.js) has the screen until it lands
+    // the intro (js/intro.js) has the screen until it lands
     ['pending', 'hold', 'fly', 'over'].includes(document.documentElement.dataset.intro)
       ? addEventListener('intro:end', start, { once: true }) : start();
   }

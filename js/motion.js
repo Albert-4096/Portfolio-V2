@@ -1,6 +1,6 @@
 /* ─── Motion layer ───────────────────────────────────────
    Crafted moments on top of the CSS entrances and reveals.
-     anime.js  · a first visit opens on the intro (js/intro.js), which owns the hero entrance
+     anime.js  · a visit opens on the intro (js/intro.js), which owns the hero entrance
                · otherwise the mark draws itself (once per session)
                · and the hero eyebrow decodes like terminal output
                · the homelab tree boots top-down
