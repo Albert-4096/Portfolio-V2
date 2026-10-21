@@ -15,6 +15,19 @@
   var c=document.createElement('link');c.rel='canonical';c.href='https://alberyt.xyz'+u;document.head.appendChild(c);
   if(l==='ro'){document.title=SITE_META.ro.title;document.querySelector('meta[name=description]').content=SITE_META.ro.desc}})();
   </script>
+  <script>
+  /* First visit in two weeks: js/intro.js opens on the mark. Decided before first paint so the page never flashes in first;
+     never on a deep link, a reload, a background tab, reduced motion, forced colours or Save-Data. */
+  (function(){var d=document.documentElement,m=function(q){return matchMedia(q).matches},c=navigator.connection,n,t,h=document.head;
+  try{n=performance.getEntriesByType('navigation')[0];t=+localStorage.getItem('intro-seen')||0;
+  if(!m('(prefers-reduced-motion: no-preference)')||m('(forced-colors: active)')||(c&&c.saveData)||location.hash||(n&&n.type!=='navigate')
+  ||document.visibilityState!=='visible'||document.prerendering||Date.now()-t<12096e5)return;
+  localStorage.setItem('intro-seen',Date.now());d.dataset.intro='pending'}catch(e){return}
+  [['preload','/assets/retezat-intro.bin'],['modulepreload','/js/intro.js']].forEach(function(a){var l=document.createElement('link');
+  l.rel=a[0];l.href=a[1];if(a[0]==='preload'){l.as='fetch';l.crossOrigin='anonymous'}h.appendChild(l)});
+  // js/motion.js takes over within 3 s, or the page enters as usual
+  setTimeout(function(){if(d.dataset.intro==='pending'){d.dataset.intro='off';dispatchEvent(new Event('intro:land'));dispatchEvent(new Event('intro:end'))}},3000)})();
+  </script>
   <link rel="alternate" hreflang="en" href="https://alberyt.xyz/">
   <link rel="alternate" hreflang="ro" href="https://alberyt.xyz/ro/">
   <link rel="alternate" hreflang="x-default" href="https://alberyt.xyz/">

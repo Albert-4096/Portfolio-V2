@@ -117,7 +117,10 @@
       addEventListener('scroll', once, { passive: true });
       setTimeout(once, 8000);
     };
-    document.readyState === 'complete' ? go() : addEventListener('load', go);
+    const start = () => document.readyState === 'complete' ? go() : addEventListener('load', go);
+    // a first visit's intro (js/intro.js) has the screen until it lands
+    ['pending', 'hold', 'fly'].includes(document.documentElement.dataset.intro)
+      ? addEventListener('intro:end', start, { once: true }) : start();
   }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 })();

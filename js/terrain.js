@@ -76,7 +76,7 @@ const vertexShader = /* glsl */ `
     float hU = (texture2D(uHeightmap, uv + vec2(0.0, uTexelSize.y)).r * 255.0 * 256.0
               + texture2D(uHeightmap, uv + vec2(0.0, uTexelSize.y)).g * 255.0) / 65535.0;
 
-    float scale = uDisplacement * 2.0; // tangent scale
+    float scale = max(uDisplacement * 2.0, 1e-4); // tangent scale; flat at the start of a rise
     vNormal = normalize(vec3(hL - hR, 2.0 / scale, hD - hU));
 
     vWorldHeight = height01;
@@ -166,6 +166,15 @@ function showStatic() {
   }
 }
 
+/* js/intro.js's flight and text entrance run on the main thread too: building this scene (a 513² mesh)
+   in the middle of them would stall their frames, so it waits until the text has landed */
+function afterFlight() {
+  const intro = document.documentElement.dataset.intro;
+  if (intro === 'fly') return new Promise(r => addEventListener('intro:end', r, { once: true }));
+  if (intro === 'land') return new Promise(r => setTimeout(r, 600));
+  return Promise.resolve();
+}
+
 /* ── Main init ─────────────────────────────────────────── */
 async function initTerrain() {
   const body = document.body;
@@ -239,6 +248,7 @@ async function initTerrain() {
   let isTabVisible = true;
   let disposed = false;
   let frozen = false;
+  let running = true; // false while js/intro.js holds the screen (see "Hand-over" below)
 
   // Decoupled camera controls for scroll, parallax, drift, and intro dolly
   const cameraBase = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
@@ -253,7 +263,7 @@ async function initTerrain() {
     new Promise((resolve, reject) => {
       new THREE.TextureLoader().load('/assets/retezat-heightmap.png', resolve, undefined, reject);
     }),
-  ]).then(([meta, heightmapTex]) => {
+  ]).then(assets => afterFlight().then(() => assets)).then(([meta, heightmapTex]) => {
     heightmapTex.minFilter = THREE.LinearFilter;
     heightmapTex.magFilter = THREE.LinearFilter;
     heightmapTex.wrapS = THREE.ClampToEdgeWrapping;
@@ -345,7 +355,7 @@ async function initTerrain() {
     }
 
     function startLoop() {
-      if (rafId != null || disposed || frozen) return;
+      if (rafId != null || disposed || frozen || !running) return;
       clock.start();
       loop();
     }
@@ -420,43 +430,15 @@ async function initTerrain() {
     const quickY = gsap.quickTo(cameraOffset, 'y', { duration: 0.8, ease: 'power2.out' });
 
     window.addEventListener('mousemove', (e) => {
+      if (!running) return; // the intro's drawing is of the centred camera
       const nx = (e.clientX / window.innerWidth - 0.5) * 2;
       const ny = (e.clientY / window.innerHeight - 0.5) * 2;
       quickX(nx * parallaxRange);
       quickY(ny * parallaxRange * 0.5);
     }, { passive: true });
 
-    // ── GSAP: Intro timeline ──
-    const tl = gsap.timeline({
-      delay: 0.2,
-      onStart: startLoop,
-      onComplete: tuneQuality,
-    });
-
-    // Displacement rises from 0
-    tl.to(uniforms.uDisplacement, {
-      value: targetDisplacement,
-      duration: 2.2,
-      ease: 'power2.out',
-    }, 0);
-
-    // Opacity fades in
-    tl.to(uniforms.uOpacity, {
-      value: 1.0,
-      duration: 1.5,
-      ease: 'power2.inOut',
-    }, 0);
-
-    // Camera dollies in
-    tl.to(cameraIntroOffset, {
-      y: 0,
-      z: 0,
-      duration: 2.5,
-      ease: 'power2.out',
-    }, 0);
-
     // ── GSAP: Idle drift (after intro) ──
-    tl.add(() => {
+    function startDrift() {
       // Very slow continuous camera orbit
       gsap.to(cameraDrift, {
         x: 0.15,
@@ -472,7 +454,64 @@ async function initTerrain() {
         yoyo: true,
         repeat: -1,
       });
-    });
+    }
+
+    // js/intro.js may be flying a line drawing of this exact view
+    const intro = document.documentElement.dataset.intro;
+    if (['pending', 'hold', 'fly', 'land'].includes(intro)) {
+      // ── Hand-over from js/intro.js ──
+      // Wait flat, at the camera's resting place and full opacity: the intro's drawing lands on exactly
+      // this frame. Once it hands over, raise the relief. The first frame compiles the shaders and
+      // stalls the main thread: under the intro's loader, or after it has landed (see afterFlight).
+      running = false;
+      uniforms.uOpacity.value = 1.0;
+      cameraIntroOffset.y = cameraIntroOffset.z = 0;
+      const reveal = () => {
+        running = true;
+        startLoop();
+        dispatchEvent(new Event('terrain:revealed'));
+        gsap.to(uniforms.uDisplacement, {
+          value: targetDisplacement,
+          duration: 2.2,
+          delay: 0.25, // the drawing's fade
+          ease: 'power2.inOut',
+          onComplete: () => { startDrift(); tuneQuality(); },
+        });
+      };
+      if (intro === 'land') { render(); reveal(); }
+      else { render(); addEventListener('intro:land', reveal, { once: true }); }
+    } else {
+      // ── GSAP: Intro timeline ──
+      const tl = gsap.timeline({
+        delay: 0.2,
+        onStart: startLoop,
+        onComplete: tuneQuality,
+      });
+
+      // Displacement rises from 0
+      tl.to(uniforms.uDisplacement, {
+        value: targetDisplacement,
+        duration: 2.2,
+        ease: 'power2.out',
+      }, 0);
+
+      // Opacity fades in
+      tl.to(uniforms.uOpacity, {
+        value: 1.0,
+        duration: 1.5,
+        ease: 'power2.inOut',
+      }, 0);
+
+      // Camera dollies in
+      tl.to(cameraIntroOffset, {
+        y: 0,
+        z: 0,
+        duration: 2.5,
+        ease: 'power2.out',
+      }, 0);
+
+      tl.add(startDrift);
+    }
 
     // ── GSAP: ScrollTrigger — camera traverses the massif ──
     const mainEl = document.querySelector('main');
