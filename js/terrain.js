@@ -166,13 +166,12 @@ function showStatic() {
   }
 }
 
-/* js/intro.js's flight and text entrance run on the main thread too: building this scene (a 513² mesh)
-   in the middle of them would stall their frames, so it waits until the text has landed */
+/* js/intro.js's flight runs on the main thread too: building this scene (a 513² mesh) in the middle of it
+   would stall its frames, so it waits for the drawing to land, a still moment */
 function afterFlight() {
-  const intro = document.documentElement.dataset.intro;
-  if (intro === 'fly') return new Promise(r => addEventListener('intro:end', r, { once: true }));
-  if (intro === 'land') return new Promise(r => setTimeout(r, 600));
-  return Promise.resolve();
+  return document.documentElement.dataset.intro === 'fly'
+    ? new Promise(r => addEventListener('intro:over', r, { once: true }))
+    : Promise.resolve();
 }
 
 /* ── Main init ─────────────────────────────────────────── */
@@ -402,7 +401,7 @@ async function initTerrain() {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
-      if (frozen) render(); // resize clears the canvas; redraw the last frame
+      if (frozen || !running) render(); // resize clears the canvas; redraw the last frame
     }
     window.addEventListener('resize', onResize, { passive: true });
 
@@ -458,10 +457,10 @@ async function initTerrain() {
 
     // js/intro.js may be flying a line drawing of this exact view
     const intro = document.documentElement.dataset.intro;
-    if (['pending', 'hold', 'fly', 'land'].includes(intro)) {
+    if (['pending', 'hold', 'over', 'land'].includes(intro)) {
       // ── Hand-over from js/intro.js ──
       // Wait flat, at the camera's resting place and full opacity: the intro's drawing lands on exactly
-      // this frame. Once it hands over, raise the relief. The first frame compiles the shaders and
+      // this frame. Once it hands over (intro:over), raise the relief. The first frame compiles the shaders and
       // stalls the main thread: under the intro's loader, or after it has landed (see afterFlight).
       running = false;
       uniforms.uOpacity.value = 1.0;
@@ -472,14 +471,15 @@ async function initTerrain() {
         dispatchEvent(new Event('terrain:revealed'));
         gsap.to(uniforms.uDisplacement, {
           value: targetDisplacement,
-          duration: 2.2,
-          delay: 0.25, // the drawing's fade
-          ease: 'power2.inOut',
+          duration: 1.1,
+          delay: 0.2, // the drawing's fade
+          ease: 'power3.out',
           onComplete: () => { startDrift(); tuneQuality(); },
         });
       };
-      if (intro === 'land') { render(); reveal(); }
-      else { render(); addEventListener('intro:land', reveal, { once: true }); }
+      render();
+      if (intro === 'over' || intro === 'land') reveal();
+      else addEventListener('intro:over', reveal, { once: true });
     } else {
       // ── GSAP: Intro timeline ──
       const tl = gsap.timeline({
@@ -549,7 +549,9 @@ async function initTerrain() {
     }
 
     // ── Cleanup ──
-    window.addEventListener('beforeunload', () => {
+    // on a real unload only: a page kept in the back/forward cache comes back with its scene
+    window.addEventListener('pagehide', (e) => {
+      if (e.persisted) return;
       disposed = true;
       stopLoop();
       observer.disconnect();

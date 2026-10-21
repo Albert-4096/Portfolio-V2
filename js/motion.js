@@ -22,14 +22,15 @@ if (motionOK && root.dataset.intro === 'pending') {
   // the head script picked this visit for the intro and preloaded both modules; past this budget it gives up
   root.dataset.intro = 'hold';
   const late = new Promise((_, no) => setTimeout(no, ENTRANCE_BUDGET));
-  Promise.race([Promise.all([import('/vendor/motion-kit.min.js'), import('/js/intro.js')]), late]).then(([k, intro]) => {
-    bootTree(k); drawRules(k); springButtons(k);
+  const kit = import('/vendor/motion-kit.min.js');
+  kit.then(k => { bootTree(k); drawRules(k); springButtons(k); }, () => {});
+  Promise.race([Promise.all([kit, import('/js/intro.js')]), late]).then(([k, intro]) => {
     intro.playIntro(k);
   }).catch(() => {
     if (root.dataset.intro !== 'hold') return;
     document.querySelectorAll('.intro, .intro-canvas').forEach(el => el.remove());
     root.dataset.intro = 'off';
-    dispatchEvent(new Event('intro:land'));
+    dispatchEvent(new Event('intro:over'));
     dispatchEvent(new Event('intro:end'));
   });
 } else if (motionOK) {
