@@ -284,6 +284,9 @@ html[data-lang="ro"] .lang-thumb { clip-path: inset(0 0 0 50%); }
   transition: background-color var(--dur-fast) ease, border-color var(--dur-fast) ease, color var(--dur-fast) ease, transform 80ms ease;
 }
 .btn:active { transform: translateY(1px); }
+/* js/motion.js takes over the press with a spring; CSS stops animating transform so the two never fight */
+.springs .btn { transition-property: background-color, border-color, color; }
+.springs .btn:active { transform: none; }
 .btn--primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 .btn--ghost { background: rgba(10, 13, 11, 0.55); border-color: var(--border-strong); color: var(--text); }
 .btn--sm { min-height: 2.25rem; padding: 0 0.85rem; }
@@ -344,7 +347,7 @@ html[data-lang="ro"] .lang-thumb { clip-path: inset(0 0 0 50%); }
 }
 .sec-index { font: 400 var(--fs-label) var(--mono); color: var(--accent); }
 .sec-head h2 { font-size: var(--fs-h2); margin: 0; }
-.sec-rule { align-self: center; height: 1px; background: var(--border-strong); min-width: 2rem; }
+.sec-rule { align-self: center; height: 1px; background: var(--border-strong); min-width: 2rem; transform-origin: left; }
 .sec-meta { font: 400 var(--fs-micro) var(--mono); color: var(--muted); }
 .sec-intro { max-width: var(--prose); color: var(--text-2); margin-bottom: 2rem; }
 .prose { max-width: var(--prose); color: var(--text-2); }
@@ -593,6 +596,7 @@ html.consent-open { scroll-padding-bottom: 16rem; }
   .print-contact { font-family: var(--mono); font-size: 8pt; margin-top: 0.6em; }
   a { color: #000; text-decoration: none; }
   [data-reveal], [data-enter] { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .tree ul, .tree li { opacity: 1 !important; transform: none !important; clip-path: none !important; }
   .card, .log, .tree, .chip, .bridge__how { background: none; backdrop-filter: none; box-shadow: none; }
 
   .hero { padding: 0 0 0.2rem; }
