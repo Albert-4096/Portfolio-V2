@@ -9,3 +9,6 @@ F06.zip
 
 # nginx access/error logs (see nginx.conf)
 logs/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
