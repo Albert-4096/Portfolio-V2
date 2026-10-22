@@ -31,11 +31,8 @@
   if(!m('(prefers-reduced-motion: no-preference)')||m('(forced-colors: active)')||(c&&c.saveData)||location.hash
   ||(n&&n.type!=='navigate'&&n.type!=='reload')||document.visibilityState!=='visible'||document.prerendering)return;
   d.dataset.intro='pending';
-  // the intro, and the h1's weight, which the intro measures. Not the scene it flies: js/terrain.js starts those
-  // ~2 MB itself, and here they'd hold up the scripts that start the intro on a slow link
-  [['modulepreload','/js/intro.js'],['preload','/fonts/ibm-plex-sans-latin-700-normal.woff2','font']]
-  .forEach(function(a){var l=document.createElement('link');l.rel=a[0];l.href=a[1];if(a[2]){l.as=a[2];l.crossOrigin='anonymous'}
-  if(a[2]==='font')l.type='font/woff2';h.appendChild(l)});
+  // Preload the intro. The shared variable font is preloaded below; js/terrain.js loads its own scene.
+  var l=document.createElement('link');l.rel='modulepreload';l.href='/js/intro.js';h.appendChild(l);
   // js/motion.js takes over within 3 s, or the page enters as usual
   setTimeout(function(){if(d.dataset.intro==='pending'){d.dataset.intro='off';dispatchEvent(new Event('intro:over'));dispatchEvent(new Event('intro:end'))}},3000)})();
   </script>
@@ -56,7 +53,7 @@
   <meta name="theme-color" content="#0a0d0b">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-  <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/source-sans-3-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="modulepreload" href="/vendor/motion-kit.min.js" media="(prefers-reduced-motion: no-preference)">
@@ -95,6 +92,10 @@
     <p class="eyebrow" data-enter style="--i:0" data-i18n="en">ml&nbsp;· security&nbsp;· homelab&nbsp;· ctf&nbsp;· timișoara</p><p class="eyebrow" data-enter style="--i:0" data-i18n="ro">ml&nbsp;· securitate&nbsp;· homelab&nbsp;· ctf&nbsp;· timișoara</p>
     <h1 data-enter style="--i:1">Albert Gabor</h1>
     <p class="lede" data-enter style="--i:2" data-i18n="en">I'm Albert, a first-year AI student at UVT in Timișoara. I learn by building ML models, security tools, and the servers this site runs on.</p><p class="lede" data-enter style="--i:2" data-i18n="ro">Sunt Albert, student în anul I la AI, la UVT, în Timișoara. Învăț construind modele ML, unelte de securitate și serverele pe care rulează site-ul acesta.</p>
+    <p class="hero-roles" data-enter style="--i:2">
+      <span><span data-i18n="en">Developer at <strong>Aviseco</strong></span><span data-i18n="ro">Dezvoltator la <strong>Aviseco</strong></span></span>
+      <span><span data-i18n="en">Project manager at <strong>TEDx</strong></span><span data-i18n="ro">Manager de proiect la <strong>TEDx</strong></span></span>
+    </p>
     <div class="cta-row" data-enter style="--i:3">
       <a class="btn btn--primary" href="#contact"><span data-i18n="en">Get in touch</span><span data-i18n="ro">Scrie-mi</span></a>
       <a class="btn btn--ghost" href="#work"><span data-i18n="en">See my work</span><span data-i18n="ro">Vezi ce fac</span></a>
@@ -102,10 +103,10 @@
     <p class="hero-proof" data-enter style="--i:4" data-i18n="en">Self-hosting since Jan 2024 · ~130 containers · served from my home</p><p class="hero-proof" data-enter style="--i:4" data-i18n="ro">Self-hosting din ian. 2024 · ~130 de containere · găzduit acasă</p>
 
     <div class="win-banner" role="group" data-aria-en="HackTM 2026 win" data-aria-ro="Victoria de la HackTM 2026" aria-label="HackTM 2026 win" data-enter style="--i:5">
-      <span class="win-tag"><span data-i18n="en">winner</span><span data-i18n="ro">câștigător</span></span>
       <div>
-        <p class="win-title"><span data-i18n="en">HackTM 2026 · Product Innovation track</span><span data-i18n="ro">HackTM 2026 · categoria Product Innovation</span></p>
-        <p class="win-detail"><span data-i18n="en">My first hackathon. I led the build of EHDS-Service with my team. We won the €2,000 prize sponsored by Aumovio.</span><span data-i18n="ro">Primul meu hackathon. Am condus dezvoltarea EHDS-Service împreună cu echipa mea. Am câștigat premiul de 2.000 € oferit de Aumovio.</span></p>
+        <p class="win-title"><span data-i18n="en">HackTM 2026 winner</span><span data-i18n="ro">Câștigător HackTM 2026</span></p>
+        <p class="win-track"><span data-i18n="en">Product Innovation · €2,000 team prize</span><span data-i18n="ro">Product Innovation · premiu de echipă de 2.000 €</span></p>
+        <p class="win-detail"><span data-i18n="en">My first hackathon. I led the build of EHDS-Service with my team. Our prize was sponsored by Aumovio.</span><span data-i18n="ro">Primul meu hackathon. Am condus dezvoltarea EHDS-Service împreună cu echipa mea. Premiul nostru a fost oferit de Aumovio.</span></p>
         <p class="win-links"><a href="https://ehds.alberyt.xyz/" rel="noopener"><span data-i18n="en">Try the demo</span><span data-i18n="ro">Încearcă demo-ul</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://blog.alberyt.xyz/posts/hacktm-2026/" rel="noopener"><span data-i18n="en">How it went</span><span data-i18n="ro">Cum a fost (EN)</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p>
       </div>
     </div>
@@ -137,7 +138,7 @@
           <img src="/assets/project-ehds.jpg" width="1200" height="780" loading="lazy" decoding="async" alt="EHDS-Service" data-alt-en="EHDS-Service: upload a discharge report or try the sample document" data-alt-ro="EHDS-Service: încarcă un bilet de externare sau încearcă documentul demonstrativ">
         </a>
         <div class="card__content">
-        <div class="card__meta"><time datetime="2026-05">2026</time><span class="badge"><span data-i18n="en">HackTM 2026 winner</span><span data-i18n="ro">câștigător HackTM 2026</span></span></div>
+        <div class="card__meta"><span class="badge badge--award"><span data-i18n="en">HackTM 2026 · Winner</span><span data-i18n="ro">HackTM 2026 · Câștigător</span></span></div>
         <h3 id="p-ehds" class="card__title">EHDS-Service</h3>
         <p class="card__body"><span data-i18n="en">A nine-stage pipeline that turns Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles. I led the build with my team.</span><span data-i18n="ro">Un pipeline în nouă etape care transformă biletele de externare în format PDF în bundle-uri HL7 FHIR R4 valide. Am condus dezvoltarea împreună cu echipa mea.</span></p>
         <details class="card__details">
@@ -200,11 +201,19 @@
     <span class="sec-index" aria-hidden="true">02</span>
     <h2 id="now-h"><span data-i18n="en">Now</span><span data-i18n="ro">Acum</span></h2>
     <span class="sec-rule" aria-hidden="true"></span>
-    <span class="sec-meta"><span data-i18n="en">Last updated: 2 October 2026</span><span data-i18n="ro">Actualizat: 2 octombrie 2026</span></span>
+    <span class="sec-meta"><span data-i18n="en">Last updated: 22 October 2026</span><span data-i18n="ro">Actualizat: 22 octombrie 2026</span></span>
   </header>
     <p class="sec-intro"><span data-i18n="en">What I'm learning and building right now.</span><span data-i18n="ro">Ce învăț și construiesc acum.</span></p>
     <!-- NOW: edit entries here. Newest first. Both languages. -->
     <ol class="log" data-reveal>
+      <li class="log__item" data-status="active">
+        <div class="log__when"><span data-i18n="en">Current role</span><span data-i18n="ro">Rol actual</span></div>
+        <div class="log__main"><p class="log__title"><span data-i18n="en">Developer at Aviseco</span><span data-i18n="ro">Dezvoltator la Aviseco</span></p></div>
+      </li>
+      <li class="log__item" data-status="active">
+        <div class="log__when"><span data-i18n="en">Current role</span><span data-i18n="ro">Rol actual</span></div>
+        <div class="log__main"><p class="log__title"><span data-i18n="en">Project manager at TEDx</span><span data-i18n="ro">Manager de proiect la TEDx</span></p></div>
+      </li>
       <li class="log__item" data-status="active">
         <div class="log__when"><time datetime="2026-10"><span data-i18n="en">Oct 2026</span><span data-i18n="ro">oct. 2026</span></time><span class="log__status" role="group" data-aria-en="Status" data-aria-ro="Stare" aria-label="Status"><span class="log__dot"></span><span data-i18n="en">started</span><span data-i18n="ro">început</span></span></div>
         <div class="log__main"><p class="log__title"><span data-i18n="en">First weeks at UVT</span><span data-i18n="ro">Primele săptămâni la UVT</span></p><p class="log__note"><span data-i18n="en">Year one of my BSc in Artificial Intelligence at West University of Timișoara.</span><span data-i18n="ro">Anul I de licență în Inteligență Artificială, la Universitatea de Vest din Timișoara.</span></p></div>
@@ -333,7 +342,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-row"><p class="terrain-cap"><span data-i18n="en">Intro: Retezat Mountains, 306–2,505 m · 1 m LiDAR, ANCPI tile F06 · three.js</span><span data-i18n="ro">Intro: Munții Retezat, 306–2.505 m · LiDAR de 1 m, date ANCPI F06 · three.js</span></p></div>
+    <div class="footer-row"><p class="terrain-cap"><span data-i18n="en">Intro &amp; contours: Retezat Mountains, 306–2,505 m · 1 m LiDAR, ANCPI tile F06 · three.js</span><span data-i18n="ro">Intro și curbe de nivel: Munții Retezat, 306–2.505 m · LiDAR de 1 m, date ANCPI F06 · three.js</span></p></div>
     <div class="footer-row"><p class="footer-links">
       <a href="/privacy.html"><span data-i18n="en">Privacy</span><span data-i18n="ro">Confidențialitate</span></a>
       <button type="button" class="linklike" id="privacy-settings"><span data-i18n="en">analytics settings</span><span data-i18n="ro">setări statistici</span></button>
