@@ -4,8 +4,7 @@
                · otherwise the mark draws itself (once per session)
                · and the hero eyebrow decodes like terminal output
                · the homelab tree boots top-down
-     Motion    · section rules draw out as their heading scrolls in
-               · buttons press on a spring
+     Motion    · buttons press on a spring
 
    Both libraries ship as one tree-shaken file, /vendor/motion-kit.min.js
    (scripts/build_motion_kit.sh), fetched only when motion is allowed.
@@ -23,7 +22,7 @@ if (motionOK && root.dataset.intro === 'pending') {
   root.dataset.intro = 'hold';
   const late = new Promise((_, no) => setTimeout(no, ENTRANCE_BUDGET));
   const kit = import('/vendor/motion-kit.min.js');
-  kit.then(k => { bootTree(k); drawRules(k); springButtons(k); }, () => {});
+  kit.then(k => { bootTree(k); springButtons(k); }, () => {});
   Promise.race([Promise.all([kit, import('/js/intro.js')]), late]).then(([k, intro]) => {
     intro.playIntro(k);
   }).catch(() => {
@@ -38,7 +37,7 @@ if (motionOK && root.dataset.intro === 'pending') {
   const giveUp = () => hold.forEach(h => h.restore());
   const deadline = setTimeout(giveUp, ENTRANCE_BUDGET);
   const kit = import('/vendor/motion-kit.min.js');
-  kit.then(k => { bootTree(k); drawRules(k); springButtons(k); }, () => {});
+  kit.then(k => { bootTree(k); springButtons(k); }, () => {});
   kit.then(k => {
     clearTimeout(deadline);
     hold.forEach(h => h.play(k));
@@ -133,20 +132,6 @@ function bootTree({ animate, stagger, inView }) {
       duration: 220, delay: stagger(25, { start: 0 }), ease: 'out(3)',
     }), clear);
   }, { amount: 0.15 });
-}
-
-/* ── Section rules: draw out left→right once, alongside the heading's own reveal ── */
-function drawRules({ animateMini, inView }) {
-  document.querySelectorAll('.section .sec-rule').forEach(rule => {
-    const head = rule.closest('.sec-head');
-    if (head.getBoundingClientRect().top < innerHeight) return;
-    rule.style.transform = 'scaleX(0)';
-    inView(head, () => {
-      animateMini(rule, { transform: ['scaleX(0)', 'scaleX(1)'] }, { duration: 0.25, delay: 0, ease: [0.22, 1, 0.36, 1] })
-        .then(() => { rule.style.transform = ''; });
-    }, { margin: '0px 0px -8% 0px' });
-  });
-  addEventListener('beforeprint', () => document.querySelectorAll('.sec-rule').forEach(r => { r.style.transform = ''; }));
 }
 
 /* ── Buttons: a short squash on press, a little overshoot on release ── */
