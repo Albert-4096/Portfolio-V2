@@ -37,13 +37,9 @@ if (motionOK && root.dataset.intro === 'pending') {
   const hold = [holdMark(), holdEyebrow()].filter(Boolean);
   const giveUp = () => hold.forEach(h => h.restore());
   const deadline = setTimeout(giveUp, ENTRANCE_BUDGET);
-  // the live terrain's first frame blocks the main thread; a scramble caught in it freezes as gibberish
-  const settled = root.dataset.terrain === 'live'
-    ? new Promise(r => addEventListener('terrain:ready', () => requestAnimationFrame(r), { once: true }))
-    : null;
   const kit = import('/vendor/motion-kit.min.js');
   kit.then(k => { bootTree(k); drawRules(k); springButtons(k); }, () => {});
-  Promise.all([kit, settled]).then(([k]) => {
+  kit.then(k => {
     clearTimeout(deadline);
     hold.forEach(h => h.play(k));
   }, () => { clearTimeout(deadline); giveUp(); });
@@ -108,7 +104,7 @@ function holdEyebrow() {
     () => { el.innerHTML = html; el.style.minHeight = ''; },
     ({ animate, scrambleText }) => track(animate(el.lastChild, {
       innerHTML: scrambleText({ text, chars: 'a-z0-9', cursor: '_' }),
-      duration: 1000, delay: 100,
+      duration: 400, delay: 0,
     })),
   );
 }
@@ -130,11 +126,11 @@ function bootTree({ animate, stagger, inView }) {
   inView(tree, () => {
     track(animate(branches, {
       clipPath: ['inset(0 0 100% 0)', 'inset(0 0 0% 0)'],
-      duration: 900, delay: stagger(220, { start: 120 }), ease: 'inOut(3)',
+      duration: 280, delay: stagger(70, { start: 0 }), ease: 'inOut(3)',
     }));
     track(animate(nodes, {
       opacity: [0, 1], x: [-8, 0],
-      duration: 420, delay: stagger(65, { start: 80 }), ease: 'out(3)',
+      duration: 220, delay: stagger(25, { start: 0 }), ease: 'out(3)',
     }), clear);
   }, { amount: 0.15 });
 }
@@ -146,7 +142,7 @@ function drawRules({ animateMini, inView }) {
     if (head.getBoundingClientRect().top < innerHeight) return;
     rule.style.transform = 'scaleX(0)';
     inView(head, () => {
-      animateMini(rule, { transform: ['scaleX(0)', 'scaleX(1)'] }, { duration: 1.1, delay: 0.1, ease: [0.22, 1, 0.36, 1] })
+      animateMini(rule, { transform: ['scaleX(0)', 'scaleX(1)'] }, { duration: 0.25, delay: 0, ease: [0.22, 1, 0.36, 1] })
         .then(() => { rule.style.transform = ''; });
     }, { margin: '0px 0px -8% 0px' });
   });
@@ -158,6 +154,6 @@ function springButtons({ animateMini, press, spring }) {
   root.classList.add('springs');
   press('.btn', el => {
     animateMini(el, { transform: 'scale(0.96)' }, { type: spring, visualDuration: 0.12, bounce: 0 });
-    return () => animateMini(el, { transform: 'scale(1)' }, { type: spring, visualDuration: 0.35, bounce: 0.45 });
+    return () => animateMini(el, { transform: 'scale(1)' }, { type: spring, visualDuration: 0.18, bounce: 0 });
   });
 }

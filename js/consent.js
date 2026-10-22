@@ -13,8 +13,8 @@
     <h2 id="consent-title" class="consent__title">${T('Can I count your visit?', 'Pot să-ți număr vizita?')}</h2>
     <p id="consent-text" class="consent__text">
       ${T(
-        "If you say yes, I'll load Umami from my own server to see what people read, and record about 15% of visits (max 5 min, form fields masked). Nothing loads otherwise.",
-        'Dacă spui da, încarc Umami de pe serverul meu ca să văd ce citesc oamenii și înregistrez cam 15% din vizite (max. 5 min, câmpurile de formular ascunse). Altfel nu se încarcă nimic.'
+        "Optional self-hosted analytics, including recordings of about 15% of visits (up to 5 min, form fields masked). Nothing loads unless you allow it.",
+        'Statistici opționale pe serverul meu, cu înregistrări pentru circa 15% din vizite (max. 5 min, câmpurile ascunse). Nimic nu se încarcă fără acordul tău.'
       )}
       <a href="/privacy.html">${T('Details', 'Detalii')}</a>
     </p>

@@ -94,7 +94,7 @@
   <section class="hero"><div class="container">
     <p class="eyebrow" data-enter style="--i:0" data-i18n="en">ml&nbsp;· security&nbsp;· homelab&nbsp;· ctf&nbsp;· timișoara</p><p class="eyebrow" data-enter style="--i:0" data-i18n="ro">ml&nbsp;· securitate&nbsp;· homelab&nbsp;· ctf&nbsp;· timișoara</p>
     <h1 data-enter style="--i:1">Albert Gabor</h1>
-    <p class="lede" data-enter style="--i:2" data-i18n="en">Hey there, I'm Albert, a first-year AI student at UVT. I'm really curious, and I learn by building: ML models, security tools, and the servers this site runs on.</p><p class="lede" data-enter style="--i:2" data-i18n="ro">Salut, sunt Albert, student în anul I la AI, la UVT. Sunt foarte curios și învăț construind: modele ML, unelte de securitate și serverele pe care rulează site-ul ăsta.</p>
+    <p class="lede" data-enter style="--i:2" data-i18n="en">I'm Albert, a first-year AI student at UVT in Timișoara. I learn by building ML models, security tools, and the servers this site runs on.</p><p class="lede" data-enter style="--i:2" data-i18n="ro">Sunt Albert, student în anul I la AI, la UVT, în Timișoara. Învăț construind modele ML, unelte de securitate și serverele pe care rulează site-ul acesta.</p>
     <div class="cta-row" data-enter style="--i:3">
       <a class="btn btn--primary" href="#contact"><span data-i18n="en">Get in touch</span><span data-i18n="ro">Scrie-mi</span></a>
       <a class="btn btn--ghost" href="#work"><span data-i18n="en">See my work</span><span data-i18n="ro">Vezi ce fac</span></a>
@@ -105,12 +105,10 @@
       <span class="win-tag"><span data-i18n="en">winner</span><span data-i18n="ro">câștigător</span></span>
       <div>
         <p class="win-title"><span data-i18n="en">HackTM 2026 · Product Innovation track</span><span data-i18n="ro">HackTM 2026 · categoria Product Innovation</span></p>
-        <p class="win-detail"><span data-i18n="en">My first hackathon. I led the build, with my team, and we won the Product Innovation track (sponsored by Aumovio, €2,000). The project turns Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles.</span><span data-i18n="ro">Primul meu hackathon. Am condus dezvoltarea, cu echipa mea, și am câștigat categoria Product Innovation (sponsorizată de Aumovio, 2.000 €). Proiectul transformă PDF-urile cu bilete de externare din spitalele românești în bundle-uri HL7 FHIR R4 valide.</span></p>
+        <p class="win-detail"><span data-i18n="en">My first hackathon. I led the build of EHDS-Service with my team. We won the €2,000 prize sponsored by Aumovio.</span><span data-i18n="ro">Primul meu hackathon. Am condus dezvoltarea EHDS-Service împreună cu echipa mea. Am câștigat premiul de 2.000 € oferit de Aumovio.</span></p>
         <p class="win-links"><a href="https://ehds.alberyt.xyz/" rel="noopener"><span data-i18n="en">Try the demo</span><span data-i18n="ro">Încearcă demo-ul</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://blog.alberyt.xyz/posts/hacktm-2026/" rel="noopener"><span data-i18n="en">How it went</span><span data-i18n="ro">Cum a fost (EN)</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p>
       </div>
     </div>
-
-    <p class="hero-cap" aria-hidden="true"><span data-i18n="en">Retezat Mountains · 1 m LiDAR</span><span data-i18n="ro">Munții Retezat · LiDAR de 1 m</span></p>
 
     <p class="print-contact print-only">contact@alberyt.xyz · linkedin.com/in/albert-gabor-5a763b36a · github.com/Albert-4096 · alberyt.xyz</p>
   </div></section>
@@ -134,27 +132,42 @@
   </header>
 
     <div class="work-featured">
-      <article class="card card--featured" aria-labelledby="p-ehds" data-reveal>
+      <article class="card card--featured card--lead" aria-labelledby="p-ehds" data-reveal>
+        <a class="card__preview" href="https://ehds.alberyt.xyz/" rel="noopener" data-aria-en="Open the EHDS-Service demo" data-aria-ro="Deschide demo-ul EHDS-Service" aria-label="Open the EHDS-Service demo">
+          <img src="/assets/project-ehds.jpg" width="1200" height="780" loading="lazy" decoding="async" alt="EHDS-Service" data-alt-en="EHDS-Service: upload a discharge report or try the sample document" data-alt-ro="EHDS-Service: încarcă un bilet de externare sau încearcă documentul demonstrativ">
+        </a>
+        <div class="card__content">
         <div class="card__meta"><time datetime="2026-05">2026</time><span class="badge"><span data-i18n="en">HackTM 2026 winner</span><span data-i18n="ro">câștigător HackTM 2026</span></span></div>
         <h3 id="p-ehds" class="card__title">EHDS-Service</h3>
-        <p class="card__body"><span data-i18n="en">Romanian hospitals hand out discharge papers as PDFs. The European Health Data Space wants HL7 FHIR R4. We built the part in between: a 9-stage pipeline that turns the PDF into a valid FHIR bundle. I led the build, with my team.</span><span data-i18n="ro">Spitalele din România dau biletele de externare ca PDF-uri. Spațiul european al datelor privind sănătatea cere HL7 FHIR R4. Noi am construit partea dintre ele: un pipeline în 9 etape care face din PDF un bundle FHIR valid. Am condus dezvoltarea, cu echipa mea.</span></p>
+        <p class="card__body"><span data-i18n="en">A nine-stage pipeline that turns Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles. I led the build with my team.</span><span data-i18n="ro">Un pipeline în nouă etape care transformă biletele de externare în format PDF în bundle-uri HL7 FHIR R4 valide. Am condus dezvoltarea împreună cu echipa mea.</span></p>
+        <details class="card__details">
+          <summary><span data-i18n="en">Build notes &amp; stack</span><span data-i18n="ro">Detalii tehnice</span></summary>
         <p class="card__hard"><span class="card__label"><span data-i18n="en">hard part</span><span data-i18n="ro">partea grea</span></span> <span data-i18n="en">Not the code. We spent the first three days figuring out what the regulation actually asks for.</span><span data-i18n="ro">Nu codul. Primele trei zile am încercat doar să înțelegem ce cere de fapt regulamentul.</span></p>
         <ul class="tags"><li>Python</li><li>FastAPI</li><li>React</li><li>TypeScript</li><li>HL7 FHIR R4</li></ul>
-        <p class="card__links"><a href="https://ehds.alberyt.xyz" rel="noopener"><span data-i18n="en">Try it (1 click)</span><span data-i18n="ro">Încearcă (1 click)</span><span class="vh"> – EHDS-Service</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://github.com/Albert-4096/EHDS-Service" rel="noopener"><span data-i18n="en">GitHub</span><span data-i18n="ro">GitHub</span><span class="vh"> – EHDS-Service</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://blog.alberyt.xyz/posts/hacktm-2026/" rel="noopener"><span data-i18n="en">Write-up</span><span data-i18n="ro">Articol (EN)</span><span class="vh"> – EHDS-Service</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p>
-        <p class="card__demo"><span data-i18n="en">The demo runs a synthetic patient's discharge PDF through the whole pipeline in one click: 78 FHIR resources, 0 validation errors.</span><span data-i18n="ro">Demo-ul trece într-un click biletul de externare al unui pacient fictiv prin tot pipeline-ul: 78 de resurse FHIR, 0 erori de validare.</span></p>
+        </details>
+        <p class="card__links"><a href="https://ehds.alberyt.xyz" rel="noopener"><span data-i18n="en">Try the demo</span><span data-i18n="ro">Încearcă demo-ul</span><span class="vh"> – EHDS-Service</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://github.com/Albert-4096/EHDS-Service" rel="noopener"><span data-i18n="en">GitHub</span><span data-i18n="ro">GitHub</span><span class="vh"> – EHDS-Service</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://blog.alberyt.xyz/posts/hacktm-2026/" rel="noopener"><span data-i18n="en">Write-up</span><span data-i18n="ro">Articol (EN)</span><span class="vh"> – EHDS-Service</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p>
+        <p class="card__demo"><span data-i18n="en">The demo uses a synthetic patient: one PDF becomes 78 FHIR resources, with 0 validation errors.</span><span data-i18n="ro">Demo-ul folosește un pacient fictiv: un PDF devine 78 de resurse FHIR, cu 0 erori de validare.</span></p>
+        </div>
       </article>
 
       <article class="card card--featured" aria-labelledby="p-kproject" data-reveal>
         <div class="card__meta"><span class="badge badge--muted"><span data-i18n="en">private · Sep 2026</span><span data-i18n="ro">privat · sept. 2026</span></span></div>
         <h3 id="p-kproject" class="card__title">K-Project</h3>
-        <p class="card__body"><span data-i18n="en">5,500+ YouTube videos I'd saved, turned into a library I can actually search. Captions (or Whisper when there are none), bge-m3 embeddings, and hybrid search in Postgres with pgvector. Claude Code queries it over MCP.</span><span data-i18n="ro">Peste 5.500 de videoclipuri YouTube salvate, transformate într-o bibliotecă în care chiar pot căuta. Subtitrări (sau Whisper, când nu există), embedding-uri bge-m3 și căutare hibridă în Postgres cu pgvector. Claude Code o interoghează prin MCP.</span></p>
+        <p class="card__body"><span data-i18n="en">A searchable library of 5,500+ YouTube videos I'd saved. Claude Code can search it directly through MCP.</span><span data-i18n="ro">O bibliotecă în care pot căuta printre peste 5.500 de videoclipuri YouTube salvate. Claude Code o poate interoga direct prin MCP.</span></p>
+        <details class="card__details" open>
+          <summary><span data-i18n="en">How it works</span><span data-i18n="ro">Cum funcționează</span></summary>
+          <p class="card__body"><span data-i18n="en">Captions, or Whisper when there are none, feed bge-m3 embeddings and hybrid search in PostgreSQL with pgvector.</span><span data-i18n="ro">Subtitrările, sau Whisper când acestea lipsesc, alimentează embedding-uri bge-m3 și căutarea hibridă în PostgreSQL cu pgvector.</span></p>
         <ul class="tags"><li>Python</li><li>PostgreSQL</li><li>pgvector</li><li>Whisper</li><li>MCP</li></ul>
+        </details>
         <p class="card__links"><span data-i18n="en">Private repo, for now.</span><span data-i18n="ro">Repo privat, deocamdată.</span></p>
       </article>
 
       <article class="card card--featured" aria-labelledby="p-crypto" data-reveal>
         <div class="card__meta"><span class="badge badge-live"><span data-i18n="en">live</span><span data-i18n="ro">live</span></span></div>
         <h3 id="p-crypto" class="card__title">Cryptography Atlas</h3>
+        <a class="card__preview" href="https://crypto.alberyt.xyz/" rel="noopener" data-aria-en="Open Cryptography Atlas" data-aria-ro="Deschide Cryptography Atlas" aria-label="Open Cryptography Atlas">
+          <img src="/assets/project-crypto.jpg" width="1200" height="780" loading="lazy" decoding="async" alt="Cryptography Atlas" data-alt-en="Cryptography Atlas: searchable visual guides to AES, RSA, and SHA-256" data-alt-ro="Cryptography Atlas: ghiduri vizuale pentru AES, RSA și SHA-256">
+        </a>
         <p class="card__body"><span data-i18n="en">A small visual guide to a few cryptographic algorithms: what they do, where they're used, and their quirks.</span><span data-i18n="ro">Un mic ghid vizual pentru câțiva algoritmi criptografici: ce fac, unde sunt folosiți și ce ciudățenii au.</span></p>
         <ul class="tags"><li>React</li><li>Vite</li></ul>
         <p class="card__links"><a href="https://crypto.alberyt.xyz" rel="noopener"><span data-i18n="en">crypto.alberyt.xyz</span><span data-i18n="ro">crypto.alberyt.xyz</span><span class="vh"> – Cryptography Atlas</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a> <a href="https://github.com/Albert-4096/cryptography-atlas" rel="noopener"><span data-i18n="en">GitHub</span><span data-i18n="ro">GitHub</span><span class="vh"> – Cryptography Atlas</span> <svg class="i-ext" aria-hidden="true" viewBox="0 0 12 12" width=".75em" height=".75em"><path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></p>
@@ -189,7 +202,7 @@
     <span class="sec-rule" aria-hidden="true"></span>
     <span class="sec-meta"><span data-i18n="en">Last updated: 2 October 2026</span><span data-i18n="ro">Actualizat: 2 octombrie 2026</span></span>
   </header>
-    <p class="sec-intro"><span data-i18n="en">What I'm working on right now. If this list goes stale for more than a month, email me and complain :)</span><span data-i18n="ro">La ce lucrez acum. Dacă lista asta stă neschimbată mai mult de o lună, scrie-mi și ceartă-mă :)</span></p>
+    <p class="sec-intro"><span data-i18n="en">What I'm learning and building right now.</span><span data-i18n="ro">Ce învăț și construiesc acum.</span></p>
     <!-- NOW: edit entries here. Newest first. Both languages. -->
     <ol class="log" data-reveal>
       <li class="log__item" data-status="active">
@@ -320,8 +333,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-row"><p class="terrain-cap terrain-cap--live"><span data-i18n="en">Retezat Mountains, 306–2,505 m · 1 m LiDAR, ANCPI tile F06 · rendered live with three.js</span><span data-i18n="ro">Munții Retezat, 306–2.505 m · LiDAR de 1 m, date ANCPI F06 · randat live cu three.js</span></p>
-    <p class="terrain-cap terrain-cap--still"><span data-i18n="en">Retezat Mountains, 306–2,505 m · 1 m LiDAR, ANCPI tile F06 · here as a still image</span><span data-i18n="ro">Munții Retezat, 306–2.505 m · LiDAR de 1 m, date ANCPI F06 · aici ca imagine statică</span></p></div>
+    <div class="footer-row"><p class="terrain-cap"><span data-i18n="en">Intro: Retezat Mountains, 306–2,505 m · 1 m LiDAR, ANCPI tile F06 · three.js</span><span data-i18n="ro">Intro: Munții Retezat, 306–2.505 m · LiDAR de 1 m, date ANCPI F06 · three.js</span></p></div>
     <div class="footer-row"><p class="footer-links">
       <a href="/privacy.html"><span data-i18n="en">Privacy</span><span data-i18n="ro">Confidențialitate</span></a>
       <button type="button" class="linklike" id="privacy-settings"><span data-i18n="en">analytics settings</span><span data-i18n="ro">setări statistici</span></button>

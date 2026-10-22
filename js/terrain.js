@@ -1,33 +1,8 @@
-/* ─── Terrain Background ─────────────────────────────────
-   Real-terrain topographic contour background for alberyt.xyz.
-   Renders a 1 m LiDAR DTM of the Retezat massif (ANCPI F06 tile)
-   as a dark scene with glowing accent-coloured contour lines.
+/* ─── Intro terrain ─────────────────────────────────────
+   The automatic intro flies the Retezat LiDAR scene. Its last frame fades into
+   the page's quiet background, then releases the WebGL resources. */
 
-   Dependencies: three.js (core), gsap + ScrollTrigger, fetched only
-   when the live scene will run (see skipLiveScene); three.js alone on
-   an intro visit to a still device, which flies the scene too.
-   Data: retezat-heightmap.png (16-bit packed R/G), retezat-meta.json
-   Fallback: retezat-poster-*.webp via CSS for touch / small screens /
-   reduced-motion / WebGL failure
-
-   Intro: on an intro visit (html[data-intro]) js/intro.js flies this very scene. stage() builds it; its
-   frame() sets a camera and the intro uniforms and renders at once. The shader merges the mark's A, as a
-   mountain, into the real heights, so the A's rings bend into the terrain's own lines. release() lands it on
-   the resting view: the loop takes over (live), or the frame is frozen into the still image (phones).
-   If the intro gives up, the scene enters the usual way.
-   ─────────────────────────────────────────────────────── */
-
-let THREE, gsap, ScrollTrigger;
-
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
+let THREE;
 
 /* ── CSS token reader ──────────────────────────────────── */
 function cssVar(name) {
@@ -50,18 +25,15 @@ const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matc
 const isCoarse = matchMedia('(pointer: coarse)').matches;
 const isSmallViewport = window.innerWidth < MOBILE_BP;
 const skipLiveScene = isCoarse || isSmallViewport || prefersReducedMotion;
-root.dataset.terrain = skipLiveScene ? 'still' : 'live';
+root.dataset.terrain = 'quiet';
 
 /* The inline head script sets html[data-intro] to pending before any module runs: js/intro.js flies this scene */
 const introVisit = ['pending', 'hold'].includes(root.dataset.intro);
 let inIntro = introVisit; // false once the intro has given up
 
-/* Start the downloads at module evaluation: for the live scene, and on an intro visit for the still ones too,
-   which fly it as well. A failure surfaces where the scene is built, never as an unhandledrejection. */
+/* Download scene assets only when the automatic intro needs them. */
 const quiet = (p) => { p.catch(() => {}); return p; };
-const wanted = !skipLiveScene || introVisit;
-const three = wanted ? quiet(import('three')) : null;
-const libs = skipLiveScene ? null : quiet(loadScript('/vendor/gsap.min.js').then(() => loadScript('/vendor/ScrollTrigger.min.js')));
+const three = introVisit ? quiet(import('three')) : null;
 // the heightmap and its meta: at once on an intro visit (it waits on them), otherwise when the scene is built
 let fetched = null;
 const assets = () => fetched ||= [
@@ -247,27 +219,14 @@ const fragmentShader = /* glsl */ `
   }
 `;
 
-/* ── Static background (poster image, set in CSS; or, from the intro, a frozen frame of the scene) ─────── */
-function showStatic(image) {
-  root.dataset.terrain = 'still';
-  const div = document.querySelector('.terrain-static-bg') || document.createElement('div');
-  div.className = 'terrain-static-bg';
-  div.setAttribute('aria-hidden', 'true');
-  if (image) div.style.backgroundImage = `url("${image}")`;
-  if (!div.isConnected) document.body.prepend(div);
-  if (!document.querySelector('.terrain-overlay')) {
-    const overlay = document.createElement('div');
-    overlay.className = 'terrain-overlay';
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.prepend(overlay);
-  }
+function showQuiet() {
+  root.dataset.terrain = 'quiet';
+  document.querySelector('.terrain-overlay')?.remove();
   dispatchEvent(new Event('terrain:ready'));
-  return div;
 }
 
 /* ── The scene ─────────────────────────────────────────── */
-// Built once, by whoever needs it first: js/intro.js (stage) or the usual entrance (initTerrain).
-// Resolves with null when there is no scene (the poster is up already).
+// Built once when js/intro.js requests its stage.
 let building = null;
 const build = () => building ||= buildScene();
 
@@ -277,20 +236,16 @@ async function buildScene() {
   let canvas, renderer, shaderFailed = false;
 
   function fail(what, err) {
-    console.warn(`[terrain] ${what}, falling back to static:`, err);
+    console.warn(`[terrain] ${what}, using the quiet background:`, err);
     renderer?.dispose();
     renderer?.forceContextLoss();
     canvas?.remove();
-    showStatic();
+    showQuiet();
     return null;
   }
 
   try {
-    [THREE] = await Promise.all([three, libs]);
-    if (!skipLiveScene) {
-      ({ gsap, ScrollTrigger } = window);
-      gsap.registerPlugin(ScrollTrigger);
-    }
+    THREE = await three;
   } catch (err) {
     return fail('Failed to load dependencies', err);
   }
@@ -319,11 +274,11 @@ async function buildScene() {
       alpha: true,
       powerPreference: 'high-performance',
     });
-    // a still device flies the intro too, and its last frame becomes the poster: a little finer there
+    // Keep the existing intro resolution on touch devices.
     renderer.setPixelRatio(Math.min(devicePixelRatio, skipLiveScene ? 2 : 1.5));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
-    // three.js reports a shader that won't compile or link instead of throwing; prepare() turns it into the poster
+    // three.js reports shader failures instead of throwing; prepare() checks them.
     renderer.debug.onShaderError = (gl, program, vs, fs) => {
       shaderFailed = true;
       console.error('[terrain] shader failed:', gl.getProgramInfoLog(program), gl.getShaderInfoLog(vs), gl.getShaderInfoLog(fs));
@@ -425,310 +380,40 @@ async function buildScene() {
   }
 }
 
-// What the built scene does: render, flight, loop, scroll, parallax and drift
 function wire({ canvas, renderer, scene, camera, geometry, material, heightmapTex, uniforms, contourInterval, targetDisplacement, shaderFailed }) {
-  // ── State ──
-  let rafId = null;
-  let isVisible = true;
-  let isTabVisible = true;
   let disposed = false;
-  let frozen = false;
-  let running = false; // the loop and the parallax run from enter() or release(); until then only frame() draws
-  let state = 'idle';  // idle → staged → landed (js/intro.js flew it) | entered (the usual way) | dropped (no scene)
-  let announced = false;
-  let observer, quickX, quickY;
-
-  // Decoupled camera controls for scroll, parallax, drift, and intro dolly
-  const cameraBase = { x: REST.pos[0], y: REST.pos[1], z: REST.pos[2] };
-  const cameraOffset = { x: 0, y: 0 };
-  const cameraIntroOffset = { y: 0.3, z: 0.8 };
-  const cameraDrift = { x: 0, y: 0 };
-  const lookAtTarget = new THREE.Vector3(...REST.look);
+  let state = 'idle';
   const target = new THREE.Vector3();
+  uniforms.uInkWidth.value.set(0.75, 0.55).multiplyScalar(renderer.getPixelRatio());
 
-  // The mark's lines are a fixed width in CSS px: half-widths in drawing-buffer px follow the pixel ratio
-  function setRatio(ratio) {
-    renderer.setPixelRatio(ratio);
-    uniforms.uInkWidth.value.set(0.75, 0.55).multiplyScalar(renderer.getPixelRatio());
-  }
-  setRatio(renderer.getPixelRatio());
-
-  // ── Render loop ──
-  const clock = new THREE.Clock();
-
-  function render() {
-    if (disposed) return;
-
-    uniforms.uTime.value = clock.getElapsedTime();
-    uniforms.uCameraPos.value.copy(camera.position);
-
-    // Apply parallax offset + scroll base + intro offset + idle drift
-    camera.position.x = cameraBase.x + cameraOffset.x + cameraDrift.x;
-    camera.position.y = cameraBase.y + cameraOffset.y + cameraIntroOffset.y + cameraDrift.y;
-    camera.position.z = cameraBase.z + cameraIntroOffset.z;
-
-    // Always orient camera toward lookAtTarget
-    camera.lookAt(lookAtTarget);
-
-    renderer.render(scene, camera);
-    // the first frame compiles the shaders and blocks the main thread; js/motion.js waits it out
-    if (!announced) { announced = true; dispatchEvent(new Event('terrain:ready')); }
-  }
-
-  function loop() {
-    if (disposed || frozen) return;
-    if (!isVisible || !isTabVisible) {
-      rafId = null;
-      return;
-    }
-    rafId = requestAnimationFrame(loop);
-    render();
-  }
-
-  function startLoop() {
-    if (rafId != null || disposed || frozen || !running) return;
-    clock.start();
-    loop();
-  }
-
-  function stopLoop() {
-    if (rafId != null) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
-    }
-  }
-
-  // ── Adaptive quality: median of 90 frame deltas; >22 ms → DPR 1, still >28 ms → freeze ──
-  function sampleFrames(done) {
-    const deltas = [];
-    let last = performance.now();
-    (function tick(now) {
-      if (disposed) return;
-      if (isVisible && isTabVisible) deltas.push(now - last);
-      last = now;
-      if (deltas.length < 90) { requestAnimationFrame(tick); return; }
-      deltas.sort((x, y) => x - y);
-      done(deltas[45]);
-    })(last);
-  }
-
-  function tuneQuality() {
-    sampleFrames((median) => {
-      if (median <= 22) return;
-      setRatio(1);
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      sampleFrames((again) => {
-        if (again <= 28) return;
-        frozen = true;
-        stopLoop();
-        console.info('[terrain] low fps, frozen');
-      });
-    });
-  }
-
-  // ── Resize handler ──
   function onResize() {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    camera.aspect = w / h;
+    camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-    // resize clears the canvas; redraw the last frame (while js/intro.js flies, its own pose)
-    if (!running) renderer.render(scene, camera);
-    else if (frozen) render();
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.render(scene, camera);
   }
-  window.addEventListener('resize', onResize, { passive: true });
+  addEventListener('resize', onResize, { passive: true });
 
-  // ── Visibility: Page Visibility API ──
-  function onVisibility() {
-    isTabVisible = !document.hidden;
-    if (isTabVisible && isVisible) startLoop();
-    else stopLoop();
-  }
-
-  // ── Pointer parallax ──
-  const parallaxRange = 0.08;
-  function onMove(e) {
-    if (!running) return; // the intro's flight is of the centred camera
-    const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-    const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-    quickX(nx * parallaxRange);
-    quickY(ny * parallaxRange * 0.5);
-  }
-
-  if (!skipLiveScene) {
-    // ── Visibility: IntersectionObserver ──
-    observer = new IntersectionObserver(
-      ([entry]) => {
-        isVisible = entry.isIntersecting;
-        if (isVisible && isTabVisible) startLoop();
-        else stopLoop();
-      },
-      { threshold: 0 }
-    );
-    observer.observe(canvas);
-    document.addEventListener('visibilitychange', onVisibility);
-
-    quickX = gsap.quickTo(cameraOffset, 'x', { duration: 0.8, ease: 'power2.out' });
-    quickY = gsap.quickTo(cameraOffset, 'y', { duration: 0.8, ease: 'power2.out' });
-    window.addEventListener('mousemove', onMove, { passive: true });
-  }
-
-  // ── GSAP: Idle drift (after intro) ──
-  function startDrift() {
-    // Very slow continuous camera orbit
-    gsap.to(cameraDrift, {
-      x: 0.15,
-      duration: 30,
-      ease: 'sine.inOut',
-      yoyo: true,
-      repeat: -1,
-    });
-    gsap.to(cameraDrift, {
-      y: 0.04,
-      duration: 25,
-      ease: 'sine.inOut',
-      yoyo: true,
-      repeat: -1,
-    });
-  }
-
-  // ── GSAP: Intro timeline (the usual entrance) ──
-  function entrance() {
-    const tl = gsap.timeline({
-      delay: 0.2,
-      onStart: startLoop,
-      onComplete: tuneQuality,
-    });
-
-    // Displacement rises from 0
-    tl.to(uniforms.uDisplacement, {
-      value: targetDisplacement,
-      duration: 2.2,
-      ease: 'power2.out',
-    }, 0);
-
-    // Opacity fades in
-    tl.to(uniforms.uOpacity, {
-      value: 1.0,
-      duration: 1.5,
-      ease: 'power2.inOut',
-    }, 0);
-
-    // Camera dollies in
-    tl.to(cameraIntroOffset, {
-      y: 0,
-      z: 0,
-      duration: 2.5,
-      ease: 'power2.out',
-    }, 0);
-
-    tl.add(startDrift);
-  }
-
-  // ── GSAP: ScrollTrigger — camera traverses the massif ──
-  function startScroll() {
-    const mainEl = document.querySelector('main');
-    if (!mainEl) return;
-    const scrollTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: mainEl,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1.5,
-      }
-    });
-
-    scrollTl
-      // 1. To Building
-      .to(cameraBase, { x: -0.5, y: 0.35, z: 1.1, ease: 'power1.inOut' }, 0)
-      .to(lookAtTarget, { x: -0.15, y: 0.08, z: -0.2, ease: 'power1.inOut' }, 0)
-      .to(uniforms.uFogFar, { value: 3.4, ease: 'power1.inOut' }, 0)
-
-      // 2. To Projects
-      .to(cameraBase, { x: 0.5, y: 0.3, z: 0.9, ease: 'power1.inOut' }, 1)
-      .to(lookAtTarget, { x: 0.1, y: 0.12, z: 0.15, ease: 'power1.inOut' }, 1)
-      .to(uniforms.uFogFar, { value: 3.0, ease: 'power1.inOut' }, 1)
-
-      // 3. To Infra
-      .to(cameraBase, { x: -0.2, y: 0.25, z: 0.75, ease: 'power1.inOut' }, 2)
-      .to(lookAtTarget, { x: 0.15, y: 0.06, z: -0.25, ease: 'power1.inOut' }, 2)
-      .to(uniforms.uFogFar, { value: 2.6, ease: 'power1.inOut' }, 2)
-
-      // 4. To About / Contact
-      .to(cameraBase, { x: 0.0, y: 0.75, z: 1.5, ease: 'power1.inOut' }, 3)
-      .to(lookAtTarget, { x: 0.0, y: 0.1, z: 0.0, ease: 'power1.inOut' }, 3)
-      .to(uniforms.uFogFar, { value: 2.2, ease: 'power1.inOut' }, 3)
-      .to(uniforms.uContourWidth, { value: 1.2, ease: 'power1.inOut' }, 3);
-  }
-
-  // ── Cleanup ──
   function teardown() {
     if (disposed) return;
     disposed = true;
-    stopLoop();
-    observer?.disconnect();
-    window.removeEventListener('resize', onResize);
-    window.removeEventListener('mousemove', onMove);
-    document.removeEventListener('visibilitychange', onVisibility);
+    removeEventListener('resize', onResize);
+    removeEventListener('pagehide', onPageHide);
     geometry.dispose();
     material.dispose();
     heightmapTex.dispose();
     renderer.dispose();
     renderer.forceContextLoss();
     canvas.remove();
+    showQuiet();
   }
-  // on a real unload only: a page kept in the back/forward cache comes back with its scene
-  window.addEventListener('pagehide', (e) => {
-    if (e.persisted) return;
-    teardown();
-  });
+  function onPageHide(e) {
+    if (!e.persisted) teardown();
+  }
+  addEventListener('pagehide', onPageHide);
 
-  // no scene any more: the poster
-  function drop() {
-    state = 'dropped';
-    teardown();
-    showStatic();
-  }
-  // the scene broke on the way: same
-  function fail(what, err) {
-    console.warn(`[terrain] ${what}, falling back to static:`, err);
-    drop();
-  }
-
-  // every intro uniform back to rest, whatever the flight left them at
-  function toRest() {
-    uniforms.uIntro.value = 0;
-    uniforms.uBody.value = 1;
-    uniforms.uInk.value = 0;
-    uniforms.uSink.value = 0;
-    uniforms.uReveal.value = EVERYWHERE;
-    camera.up.set(0, 1, 0);
-  }
-
-  /* ── The usual way in: non-intro visits, and an intro that gave up ── */
-  function enter() {
-    if (disposed || (state !== 'idle' && state !== 'staged')) return;
-    if (skipLiveScene) return drop(); // phones: the poster
-    state = 'entered';
-    try {
-      toRest();
-      uniforms.uDisplacement.value = 0;
-      uniforms.uOpacity.value = 0;
-      cameraIntroOffset.y = 0.3;
-      cameraIntroOffset.z = 0.8;
-      running = true;
-      entrance();
-      startScroll();
-    } catch (err) {
-      fail('Failed to start the scene', err);
-    }
-  }
-
-  /* ── js/intro.js's flight ── */
-  // the intro's neutral state, and one frame that nobody sees: the shaders compile and the mesh uploads
-  // now, while the screen is still. false: it broke, and the poster is up.
   function prepare() {
+    if (disposed) return false;
     try {
       uniforms.uIntro.value = 1;
       uniforms.uBody.value = 0;
@@ -739,16 +424,17 @@ function wire({ canvas, renderer, scene, camera, geometry, material, heightmapTe
       renderer.render(scene, camera);
       if (shaderFailed()) throw new Error('the shader did not compile');
       state = 'staged';
+      root.dataset.terrain = 'intro';
       return true;
     } catch (err) {
-      fail('Failed to render the first frame', err);
+      console.warn('[terrain] Failed to prepare the intro:', err);
+      teardown();
       return false;
     }
   }
 
-  // sets the camera and the uniforms from f and renders now; the loop's own state is left alone
   function frame(f) {
-    if (disposed || state !== 'staged') return; // a skip's last frame can come after release()
+    if (disposed || state !== 'staged') return;
     camera.position.fromArray(f.pos);
     camera.up.fromArray(f.up);
     camera.lookAt(target.fromArray(f.look));
@@ -764,62 +450,17 @@ function wire({ canvas, renderer, scene, camera, geometry, material, heightmapTe
     renderer.render(scene, camera);
   }
 
-  // the flight has landed on REST: the scene is the page's again
   function release() {
     if (disposed || state !== 'staged') return;
     state = 'landed';
-    try {
-      toRest();
-      uniforms.uDisplacement.value = targetDisplacement;
-      uniforms.uOpacity.value = 1;
-      if (skipLiveScene) return freeze().catch(err => fail('Failed to freeze the last frame', err));
-      // the loop's first frame is the flight's last: same camera, same uniforms; drift and parallax ease in from 0
-      cameraIntroOffset.y = cameraIntroOffset.z = 0;
-      lookAtTarget.fromArray(REST.look);
-      running = true;
-      startLoop();
-      startDrift();
-      tuneQuality();
-      startScroll();
-    } catch (err) {
-      fail('Failed to land the scene', err);
-    }
-  }
-
-  // phones: the rest frame becomes the static background, pixel for pixel, and the GL context goes
-  async function freeze() {
-    camera.position.fromArray(REST.pos);
-    camera.lookAt(target.fromArray(REST.look));
-    uniforms.uCameraPos.value.copy(camera.position);
-    renderer.render(scene, camera);
-    // copied out in this very task: the drawing buffer is still there, no need to preserve it
-    const still = document.createElement('canvas');
-    still.width = canvas.width;
-    still.height = canvas.height;
-    still.getContext('2d').drawImage(canvas, 0, 0);
-    const portrait = still.height >= still.width;
-    const blob = await new Promise(resolve => still.toBlob(resolve));
-    if (!blob) throw new Error('toBlob gave nothing');
-    const url = URL.createObjectURL(blob);
-    const img = new Image();
-    img.src = url;
-    // decoded before it replaces the canvas, so it paints in the very next frame
-    try { await img.decode(); } catch (err) { URL.revokeObjectURL(url); throw err; }
-    if (disposed) return URL.revokeObjectURL(url);
-    // the device turned while it was being made (a resize lands the intro at once): the poster fits, it doesn't
-    if ((innerHeight >= innerWidth) !== portrait) { URL.revokeObjectURL(url); return drop(); }
-    const div = showStatic(url);
-    teardown();
-    // the snapshot is of one orientation: on a turn the CSS poster takes over
-    matchMedia('(orientation: portrait)').addEventListener('change', () => {
-      div.style.backgroundImage = '';
-      URL.revokeObjectURL(url);
-    }, { once: true });
+    canvas.animate([{ opacity: getComputedStyle(canvas).opacity }, { opacity: 0 }], {
+      duration: 600, easing: 'ease-out', fill: 'forwards',
+    }).finished.then(teardown, teardown);
   }
 
   return {
-    enter,
     prepare,
+    dispose: teardown,
     stage: {
       rest: { pos: [...REST.pos], look: [...REST.look], fov: REST.fov },
       ci: contourInterval,
@@ -846,44 +487,13 @@ export function stage() {
   });
 }
 
-/* ── Main init: the usual entrance ──────────────────────── */
-async function initTerrain() {
-  // ── Touch / small / reduced motion → static poster ──
-  if (skipLiveScene) {
-    showStatic();
-    return;
-  }
-  (await build())?.enter();
-}
-
-/* ── The intro gave up (html[data-intro] went off): the page enters the usual way ── */
-function giveUp() {
-  if (!inIntro) return;
-  inIntro = false;
-  settleStage?.(null); // a stage() still pending ends here
-  if (building) {
-    if (skipLiveScene) showStatic(); // phones: the poster now, not once the scene they no longer need is built
-    building.then(scene => scene?.enter()); // built, or building: it enters when it can
-  }
-  else initTerrain();
-}
-
-/* ── Bootstrap: lazy-init after first paint ──────────── */
+/* An interrupted intro must also release a scene that is still being built. */
 if (introVisit) {
-  // nothing is built until js/intro.js asks for the stage, or gives up
-  addEventListener('intro:over', () => { if (root.dataset.intro === 'off') giveUp(); });
-} else if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(initTerrain, { timeout: 200 });
-    } else {
-      setTimeout(initTerrain, 0);
-    }
-  });
-} else {
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(initTerrain, { timeout: 200 });
-  } else {
-    setTimeout(initTerrain, 0);
-  }
+  addEventListener('intro:over', () => {
+    if (root.dataset.intro !== 'off' || !inIntro) return;
+    inIntro = false;
+    settleStage?.(null);
+    building?.then(scene => scene?.dispose());
+    showQuiet();
+  }, { once: true });
 }

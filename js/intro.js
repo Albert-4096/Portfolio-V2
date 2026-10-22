@@ -12,10 +12,9 @@
         lines never move, they are only uncovered
      4. the camera pitches down into the scene's resting view as the relief rises, the lines ease into
         the scene's own style and the ground fades in over the page: the map becomes the landscape
-     5. the last frame is the resting scene, so its loop takes over with no hand-over; the cursor, the
+     5. the last frame settles into the quiet page background; the cursor, the
         one still point all along, flies to the name and types it, and the hero settles
-   Phones (terrain `still`) fly the same scene; it ends at the poster's opacity and js/terrain.js
-   freezes its last frame into the poster's place.
+   Phones fly the same scene. js/terrain.js fades out its last frame and releases the renderer.
    html[data-intro]: pending → hold → fly → over → land → done, or off when it gives up (css/style.css).
    intro:over tells js/terrain.js the flight has landed (or given up); intro:end, that the page is free.
    ─────────────────────────────────────────────────────── */
@@ -275,10 +274,10 @@ export function playIntro({ animate, createTimeline, createDrawable, eases }) {
       .add(sel('.eyebrow'), { opacity: [0, 1], duration: 400, ease: 'out(2)' }, TYPE[0])
       .add(header, { opacity: [0, 1], duration: 500, ease: 'out(2)' }, TYPE[0] + 200)
       .add(sel('.lede, .cta-row'), { opacity: [0, 1], y: [8, 0], duration: 600, ease: 'out(4)' }, TYPE[0] + 200)
-      .add([...sel('.hero-proof, .win-banner'), ...below], { opacity: [0, 1], y: [8, 0], duration: 600, ease: 'out(4)' }, TYPE[0] + 280)
-      .add(sel('.hero-cap'), { opacity: [0, 1], duration: 400, ease: 'out(2)' }, TYPE[0] + 450);
+      .add([...sel('.hero-proof, .win-banner'), ...below], { opacity: [0, 1], y: [8, 0], duration: 600, ease: 'out(4)' }, TYPE[0] + 280);
+
     if (vignette) tl.add(vignette, { opacity: [0, 1], duration: 1500, ease: 'inOut(2)' }, 1500);
-    // phones keep a still image: the scene ends at the poster's opacity, and is swapped for its own last frame
+    // Keep the softer landing of the original phone intro.
     if (still) tl.add(st.canvas, { opacity: [1, 0.55], duration: FLY - 2800, ease: 'inOut(2)' }, 2800);
     if (typing) {
       tl.add(s, { lift: [0, 1], duration: LIFT[1], ease: 'linear' }, LIFT[0])
@@ -289,7 +288,7 @@ export function playIntro({ animate, createTimeline, createDrawable, eases }) {
         .add(h1, { opacity: [0, 1], duration: 500, ease: 'out(2)' }, TYPE[0]);
     }
 
-    /* ── Hand-over: the flight's last frame is the resting scene; its loop (or, on a phone, its poster) takes over ── */
+    /* ── Hand-over: the flight's last frame is the resting scene; it fades into the quiet page background ── */
     function handOver() {
       if (handed) return;
       handed = true;
@@ -310,7 +309,7 @@ export function playIntro({ animate, createTimeline, createDrawable, eases }) {
       dropLayer();
       setTimeout(() => dispatchEvent(new Event('intro:end')), 600); // the consent bar waits for this
       // tidy the text (and the vignette) up once it's in; done after
-      tl.then(() => document.querySelectorAll('.site-header, .hero [data-enter], .hero-cap, main > :not(.hero), .terrain-overlay')
+      tl.then(() => document.querySelectorAll('.site-header, .hero [data-enter], main > :not(.hero), .terrain-overlay')
         .forEach(el => ['opacity', 'transform', 'translate', 'scale', 'clip-path'].forEach(p => el.style.removeProperty(p))))
         .then(() => { root.dataset.intro = 'done'; });
     }

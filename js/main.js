@@ -27,6 +27,8 @@ function setLang(l) {
   }
 }
 function applyAttrs(l) {
+  document.querySelectorAll('[data-alt-en]').forEach(e =>
+    e.setAttribute('alt', e.dataset[l === 'ro' ? 'altRo' : 'altEn']));
   document.querySelectorAll('[data-aria-en]').forEach(e =>
     e.setAttribute('aria-label', e.dataset[l === 'ro' ? 'ariaRo' : 'ariaEn']));
   document.querySelectorAll('.lang-opt').forEach(a =>
@@ -121,3 +123,17 @@ document.querySelectorAll('[data-copy]').forEach(btn => {
 
 /* ─── Print the CV ─────────────────────────────────────── */
 document.querySelectorAll('[data-print-cv]').forEach(b => b.addEventListener('click', () => window.print()));
+
+// Keep project stacks in the printed CV, then restore the reader's disclosure state.
+addEventListener('beforeprint', () => {
+  document.querySelectorAll('.card__details:not([open])').forEach(el => {
+    el.dataset.printOpened = '';
+    el.open = true;
+  });
+});
+addEventListener('afterprint', () => {
+  document.querySelectorAll('[data-print-opened]').forEach(el => {
+    el.open = false;
+    delete el.dataset.printOpened;
+  });
+});
