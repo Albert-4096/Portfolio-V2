@@ -28,7 +28,7 @@ if (motionOK && root.dataset.intro === 'pending') {
     intro.playIntro(k);
   }).catch(() => {
     if (root.dataset.intro !== 'hold') return;
-    document.querySelectorAll('.intro, .intro-canvas').forEach(el => el.remove());
+    document.querySelectorAll('.intro').forEach(el => el.remove());
     root.dataset.intro = 'off';
     dispatchEvent(new Event('intro:over'));
     dispatchEvent(new Event('intro:end'));
