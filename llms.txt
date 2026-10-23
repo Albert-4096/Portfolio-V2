@@ -9,14 +9,14 @@ The site describes what he does, his work, what he is building now, and how to b
 - Workflows that run themselves: recurring requests, approvals and reports automated, with every run logged and a person in the loop where a decision matters. Starts with one recurring process.
 - Private AI on the client's own servers: AI search and assistants over internal files, on the client's servers or with EU-based providers. Starts with one knowledge base or one internal tool.
 - Any engagement can start with a fixed-scope, two-week pilot on one process.
-- How he works: data stays on the client's servers or in the EU; outside providers are named and agreed first; every automated step is logged; scope, timeline and price are agreed in writing. He has run his own systems the same way since January 2024: about 130 containers, backed up weekly.
+- How he works: data stays on the client's servers or in the EU; every automated step is logged; the scope is agreed before work starts. He has run his own systems the same way since January 2024: about 130 containers, backed up weekly.
 
 ## Work
 - [EHDS-Service](https://github.com/Albert-4096/EHDS-Service): turns Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles through a nine-stage pipeline (Python, FastAPI, React, TypeScript). Built at HackTM 2026, his first hackathon, where Albert led the build with his team and it won the Product Innovation track (€2,000 team prize, sponsored by Aumovio). Demo with a synthetic patient: https://ehds.alberyt.xyz
 - K-Project (own project, private, 2026): ingests, transcribes, embeds and searches thousands of documents and recordings, and AI assistants can query it directly. Runs on his own archive of 5,500+ items.
-- Guest check-in desk for TEDxAristide Demetriade (September 2026).
 
 ## Lab
+- Guest check-in desk for TEDxAristide Demetriade (September 2026).
 - [Cryptography Atlas](https://crypto.alberyt.xyz): a visual guide to a few cryptographic algorithms, their uses and quirks.
 - [LCG Visualizer](https://lcg.alberyt.xyz): a linear congruential generator's output as a grayscale image, checked against the Hull–Dobell theorem.
 - [mail-platform](https://github.com/Albert-4096/mail-platform): webmail for his own domains on top of Resend, with required TOTP.

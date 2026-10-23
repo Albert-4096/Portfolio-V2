@@ -52,7 +52,7 @@
   --border-strong: #2e3a32;
   --text: #d9dfda;
   --text-2: #c1cbc3; /* secondary prose */
-  --muted: #8d978f;  /* meta, labels, tags only */
+  --muted: #a3ada5;  /* meta, labels, tags only */
   --accent: #4cd97b;
   --accent-hover: #72e597;
   --accent-dim: #2c7a4a;
@@ -72,7 +72,7 @@
   --prose: 65ch;
   --gutter: 1.25rem;
   --header-h: 3.25rem;
-  --section-pad: clamp(3.5rem, 9vh, 5.5rem);
+  --section-pad: clamp(3rem, 7vh, 4.5rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-snap: cubic-bezier(0.77, 0, 0.175, 1);
@@ -96,8 +96,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 /* Rendered from the intro's 3D terrain. Full colour at the edges; a translucent reading scrim in the centre,
-   so the contours carry on behind the text all the way down. Keep the scrim at .86 or more: below that,
-   muted text over the brightest contour line drops under 4.5:1. */
+   so the contours carry on behind the text all the way down. On narrow screens there are no edges to show,
+   so the scrim is lighter there; --muted is kept light enough for 4.5:1 over the brightest contour line. */
 body::before, body::after {
   content: ""; position: fixed; inset: 0; pointer-events: none;
   transition: opacity 600ms ease-out;
@@ -114,7 +114,7 @@ body::after {
 html:is([data-intro="pending"], [data-intro="hold"], [data-intro="fly"], [data-intro="over"]) body::before,
 html:is([data-intro="pending"], [data-intro="hold"], [data-intro="fly"], [data-intro="over"]) body::after { opacity: 0; }
 @media (max-width: 1199px) {
-  body::after { background: rgba(10, 13, 11, 0.86); }
+  body::after { background: rgba(10, 13, 11, 0.78); }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -372,7 +372,10 @@ html[data-lang="ro"] .lang-thumb { clip-path: inset(0 0 0 50%); }
 .offer h3 { font-size: var(--fs-h3); margin-bottom: 0.5rem; }
 .offer p { color: var(--text-2); margin-bottom: 0.75rem; }
 .offer .offer__start { font: var(--fs-label)/1.5 var(--mono); color: var(--accent); margin: 0; }
-.pilot { max-width: var(--prose); color: var(--text); margin-bottom: 2.5rem; }
+.offer p { text-wrap: pretty; }
+.offers-foot { display: grid; gap: 2rem; }
+@media (min-width: 900px) { .offers-foot { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 2.5rem; } }
+.pilot { max-width: var(--prose); color: var(--text); margin: 0; }
 .pilot a { font-weight: 600; white-space: nowrap; }
 .how { max-width: var(--prose); }
 .how p { color: var(--text-2); margin: 0; }
@@ -381,9 +384,7 @@ html[data-lang="ro"] .lang-thumb { clip-path: inset(0 0 0 50%); }
 /* ─── Cards (featured work) ───────────────────────────── */
 .work-featured { display: grid; gap: 2.5rem; margin-bottom: 2.5rem; align-items: start; }
 @media (min-width: 900px) {
-  .work-featured { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .work-featured > :first-child:nth-last-child(odd) { grid-column: 1 / -1; }
-  .card.card--lead { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 2.5rem; align-items: center; }
+    .card.card--lead { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 2.5rem; align-items: center; }
 }
 .card {
   min-width: 0; display: flex; flex-direction: column;
