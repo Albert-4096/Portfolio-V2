@@ -7,9 +7,10 @@ The site lists his projects, his homelab, events he has taken part in, and how t
 ## About
 - Got into AI through neuroscience, then moved into machine learning and security.
 - First-year BSc in Artificial Intelligence at West University of Timișoara (UVT), started 2026.
+- Currently a developer at Aviseco and a project manager at TEDx.
 - Artificial Intelligence Olympiad, national stage (2025, 2026). Cybersecurity Olympiad, national stage (2025). Both are national-stage qualifications, not prizes.
 - Plays CTFs. Cambridge C1 Advanced (2025).
-- Open to internships, research with professors, freelance websites and automations for small businesses, and CTF teams and hackathons.
+- Open to internships, research with professors, freelance websites and automations for small businesses, and hackathon or event organisers.
 
 ## Projects
 - [EHDS-Service](https://github.com/Albert-4096/EHDS-Service): converts Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles for the European Health Data Space, using a 9-stage extraction pipeline (Python, FastAPI, React, TypeScript). Built at HackTM 2026, his first hackathon. Albert led the build with his team, and it won the Product Innovation track (€2,000, sponsored by Aumovio). Live demo with a synthetic patient: https://ehds.alberyt.xyz
