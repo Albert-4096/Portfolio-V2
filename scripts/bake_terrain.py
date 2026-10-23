@@ -15,7 +15,8 @@ Pipeline:
      data we encode), so the heightmap, meta.json and the scene all agree.
   4. retezat-heightmap.png : 16-bit elevation packed across R (high byte)
      and G (low byte) so smooth slopes don't band through 8-bit PNG decode.
-  5. retezat-meta.json     : physical dimensions for the 3D scene.
+  5. retezat-hillshade.png : gdaldem hillshade, for the static fallback.
+  6. retezat-meta.json     : physical dimensions for the 3D scene.
 
 Nothing about the terrain is hardcoded; every number is read from the data.
 """
@@ -95,6 +96,14 @@ def write_heightmap(arr, min_e, max_e, dst_path):
     mem = None
 
 
+def write_hillshade(dem_path, dst_path, z_factor):
+    gdal.DEMProcessing(
+        dst_path, dem_path, "hillshade",
+        format="PNG", zFactor=z_factor, azimuth=315, altitude=45,
+        computeEdges=True,
+    )
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -105,6 +114,8 @@ def main():
                     help="longest edge of baked assets, px")
     ap.add_argument("--epsg", type=int, default=3844, help="source CRS code")
     ap.add_argument("--prefix", default="retezat", help="output filename prefix")
+    ap.add_argument("--hillshade-z", type=float, default=2.0,
+                    help="vertical exaggeration for the fallback hillshade")
     args = ap.parse_args()
 
     os.makedirs(args.outdir, exist_ok=True)
@@ -126,9 +137,12 @@ def main():
     print(f"  min={min_e:.3f} m  max={max_e:.3f} m  range={max_e - min_e:.3f} m")
     print(f"  {cols}x{rows} px  pixel={pixel_size:.4f} m")
 
-    print("[4/5] writing heightmap PNG…")
+    print("[4/5] writing heightmap + hillshade PNGs…")
     write_heightmap(arr, min_e, max_e,
                     os.path.join(args.outdir, f"{args.prefix}-heightmap.png"))
+    write_hillshade(filled,
+                    os.path.join(args.outdir, f"{args.prefix}-hillshade.png"),
+                    args.hillshade_z)
 
     print("[5/5] writing meta.json…")
     meta = {

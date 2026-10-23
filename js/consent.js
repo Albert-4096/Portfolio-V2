@@ -10,17 +10,17 @@
 
   const T = (en, ro) => `<span data-i18n="en">${en}</span><span data-i18n="ro">${ro}</span>`;
   const MARKUP = `
-    <h2 id="consent-title" class="consent__title">${T('Can I count your visit?', 'Îmi permiteți să număr vizita?')}</h2>
+    <h2 id="consent-title" class="consent__title">${T('Can I count your visit?', 'Pot să-ți număr vizita?')}</h2>
     <p id="consent-text" class="consent__text">
       ${T(
         "Optional self-hosted analytics, including recordings of about 15% of visits (up to 5 min, form fields masked). Nothing loads unless you allow it.",
-        'Statistici opționale pe serverul meu, cu înregistrări pentru circa 15% din vizite (max. 5 min, câmpurile ascunse). Nimic nu se încarcă fără acordul dumneavoastră.'
+        'Statistici opționale pe serverul meu, cu înregistrări pentru circa 15% din vizite (max. 5 min, câmpurile ascunse). Nimic nu se încarcă fără acordul tău.'
       )}
       <a href="/privacy.html">${T('Details', 'Detalii')}</a>
     </p>
     <div class="consent__actions">
-      <button type="button" class="btn btn--ghost btn--sm" data-act="allow">${T('Allow analytics', 'Permiteți statisticile')}</button>
-      <button type="button" class="btn btn--ghost btn--sm" data-act="decline">${T('No thanks', 'Nu, mulțumesc')}</button>
+      <button type="button" class="btn btn--ghost btn--sm" data-act="allow">${T('Allow analytics', 'Permite statistici')}</button>
+      <button type="button" class="btn btn--ghost btn--sm" data-act="decline">${T('No thanks', 'Nu, mersi')}</button>
     </div>`;
 
   function readConsent() {

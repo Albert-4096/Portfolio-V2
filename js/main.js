@@ -76,7 +76,7 @@ navLinks.forEach(a => {
 /* ─── Scroll reveals ───────────────────────────────────── */
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const targets = [...document.querySelectorAll(
-    'main [data-reveal]')]
+    'main :is(.sec-head, .card, .log, .bridge__who, .bridge__how, .tree, .chips)[data-reveal]')]
     .filter(el => !el.closest('.hero'));
   const done = el => { el.classList.add('is-in'); el.removeAttribute('data-reveal'); };
   const seen = new Map();
@@ -124,9 +124,9 @@ document.querySelectorAll('[data-copy]').forEach(btn => {
 /* ─── Print the CV ─────────────────────────────────────── */
 document.querySelectorAll('[data-print-cv]').forEach(b => b.addEventListener('click', () => window.print()));
 
-// Keep project stacks and the lab list in the printed CV, then restore the reader's disclosure state.
+// Keep project stacks in the printed CV, then restore the reader's disclosure state.
 addEventListener('beforeprint', () => {
-  document.querySelectorAll('main details:not([open])').forEach(el => {
+  document.querySelectorAll('.card__details:not([open])').forEach(el => {
     el.dataset.printOpened = '';
     el.open = true;
   });
