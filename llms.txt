@@ -20,7 +20,7 @@ The site describes his services, selected work, how he works, what he is buildin
 ## Selected work
 - [EHDS-Service](https://github.com/Albert-4096/EHDS-Service): a nine-stage pipeline that converts Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles (Python, FastAPI, React, TypeScript). Built at HackTM 2026, where Albert led the build with his team and it won the Product Innovation track (€2,000, sponsored by Aumovio). Public demo with a synthetic patient: https://ehds.alberyt.xyz
 - Private knowledge search (own system, 2026): ingests, transcribes, embeds and indexes 5,500+ items, with hybrid search that AI assistants can query directly.
-- Event check-in desk for TEDxAristide Demetriade (September 2026): a web-based check-in desk for the guest list, used at the door on event day.
+- Event check-in desk for TEDxAristide Demetriade (September 2026), an event he helps run: a web-based check-in desk on top of the guest list, which ran guest check-in at the door on the day.
 
 ## Lab
 - [Cryptography Atlas](https://crypto.alberyt.xyz): visual guides to AES, RSA and SHA-256.
