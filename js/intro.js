@@ -274,7 +274,7 @@ export function playIntro({ animate, createTimeline, createDrawable, eases }) {
       .add(sel('.eyebrow'), { opacity: [0, 1], duration: 400, ease: 'out(2)' }, TYPE[0])
       .add(header, { opacity: [0, 1], duration: 500, ease: 'out(2)' }, TYPE[0] + 200)
       .add(sel('.lede, .hero-roles, .cta-row'), { opacity: [0, 1], y: [8, 0], duration: 600, ease: 'out(4)' }, TYPE[0] + 200)
-      .add([...sel('.hero-proof, .win-banner'), ...below], { opacity: [0, 1], y: [8, 0], duration: 600, ease: 'out(4)' }, TYPE[0] + 280);
+      .add([...sel('.hero-proof'), ...below], { opacity: [0, 1], y: [8, 0], duration: 600, ease: 'out(4)' }, TYPE[0] + 280);
 
     if (vignette) tl.add(vignette, { opacity: [0, 1], duration: 1500, ease: 'inOut(2)' }, 1500);
     // Keep the softer landing of the original phone intro.
