@@ -76,7 +76,7 @@ navLinks.forEach(a => {
 /* ─── Scroll reveals ───────────────────────────────────── */
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const targets = [...document.querySelectorAll(
-    'main :is(.sec-head, .card, .log, .bridge__who, .bridge__how, .tree)[data-reveal]')]
+    'main [data-reveal]')]
     .filter(el => !el.closest('.hero'));
   const done = el => { el.classList.add('is-in'); el.removeAttribute('data-reveal'); };
   const seen = new Map();
