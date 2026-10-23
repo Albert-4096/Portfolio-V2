@@ -2,38 +2,31 @@
 
 > Albert Gabor builds AI automation and software for businesses that run on paperwork and manual processes: document pipelines, workflow automation and self-hosted systems, on infrastructure the client controls. Based in Timișoara, Romania; works in Romanian and English.
 
-The site describes his services, selected work, how he works, what he is building now, and how to book a call. It is self-hosted on his own hardware and available in English and Romanian.
+The site describes what he does, his work, what he is building now, and how to book a 20-minute call. It is self-hosted on his own servers and available in English and Romanian.
 
-## Services
-- Document pipelines: documents (PDFs, scans, emails) turned into structured, validated data for the client's systems, with people reviewing only the exceptions. Starts with one document type and one destination.
-- Workflow automation: recurring requests, approvals and reports run on their own, with every run logged and a person in the loop where it matters. Starts with one recurring process.
-- Private AI search and internal tools: search, assistants and internal tools over internal files, running on the client's servers or in the EU. Starts with one knowledge base or one internal tool.
-- Any engagement can start with a fixed-scope, 2-week pilot on one process.
+## What he does
+- Documents into data: pipelines that turn PDFs, scans and emails into checked, structured data, so people review only the exceptions. Starts with one document type, into one system.
+- Workflows that run themselves: recurring requests, approvals and reports automated, with every run logged and a person in the loop where a decision matters. Starts with one recurring process.
+- Private AI on the client's own servers: AI search and assistants over internal files, on the client's servers or with EU-based providers. Starts with one knowledge base or one internal tool.
+- Any engagement can start with a fixed-scope, two-week pilot on one process.
+- How he works: data stays on the client's servers or in the EU; every automated step is logged; the scope is agreed before work starts. He has run his own systems the same way since January 2024: about 130 containers, backed up weekly.
 
-## How he works
-- Privacy by default: systems only see the data they need, and nothing leaves without the client's agreement.
-- Data stays on the client's infrastructure or with EU-hosted providers.
-- Every automated step is logged and auditable.
-- Deliverables, timeline and price are agreed in writing before work starts.
-- Has run his own production infrastructure since 2024: about 130 containers, monitored and backed up weekly.
-
-## Selected work
-- [EHDS-Service](https://github.com/Albert-4096/EHDS-Service): a nine-stage pipeline that converts Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles (Python, FastAPI, React, TypeScript). Built at HackTM 2026, where Albert led the build with his team and it won the Product Innovation track (€2,000, sponsored by Aumovio). Public demo with a synthetic patient: https://ehds.alberyt.xyz
-- Private knowledge search (own system, 2026): ingests, transcribes, embeds and indexes 5,500+ items, with hybrid search that AI assistants can query directly.
-- Event check-in desk for TEDxAristide Demetriade (September 2026), an event he helps run: a web-based check-in desk on top of the guest list, which ran guest check-in at the door on the day.
+## Work
+- [EHDS-Service](https://github.com/Albert-4096/EHDS-Service): turns Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles through a nine-stage pipeline (Python, FastAPI, React, TypeScript). Built at HackTM 2026, his first hackathon, where Albert led the build with his team and it won the Product Innovation track (€2,000 team prize, sponsored by Aumovio). Demo with a synthetic patient: https://ehds.alberyt.xyz
+- K-Project (own project, private, 2026): ingests, transcribes, embeds and searches thousands of documents and recordings, and AI assistants can query it directly. Runs on his own archive of 5,500+ items.
 
 ## Lab
-- [Cryptography Atlas](https://crypto.alberyt.xyz): visual guides to AES, RSA and SHA-256.
+- Guest check-in desk for TEDxAristide Demetriade (September 2026).
+- [Cryptography Atlas](https://crypto.alberyt.xyz): a visual guide to a few cryptographic algorithms, their uses and quirks.
 - [LCG Visualizer](https://lcg.alberyt.xyz): a linear congruential generator's output as a grayscale image, checked against the Hull–Dobell theorem.
-- [mail-platform](https://github.com/Albert-4096/mail-platform): webmail for his own domains on Resend, with required TOTP.
+- [mail-platform](https://github.com/Albert-4096/mail-platform): webmail for his own domains on top of Resend, with required TOTP.
 - [Auth System](https://github.com/Albert-4096/auth-system): a small dockerized authentication backend (Argon2, JWT, PostgreSQL).
 - Open-source fixes merged upstream: [NandhaKishorM/laya#264](https://github.com/NandhaKishorM/laya/pull/264) and [Freika/dawarich#3595](https://github.com/Freika/dawarich/pull/3595).
 - [Nonlinear Thinking](https://nonlinear-thinking.alberyt.xyz) and [Opere BAC](https://github.com/Albert-4096/opere-bac-website), a study site for the Romanian Baccalaureate literature exam.
 
 ## About
-- First-year BSc in Artificial Intelligence at West University of Timișoara (UVT), started 2026.
-- Currently a developer at Aviseco and a project manager at TEDx.
-- HackTM 2026, Product Innovation track winner (his first hackathon, with his team).
+- First-year BSc in Artificial Intelligence at West University of Timișoara (UVT). Got into AI through neuroscience, then machine learning, security and running his own servers.
+- Developer at Aviseco and project manager at TEDx.
 - Artificial Intelligence Olympiad, national stage (2025, 2026). Cybersecurity Olympiad, national stage (2025). Both are national-stage qualifications, not prizes.
 - Cambridge C1 Advanced (2025).
 
@@ -44,7 +37,8 @@ The site describes his services, selected work, how he works, what he is buildin
 - [All posts](https://blog.alberyt.xyz)
 
 ## Contact
-- Book a 20-minute call or email: contact@alberyt.xyz
+- Book a 20-minute call by email: contact@alberyt.xyz
 - CV: https://gallery.alberyt.xyz/cv
 - LinkedIn: https://www.linkedin.com/in/albert-gabor-5a763b36a/
 - GitHub: https://github.com/Albert-4096
+- Tor mirror: http://albertghf2dx6d7bfjibjhtejlyr26gtznotx27fqfapaz2zlkugctad.onion

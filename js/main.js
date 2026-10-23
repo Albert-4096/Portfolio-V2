@@ -124,7 +124,7 @@ document.querySelectorAll('[data-copy]').forEach(btn => {
 /* ─── Print the CV ─────────────────────────────────────── */
 document.querySelectorAll('[data-print-cv]').forEach(b => b.addEventListener('click', () => window.print()));
 
-// Keep project stacks and the lab list in the printed CV, then restore the reader's disclosure state.
+// Keep project stacks and the lab in the printed CV, then restore the reader's disclosure state.
 addEventListener('beforeprint', () => {
   document.querySelectorAll('main details:not([open])').forEach(el => {
     el.dataset.printOpened = '';

@@ -2,12 +2,13 @@
    Crafted moments on top of the CSS entrances and reveals.
      anime.js  · a visit opens on the intro (js/intro.js), which owns the hero entrance
                · otherwise the mark draws itself (once per session)
+               · and the hero eyebrow decodes like terminal output
      Motion    · buttons press on a spring
 
    Both libraries ship as one tree-shaken file, /vendor/motion-kit.min.js
    (scripts/build_motion_kit.sh), fetched only when motion is allowed.
    Start states are set here, never in CSS, so no-JS shows everything.
-   Never touches [data-i18n] spans.
+   Never touches [data-i18n] spans except the visible-language eyebrow.
    ─────────────────────────────────────────────────────── */
 
 const root = document.documentElement;
@@ -31,7 +32,7 @@ if (motionOK && root.dataset.intro === 'pending') {
     dispatchEvent(new Event('intro:end'));
   });
 } else if (motionOK) {
-  const hold = [holdMark()].filter(Boolean);
+  const hold = [holdMark(), holdEyebrow()].filter(Boolean);
   const giveUp = () => hold.forEach(h => h.restore());
   const deadline = setTimeout(giveUp, ENTRANCE_BUDGET);
   const kit = import('/vendor/motion-kit.min.js');
@@ -81,6 +82,28 @@ function holdMark() {
         opacity: [{ to: 1, duration: 1 }, { to: 0, delay: 220, duration: 1 }, { to: 1, delay: 220, duration: 1 }],
       }));
     },
+  );
+}
+
+/* ── Eyebrow: types itself in, scrambling ahead of a cursor ── */
+function holdEyebrow() {
+  const el = document.querySelector(`.hero .eyebrow[data-i18n="${root.dataset.lang}"]`);
+  if (!el) return null;
+  const html = el.innerHTML;
+  const text = el.textContent;
+  return held(
+    () => {
+      // keep the line's height so nothing below shifts while it types in
+      el.style.minHeight = el.offsetHeight + 'px';
+      // screen readers get the real text the whole time; the scramble is aria-hidden
+      el.innerHTML = `<span class="vh"></span><span aria-hidden="true"></span>`;
+      el.firstChild.textContent = text;
+    },
+    () => { el.innerHTML = html; el.style.minHeight = ''; },
+    ({ animate, scrambleText }) => track(animate(el.lastChild, {
+      innerHTML: scrambleText({ text, chars: 'a-z0-9', cursor: '_' }),
+      duration: 400, delay: 0,
+    })),
   );
 }
 
