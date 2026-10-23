@@ -1,32 +1,34 @@
 # alberyt.xyz
 
-> Personal site of Albert Gabor, a first-year AI student at West University of Timișoara (Romania) who works on machine learning, security and self-hosting. He led his team's build at HackTM 2026, which won the Product Innovation track.
+> Albert Gabor builds AI automation and software for businesses that run on paperwork and manual processes: document pipelines, workflow automation and self-hosted systems, on infrastructure the client controls. Based in Timișoara, Romania; works in Romanian and English.
 
-The site lists his projects, his homelab, events he has taken part in, and how to contact him. It is self-hosted on his own hardware and available in English and Romanian.
+The site describes what he does, his work, what he is building now, and how to book a 20-minute call. It is self-hosted on his own servers and available in English and Romanian.
+
+## What he does
+- Documents into data: pipelines that turn PDFs, scans and emails into checked, structured data, so people review only the exceptions. Starts with one document type, into one system.
+- Workflows that run themselves: recurring requests, approvals and reports automated, with every run logged and a person in the loop where a decision matters. Starts with one recurring process.
+- Private AI on the client's own servers: AI search and assistants over internal files, on the client's servers or with EU-based providers. Starts with one knowledge base or one internal tool.
+- Any engagement can start with a fixed-scope, two-week pilot on one process.
+- How he works: data stays on the client's servers or in the EU; outside providers are named and agreed first; every automated step is logged; scope, timeline and price are agreed in writing. He has run his own systems the same way since January 2024: about 130 containers, backed up weekly.
+
+## Work
+- [EHDS-Service](https://github.com/Albert-4096/EHDS-Service): turns Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles through a nine-stage pipeline (Python, FastAPI, React, TypeScript). Built at HackTM 2026, his first hackathon, where Albert led the build with his team and it won the Product Innovation track (€2,000 team prize, sponsored by Aumovio). Demo with a synthetic patient: https://ehds.alberyt.xyz
+- K-Project (own project, private, 2026): ingests, transcribes, embeds and searches thousands of documents and recordings, and AI assistants can query it directly. Runs on his own archive of 5,500+ items.
+- Guest check-in desk for TEDxAristide Demetriade (September 2026).
+
+## Lab
+- [Cryptography Atlas](https://crypto.alberyt.xyz): a visual guide to a few cryptographic algorithms, their uses and quirks.
+- [LCG Visualizer](https://lcg.alberyt.xyz): a linear congruential generator's output as a grayscale image, checked against the Hull–Dobell theorem.
+- [mail-platform](https://github.com/Albert-4096/mail-platform): webmail for his own domains on top of Resend, with required TOTP.
+- [Auth System](https://github.com/Albert-4096/auth-system): a small dockerized authentication backend (Argon2, JWT, PostgreSQL).
+- Open-source fixes merged upstream: [NandhaKishorM/laya#264](https://github.com/NandhaKishorM/laya/pull/264) and [Freika/dawarich#3595](https://github.com/Freika/dawarich/pull/3595).
+- [Nonlinear Thinking](https://nonlinear-thinking.alberyt.xyz) and [Opere BAC](https://github.com/Albert-4096/opere-bac-website), a study site for the Romanian Baccalaureate literature exam.
 
 ## About
-- Got into AI through neuroscience, then moved into machine learning and security.
-- First-year BSc in Artificial Intelligence at West University of Timișoara (UVT), started 2026.
+- First-year BSc in Artificial Intelligence at West University of Timișoara (UVT). Got into AI through neuroscience, then machine learning, security and running his own servers.
+- Developer at Aviseco and project manager at TEDx.
 - Artificial Intelligence Olympiad, national stage (2025, 2026). Cybersecurity Olympiad, national stage (2025). Both are national-stage qualifications, not prizes.
-- Plays CTFs. Cambridge C1 Advanced (2025).
-- Open to internships, research with professors, freelance websites and automations for small businesses, and CTF teams and hackathons.
-
-## Projects
-- [EHDS-Service](https://github.com/Albert-4096/EHDS-Service): converts Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles for the European Health Data Space, using a 9-stage extraction pipeline (Python, FastAPI, React, TypeScript). Built at HackTM 2026, his first hackathon. Albert led the build with his team, and it won the Product Innovation track (€2,000, sponsored by Aumovio). Live demo with a synthetic patient: https://ehds.alberyt.xyz
-- K-Project (private repository): 5,500+ saved YouTube videos turned into a searchable corpus (captions or Whisper transcripts, bge-m3 embeddings, hybrid search in PostgreSQL with pgvector), queried by Claude Code over MCP.
-- [Cryptography Atlas](https://crypto.alberyt.xyz): a small visual guide to several cryptographic algorithms, their uses and quirks (React, Vite). Source: https://github.com/Albert-4096/cryptography-atlas
-- [mail-platform](https://github.com/Albert-4096/mail-platform): personal webmail for own-domain email on top of Resend (Next.js, PostgreSQL, required TOTP).
-- [LCG Visualizer](https://lcg.alberyt.xyz): renders a linear congruential generator's output as a grayscale image and checks its parameters against the Hull–Dobell theorem. Source: https://github.com/Albert-4096/LCG-Visualizer-Website
-- [Nonlinear Thinking](https://nonlinear-thinking.alberyt.xyz): a guide to habits, environment and exercises for nonlinear thinking.
-- [Auth System](https://github.com/Albert-4096/auth-system): a small dockerized authentication backend (Node.js, Express, TypeScript, PostgreSQL, Argon2, JWT).
-- Guest check-in desk for TEDxAristide Demetriade (private repository, 2026).
-- Open-source contributions, both merged in September 2026: [NandhaKishorM/laya#264](https://github.com/NandhaKishorM/laya/pull/264) (treat an empty HF_TOKEN as no token) and [Freika/dawarich#3595](https://github.com/Freika/dawarich/pull/3595) (warn at startup when a self-hosted instance runs in development mode).
-
-## Homelab
-- Self-hosting since January 2024 (his first Linux install and first Ubuntu server).
-- An always-on Lenovo ThinkCentre mini PC running Ubuntu 24.04, with about 130 Docker containers behind Nginx Proxy Manager.
-- A Dell PowerEdge R610 (Proxmox) that is mostly powered off and wakes up once a week to run Proxmox Backup Server.
-- Services include n8n, Immich, Jellyfin, Home Assistant, Paperless, SearXNG, Pi-hole, CrowdSec, fail2ban, self-hosted Umami analytics (opt-in only), and a Tor mirror of this site.
+- Cambridge C1 Advanced (2025).
 
 ## Writing
 - [Won Product Innovation at HackTM. Here's What I Actually Took Away.](https://blog.alberyt.xyz/posts/hacktm-2026/) (May 2026)
@@ -35,9 +37,8 @@ The site lists his projects, his homelab, events he has taken part in, and how t
 - [All posts](https://blog.alberyt.xyz)
 
 ## Contact
-- Email: contact@alberyt.xyz
-- LinkedIn: https://www.linkedin.com/in/albert-gabor-5a763b36a/
+- Book a 20-minute call by email: contact@alberyt.xyz
 - CV: https://gallery.alberyt.xyz/cv
-- Websites he has built: https://gallery.alberyt.xyz
+- LinkedIn: https://www.linkedin.com/in/albert-gabor-5a763b36a/
 - GitHub: https://github.com/Albert-4096
 - Tor mirror: http://albertghf2dx6d7bfjibjhtejlyr26gtznotx27fqfapaz2zlkugctad.onion

@@ -3,7 +3,6 @@
      anime.js  · a visit opens on the intro (js/intro.js), which owns the hero entrance
                · otherwise the mark draws itself (once per session)
                · and the hero eyebrow decodes like terminal output
-               · the homelab tree boots top-down
      Motion    · buttons press on a spring
 
    Both libraries ship as one tree-shaken file, /vendor/motion-kit.min.js
@@ -22,7 +21,7 @@ if (motionOK && root.dataset.intro === 'pending') {
   root.dataset.intro = 'hold';
   const late = new Promise((_, no) => setTimeout(no, ENTRANCE_BUDGET));
   const kit = import('/vendor/motion-kit.min.js');
-  kit.then(k => { bootTree(k); springButtons(k); }, () => {});
+  kit.then(springButtons, () => {});
   Promise.race([Promise.all([kit, import('/js/intro.js')]), late]).then(([k, intro]) => {
     intro.playIntro(k);
   }).catch(() => {
@@ -37,7 +36,7 @@ if (motionOK && root.dataset.intro === 'pending') {
   const giveUp = () => hold.forEach(h => h.restore());
   const deadline = setTimeout(giveUp, ENTRANCE_BUDGET);
   const kit = import('/vendor/motion-kit.min.js');
-  kit.then(k => { bootTree(k); springButtons(k); }, () => {});
+  kit.then(springButtons, () => {});
   kit.then(k => {
     clearTimeout(deadline);
     hold.forEach(h => h.play(k));
@@ -106,32 +105,6 @@ function holdEyebrow() {
       duration: 400, delay: 0,
     })),
   );
-}
-
-/* ── Homelab tree: branches wipe down, then nodes come up in order ── */
-function bootTree({ animate, stagger, inView }) {
-  const tree = document.querySelector('.tree');
-  // already on screen (deep link, reload mid-page): leave it be rather than blank it
-  if (!tree || tree.getBoundingClientRect().top < innerHeight) return;
-  const branches = tree.querySelectorAll('ul ul');
-  const nodes = tree.querySelectorAll('li');
-  branches.forEach(b => { b.style.clipPath = 'inset(0 0 100% 0)'; });
-  nodes.forEach(n => { n.style.opacity = 0; });
-  const clear = () => {
-    branches.forEach(b => { b.style.clipPath = ''; });
-    nodes.forEach(n => { n.style.opacity = ''; n.style.transform = ''; });
-  };
-  addEventListener('beforeprint', clear, { once: true });
-  inView(tree, () => {
-    track(animate(branches, {
-      clipPath: ['inset(0 0 100% 0)', 'inset(0 0 0% 0)'],
-      duration: 280, delay: stagger(70, { start: 0 }), ease: 'inOut(3)',
-    }));
-    track(animate(nodes, {
-      opacity: [0, 1], x: [-8, 0],
-      duration: 220, delay: stagger(25, { start: 0 }), ease: 'out(3)',
-    }), clear);
-  }, { amount: 0.15 });
 }
 
 /* ── Buttons: a short squash on press, a little overshoot on release ── */
