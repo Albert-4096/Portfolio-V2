@@ -14,9 +14,14 @@ The site describes what he does, his work, what he is building now, and how to b
 ## Work
 - [EHDS-Service](https://github.com/Albert-4096/EHDS-Service): turns Romanian hospital discharge PDFs into valid HL7 FHIR R4 bundles through a nine-stage pipeline (Python, FastAPI, React, TypeScript). Built at HackTM 2026, his first hackathon, where Albert led the build with his team and it won the Product Innovation track (€2,000 team prize, sponsored by Aumovio). Demo with a synthetic patient: https://ehds.alberyt.xyz
 - K-Project (own project, private, 2026): ingests, transcribes, embeds and searches thousands of documents and recordings, and AI assistants can query it directly. Runs on his own archive of 5,500+ items.
+- firme & legi (own project, 2026): two search engines over Romanian public data, for people and AI assistants. Firme holds 4.1 million companies with financial statements since 2008, procurement awards and dated register changes, every answer with its source (access by invitation; 45-second film: https://gallery.alberyt.xyz/firme). [legi](https://legi.alberyt.xyz) holds 34 acts of Romanian law in every consolidated version, so an article can be read as it stood on any date.
+
+## Now (22 November 2026)
+- Building (pilot stage): a private evidence engine for a law firm. Scanned and digital case files become one archive the lawyers question from the AI assistant they already use. Every answer opens the exact page it came from, with the passage highlighted; amounts, dates and IBANs are matched to the digit; the law is quoted as it stood on the relevant date; every lookup is logged.
 
 ## Lab
 - Guest check-in desk for TEDxAristide Demetriade (September 2026).
+- [Block Bloom](https://block-bloom.alberyt.xyz): a free 8×8 block puzzle for phones and browsers, with no ads, no accounts and offline play.
 - [Cryptography Atlas](https://crypto.alberyt.xyz): a visual guide to a few cryptographic algorithms, their uses and quirks.
 - [LCG Visualizer](https://lcg.alberyt.xyz): a linear congruential generator's output as a grayscale image, checked against the Hull–Dobell theorem.
 - [mail-platform](https://github.com/Albert-4096/mail-platform): webmail for his own domains on top of Resend, with required TOTP.
