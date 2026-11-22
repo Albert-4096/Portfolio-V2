@@ -21,6 +21,7 @@ The site describes what he does, his work, what he is building now, and how to b
 
 ## Lab
 - Guest check-in desk for TEDxAristide Demetriade (September 2026).
+- [orar](https://orar.alberyt.xyz): a free timetable app for UVT Computer Science students. It reads the faculty's image-only timetable PDFs and gives each student a personal timetable, a print-ready PDF and an iCalendar feed.
 - [Block Bloom](https://block-bloom.alberyt.xyz): a free 8×8 block puzzle for phones and browsers, with no ads, no accounts and offline play.
 - [Cryptography Atlas](https://crypto.alberyt.xyz): a visual guide to a few cryptographic algorithms, their uses and quirks.
 - [LCG Visualizer](https://lcg.alberyt.xyz): a linear congruential generator's output as a grayscale image, checked against the Hull–Dobell theorem.
