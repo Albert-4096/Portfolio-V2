@@ -483,6 +483,7 @@ html[data-lang="ro"] .lang-thumb { clip-path: inset(0 0 0 50%); }
 .bridge__lede { font-size: var(--fs-h3); font-weight: 600; line-height: 1.35; color: var(--text); max-width: 32ch; margin-bottom: 1.5rem; }
 .bridge__other { font-size: var(--fs-small); color: var(--muted); max-width: 52ch; margin: 0; }
 .bridge__hint { font: var(--fs-label) var(--mono); color: var(--muted); margin: 0 0 0.75rem; }
+.bridge .hero-proof { margin-bottom: 1.25rem; }
 .bridge__coffee { color: var(--text-2); }
 .bridge__how { background: rgba(19, 24, 21, 0.85); border-left: 3px solid var(--accent); padding: 1.5rem; }
 .bridge__email {
