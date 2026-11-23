@@ -4,11 +4,12 @@
                · otherwise the mark draws itself (once per session)
                · and the hero eyebrow decodes like terminal output
      Motion    · buttons press on a spring
+     plain JS  · the hero headline's last words rotate (after the intro; reduced motion keeps the full sentence)
 
    Both libraries ship as one tree-shaken file, /vendor/motion-kit.min.js
    (scripts/build_motion_kit.sh), fetched only when motion is allowed.
    Start states are set here, never in CSS, so no-JS shows everything.
-   Never touches [data-i18n] spans except the visible-language eyebrow.
+   Never touches [data-i18n] spans except the visible-language eyebrow and headline.
    ─────────────────────────────────────────────────────── */
 
 const root = document.documentElement;
@@ -41,6 +42,76 @@ if (motionOK && root.dataset.intro === 'pending') {
     clearTimeout(deadline);
     hold.forEach(h => h.play(k));
   }, () => { clearTimeout(deadline); giveUp(); });
+}
+
+/* ── Headline: "I build <AI agents | data platforms | …>." ──
+   The markup is the full sentence, with each word in a [data-w] span. Here the visible language swaps it for a
+   screen-reader copy plus an aria-hidden line whose words share one grid cell (see .rot in the stylesheet). */
+if (motionOK) {
+  const lead = document.querySelector('.hero .lede--lead');
+  const HOLD = 2500, OUT = 200, IN = 320;
+  const ease = getComputedStyle(root).getPropertyValue('--ease-out').trim() || 'ease-out';
+  let el, saved, words, i, timer, live = false;
+
+  const mount = () => {
+    el = lead && lead.querySelector(`[data-i18n="${root.dataset.lang}"]`);
+    if (!el || !el.querySelector('[data-w]')) { el = null; return; }
+    saved = el.innerHTML;
+    const prefix = el.firstChild.textContent;
+    const full = el.textContent;
+    const line = document.createElement('span');
+    const rot = document.createElement('span');
+    line.setAttribute('aria-hidden', 'true');
+    rot.className = 'rot';
+    words = [...el.querySelectorAll('[data-w]')].map(w => {
+      const t = document.createElement('span');
+      t.className = 'rot__w';
+      t.textContent = w.textContent + '.';
+      rot.append(t);
+      return t;
+    });
+    line.append(prefix, rot);
+    el.innerHTML = '<span class="vh"></span>';
+    el.firstChild.textContent = full;
+    el.append(line);
+    i = 0;
+    words[0].classList.add('is-on');
+  };
+  const unmount = () => {
+    clearTimeout(timer);
+    if (el) el.innerHTML = saved;
+    el = null;
+  };
+
+  const step = () => {
+    const prev = words[i];
+    i = (i + 1) % words.length;
+    const next = words[i];
+    next.classList.add('is-on');
+    const lift = '0.3em';
+    const out = prev.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translateY(-${lift})` }],
+      { duration: OUT, easing: ease, fill: 'forwards' });
+    next.animate([{ opacity: 0, transform: `translateY(${lift})` }, { opacity: 1, transform: 'none' }],
+      { duration: IN, delay: OUT / 2, easing: ease, fill: 'backwards' });
+    out.finished.then(() => { prev.classList.remove('is-on'); out.cancel(); }, () => {});
+  };
+  const schedule = () => {
+    clearTimeout(timer);
+    if (live && el && !document.hidden) timer = setTimeout(() => { step(); schedule(); }, HOLD);
+  };
+
+  mount();
+  // wait for the intro to hand the page over, so the words never move under it
+  const intro = ['pending', 'hold', 'fly', 'over'].includes(root.dataset.intro);
+  const start = () => { live = true; schedule(); };
+  intro ? addEventListener('intro:end', start, { once: true }) : start();
+
+  document.addEventListener('visibilitychange', schedule);
+  // only the visible language rotates; the other one stays the plain sentence
+  new MutationObserver(() => { unmount(); mount(); schedule(); }).observe(root, { attributes: true, attributeFilter: ['data-lang'] });
+  // print shows the whole sentence
+  addEventListener('beforeprint', unmount);
+  addEventListener('afterprint', () => { mount(); schedule(); });
 }
 
 /* A held element: blanked now, played once the kit lands, or restored as-is if it doesn't in time */

@@ -1,6 +1,6 @@
 # alberyt.xyz
 
-> Albert Gabor builds AI automation and software for businesses that run on paperwork and manual processes: document pipelines, workflow automation and self-hosted systems, on infrastructure the client controls. Based in Timișoara, Romania; works in Romanian and English.
+> Albert Gabor builds AI agents, data platforms, web apps and secure infrastructure, from the first idea to production, on infrastructure the client controls. Based in Timișoara, Romania; works in Romanian and English.
 
 The site describes what he does, his work, what he is building now, and how to book a 20-minute call. It is self-hosted on his own servers and available in English and Romanian.
 
